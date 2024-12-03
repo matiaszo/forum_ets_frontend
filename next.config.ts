@@ -1,7 +1,38 @@
-import type { NextConfig } from "next";
+const nextConfig = {
 
-const nextConfig: NextConfig = {
-  /* config options here */
+  rewrites: () =>{
+
+      return[
+          {
+              source: "/",
+              destination: "/login",
+          },
+          {
+              source: "/register",
+              destination: "/register",
+          },
+          {
+              source: "/home",
+              destination: "/home",
+          },
+          {
+              source: "/forum",
+              destination: "/forum",
+          },
+          {
+              source: "/chat",
+              destination: "/chat",
+          },
+          {
+              source: "/project",
+              destination: "/project",
+          },
+          {
+              source: "/profile",
+              destination: "/profile",
+          },
+      ]
+  }
 };
 
 export default nextConfig;
