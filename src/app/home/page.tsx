@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const home = () => {
     const styles = {
-        h1: "text-blue1 text-2xl",
+        h1: "text-blue1 text-3xl",
         box: "flex justify-end w-full pr-14 gap-9", 
         search: "border-2 border-blue1 rounded w-4/12 p-2", 
     }
@@ -13,7 +13,7 @@ const home = () => {
     return (
         <>
         <div className="flex flex-col">
-            <div className="flex flex-col flex-wrap m-6">
+            <div className="flex flex-col flex-wrap m-6 ml-14">
                 <h1 className={styles.h1}>Acesse o fórum do setor aqui</h1>
                 <p >Converse com seus colegas sobre os mais diversos tópicos.</p>
             </div>
