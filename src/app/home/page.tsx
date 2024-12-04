@@ -1,3 +1,6 @@
+import Card from "@/components/card";
+import dataTests from "@/constants/dataTests.json"
+
 const home = () => {
     const styles = {
         h1: "text-blue1 text-2xl",
@@ -17,8 +20,8 @@ const home = () => {
                 <input className={styles.search} type="text" placeholder="Pesquise por título, pergunta.." />
             </div>
 
-            <div>
-                {/* Aqui os cards */}
+            <div className="flex justify-center m-20 flex-wrap" >
+               <Card data={dataTests} />
             </div>
         </div>
         </>

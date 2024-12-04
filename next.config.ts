@@ -1,5 +1,4 @@
 const nextConfig = {
-
   rewrites: () =>{
 
       return[
