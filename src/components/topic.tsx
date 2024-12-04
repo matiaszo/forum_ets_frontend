@@ -11,7 +11,7 @@ const Topic = () =>{
     return(
         <>
             <Link href={ROUTES.topic}>
-                <div className="flex items-center shadow-xl rounded-xl p-3 font-robFont mb-3">
+                <div className="flex items-center shadow-xl rounded-xl p-3 font-robFont mb-3 text-black">
                     <Image className={style.image} src={blueColor}  alt="blue"/>
                     <div className="flex flex-col ml-10 min-w-[90%]">
                         <h1 className="text-blue1 text-3xl mb-3">Titulo do tópico</h1>

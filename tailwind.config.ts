@@ -8,6 +8,15 @@ export default {
   ],
   theme: {
     extend: {
+      animation: {
+        fadeInDown: "fadeInDown 0.3s ease-out forwards",
+      },
+      keyframes: {
+        fadeInDown: {
+          "0%": { opacity: "0", transform: "translateY(-50px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
       colors: {
         blue0: "var(--blue0)",
         blue1: "var(--blue1)",
@@ -15,6 +24,8 @@ export default {
         blue3: "var(--blue3)",
         blue4: "var(--blue4)",
         blue5: "var(--blue5)",
+        alice: "var(--alice)",
+        black: "var(--black)",
       },
       fontSize:{
         large: "40px",
