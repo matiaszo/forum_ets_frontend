@@ -13,13 +13,13 @@ export const Header = ({first, second, third, fourth}: any) => {
     }
     return(
         <>
-        <div className="flex items-center ml-6 mr-6">
+        <div className="flex items-center shadow-md">
 
-            <h1 className="">
+            <h1 className="ml-6">
                 <Image src={ets_logo} width={100} height={200} alt="ets logo"/>
             </h1>
 
-            <div className="flex flex-grow gap-32 justify-end items-center">
+            <div className="flex flex-grow gap-28 justify-end items-center mr-6">
                 <Link className={style.option} href={ROUTES.home}>{first}</Link>
                 <Link className={style.option} href={ROUTES.forum}>{second}</Link>
                 <Link className={style.option} href={ROUTES.chat}>{third}</Link>
