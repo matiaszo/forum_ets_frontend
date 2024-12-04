@@ -6,8 +6,8 @@ import Image from "next/image";
 const home = () => {
     const styles = {
         h1: "text-blue1 text-2xl",
-        box: "flex justify-end w-full", 
-        search: "border-2 border-blue1 rounded w-4/12 p-2 mr-20", 
+        box: "flex justify-end w-full pr-14 gap-9", 
+        search: "border-2 border-blue1 rounded w-4/12 p-2", 
     }
 
     return (
@@ -20,11 +20,16 @@ const home = () => {
 
             <div className={styles.box}>
                 <input className={styles.search} type="text" placeholder="Pesquise por título, pergunta.." />
-                <Image src={search} alt={""} width={50} height={50}/>
+                <Image className="cursor-pointer" src={search} alt={""} width={50} height={50}/>
             </div>
 
-            <div className="flex justify-center m-10 mx-60 flex-wrap" >
-               <Card data={dataTests} />
+            <div className="flex justify-center m-10 mx-35 flex-wrap" >
+                {dataTests.map(async (item, index) => {
+                    return(
+                        <Card title={item.title} mainQuestion={item.mainQuestion} image={item.image} />
+                    )
+                    
+                })}
             </div>
         </div>
         </>
