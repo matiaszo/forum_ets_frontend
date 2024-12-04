@@ -1,7 +1,14 @@
-const nextConfig = {
-
-  rewrites: () =>{
-
+const nextConfig =
+{
+    images:
+    {
+        remotePatterns:
+        [
+            {protocol: "https", hostname: "**"}
+        ]
+    },
+    rewrites: () =>
+    {
       return[
           {
               source: "/",
