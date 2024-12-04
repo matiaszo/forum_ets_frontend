@@ -1,8 +1,8 @@
-import dynamic from "next/dynamic";
+"use client"
+
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
-import { StaticImageData } from "next/image";
-import py from "@/assets/pyimage.webp"
-import { start } from "repl";
+import { useState } from "react";
 
 type CardData = {
     title: string;
@@ -10,11 +10,13 @@ type CardData = {
     mainQuestion: string;
 }
 
-
 const limit = 25
 
-const Card = async( {title, image, mainQuestion} : CardData) => {
-    const img = (await import(`@/assets/${image}`)).default;
+const Card = ( {title, image, mainQuestion} : CardData) => {
+
+    const [img, setImg] = useState<StaticImport | string>('/img')
+
+    import(`@/assets/${image}`).then((data) => {setImg(data.default)})
     return (
         <>
             <div className={styles.container}> 
