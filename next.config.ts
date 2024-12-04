@@ -31,6 +31,10 @@ const nextConfig = {
               source: "/profile",
               destination: "/profile",
           },
+          {
+              source: "/topic",
+              destination: "/topic",
+          },
       ]
   }
 };

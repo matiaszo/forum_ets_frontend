@@ -11,6 +11,7 @@ export const Header = ({first, second, third, fourth}: any) => {
     const style= {
         option: "font-robFont text-blue5 text-xl"
     }
+    
     return(
         <>
         <div className="flex items-center shadow-md">
@@ -24,7 +25,7 @@ export const Header = ({first, second, third, fourth}: any) => {
                 <Link className={style.option} href={ROUTES.forum}>{second}</Link>
                 <Link className={style.option} href={ROUTES.chat}>{third}</Link>
                 <Link className={style.option} href={ROUTES.project}>{fourth}</Link>
-                <Link  href={ROUTES.chat}><Image src={user_logo} width={50} height={50} alt="ets logo"/></Link>
+                <Link  href={ROUTES.profile}><Image src={user_logo} width={50} height={50} alt="ets logo"/></Link>
             </div>
         </div>
         </>
