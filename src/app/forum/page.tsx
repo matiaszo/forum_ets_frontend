@@ -4,7 +4,7 @@ export default function Forum()
 {
     return(
     <>
-        <ForumPost/>
+        <ForumPost image={"ets_logo.png"}/>
     </>
     )
 }
