@@ -13,11 +13,23 @@ type people = {
     name: string
 }
 
+type goals = {
+    text: string;
+}
+
 const projects = () => {
 
     const [open, setOpen] = useState<boolean>(false)
     const [openNext, setOpenNext] = useState<boolean>(true)
-    const [popleValue, setPeopleValue] = useState<people[]>([])
+    const [goalValue, setgoalValue] = useState<goals[]>([])
+    const [peopleValue, setPeopleValue] = useState<people[]>([])
+
+    const handleInputChange = (event: any) => {
+        setPeopleValue(event.target.value); 
+    };
+    const handleInputGoalChange = (event: any) => {
+        goalValue.add(event.target.value)
+    };
 
     return(
         <>
@@ -26,23 +38,33 @@ const projects = () => {
 
             <div className={styles.modalContainer} >
                 <form action={"POST"} id="modal" className={styles.modalBox} >
+
                     <h1 className={styles.title} >Crie um novo projeto</h1>
+
                     <div className={styles.content} >
                         <p>Digite um nome para se projeto</p>
                         <input className={styles.input} type="text" />
+
                         <p>Digite uma descrição para se projeto</p>
                         <input className={styles.input} type="text" />
+
+                        {/* aqui a pessoa vai adicionar os objetivos e eles serão guaradados numa lista, depois serão liustados nuas litas que,s e execder o tamanho será acessado com o scrool */}
                         <p>Adicione os objetivos do seu projeto</p>
                         <div className="flex gap-10">
                             <input className={styles.inputObj} type="text" />
                             <Image src={add} width={50} height={50} alt="" priority className={styles.icon}/>
                         </div>
+                    </div>
 
-                    </div>
                     <div className="flex justify-center gap-3">
-                        <button className={styles.btnNext} onClick={() => {setOpen(false); setOpenNext(true)}}>Próximo</button>
-                        <button className={styles.btnCancel}  onClick={() => {setOpen(false)}}>Cancelar</button>
+                        <button className={styles.btnNext} 
+                        onClick={() => {setOpen(false); 
+                        setOpenNext(true)}}>Próximo</button>
+
+                        <button className={styles.btnCancel}
+                        onClick={() => {setOpen(false)}}>Cancelar</button>
                     </div>
+
                 </form>
             </div>
             
@@ -58,14 +80,18 @@ const projects = () => {
                         {/* barra de busca, o front vai enviar o nome pesquisado, o beck vai buscar por nome e achar os usuários, os users retornados aparecerão ali em baixo */}
                         <p>Busque por nome</p>
                         <div className="flex gap-10">
-                            <input className={styles.inputObj} type="text" placeholder="ex: Eduardo Henrique Ribeiro" />
-                            <Image src={add} width={50} height={50} alt="" priority className={styles.icon}/>
+                            <input id="person"
+                            className={styles.inputObj}
+                            onChange={handleInputChange}
+                            type="text"
+                            placeholder="ex: Eduardo Henrique Ribeiro" />
+                            <Image src={add} width={50} height={50} alt="" priority className={styles.icon} />
                         </div>
                         {/* vai guardar os users na lista e os users da lista serão exibidos alí em baixo, depois será enviada uma requisição ´para criar o projeto com os users da lista */}
                         <p>Abaixo irão aparecer as pessoas adicionadas</p>
                     </div>
                     <div className="flex justify-center gap-3 p-2">
-                        <button className={styles.btnNext} >Próximo</button>
+                        <button className={styles.btnNext}>Próximo</button>
                         <button className={styles.btnCancel} onClick={() =>{setOpenNext(false)}}>Cancelar</button>
                     </div>
                 </form>

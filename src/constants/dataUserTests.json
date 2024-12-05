@@ -1,0 +1,73 @@
+[
+    {
+      "edv": "EDV001",
+      "password": "password123",
+      "name": "Eduardo Henrique",
+      "email": "eduardo@example.com",
+      "intructor": true
+    },
+    {
+      "edv": "EDV002",
+      "password": "password123",
+      "name": "Maria Silva",
+      "email": "maria@example.com",
+      "intructor": false
+    },
+    {
+      "edv": "EDV003",
+      "password": "password123",
+      "name": "Carlos Almeida",
+      "email": "carlos@example.com",
+      "intructor": true
+    },
+    {
+      "edv": "EDV004",
+      "password": "password123",
+      "name": "Ana Pereira",
+      "email": "ana@example.com",
+      "intructor": false
+    },
+    {
+      "edv": "EDV005",
+      "password": "password123",
+      "name": "Lucas Souza",
+      "email": "lucas@example.com",
+      "intructor": true
+    },
+    {
+      "edv": "EDV006",
+      "password": "password123",
+      "name": "Isabela Costa",
+      "email": "isabela@example.com",
+      "intructor": false
+    },
+    {
+      "edv": "EDV007",
+      "password": "password123",
+      "name": "Felipe Martins",
+      "email": "felipe@example.com",
+      "intructor": true
+    },
+    {
+      "edv": "EDV008",
+      "password": "password123",
+      "name": "Julia Oliveira",
+      "email": "julia@example.com",
+      "intructor": false
+    },
+    {
+      "edv": "EDV009",
+      "password": "password123",
+      "name": "Rafael Silva",
+      "email": "rafael@example.com",
+      "intructor": true
+    },
+    {
+      "edv": "EDV010",
+      "password": "password123",
+      "name": "Carla Rodrigues",
+      "email": "carla@example.com",
+      "intructor": false
+    }
+  ]
+  
