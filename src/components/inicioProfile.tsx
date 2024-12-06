@@ -10,7 +10,7 @@ interface user {
     name: string;
     image: string;
     bio: string;
-    gitUseraname: string;
+    gitUseraname: string | null;
     instructor: number;
     isUser: boolean;
 }
@@ -80,7 +80,7 @@ export const InicioProfile = ({ usuario }: { usuario: user }) => {
         <div>
             {usuario.gitUseraname ?
                 (
-                    <div className="w-[100%] mb-5">
+                    <div className="w-[100%] mb-1">
                         <div className="shadow-md w-[100%] rounded-lg p-2">
                             <h1 className="text-[22px] font-robFont mb-2">GitHub Status</h1>
                             <div className="flex flex-row w-[100%] items-center justify-center sm:flex-wrap">
@@ -143,7 +143,15 @@ export const InicioProfile = ({ usuario }: { usuario: user }) => {
                 ) : (
                     <div className="w-[100%] mb-2">
                         <div className="shadow-md w-[100%] h-1/2 rounded-lg p-2">
-                            <h1 className="cursor-pointer">Add GitHub Status</h1>
+                                {usuario.isUser ? (
+                                    <button>
+                                        Add GitHub Status
+                                    </button>
+                                ) : (
+                                    <>
+                                        <h1 className='text-gray-400'>O usuário nao possui GitHub Status</h1>
+                                    </>
+                                )}
                         </div>
                     </div>
                 )}
@@ -152,7 +160,7 @@ export const InicioProfile = ({ usuario }: { usuario: user }) => {
                 <div className="w-[100%] mb-2">
                     <div className="shadow-md w-[100%] rounded-lg p-2">
                         <h1 className="text-[22px] font-robFont mb-2">Skills</h1>
-                        <div className="flex flex-wrap gap-5 items-center justify-center">
+                        <div className="flex flex-wrap gap-5 items-center justify-center p-2">
                             {teste.map((skill) => (
                                 <div key={skill.id} className="flex flex-col items-center">
                                     <img
@@ -181,7 +189,15 @@ export const InicioProfile = ({ usuario }: { usuario: user }) => {
             ) : (
                 <div className="w-[100%] mb-2">
                     <div className="shadow-md w-[100%] h-1/2 rounded-lg p-2">
-                        <h1 className="cursor-pointer">Add Skills</h1>
+                    {usuario.isUser ? (
+                        <button>
+                            Add Skills
+                        </button>
+                    ) : (
+                        <>
+                            <h1 className='text-gray-400'>O usuário nao adicionou suas Skills</h1>
+                        </>
+                    )}
                     </div>
                 </div>
             )

@@ -19,26 +19,31 @@ export const FeedbackProfile = ({feedbacks} : {feedbacks : feedback[]}) => {
     
     return (
         <div className="w-[100%]">
-            {feedbacks.map((feed) => (
-                feed.user.isUser ? (
-                    <CardFeedback id={feed.id} key={feed.id} stars={feed.stars} text={feed.text} publico={feed.public} projectName={feed.projectName} user={{
-                        id: feed.user.id,
-                        image: feed.user.image,
-                        name: feed.user.name,
-                        isUser: feed.user.isUser
-                    }} />
-                ) : feed.public ? (
-                    <CardFeedback id={feed.id} key={feed.id} stars={feed.stars} text={feed.text} publico={feed.public} projectName={feed.projectName} user={{
-                        id: feed.user.id,
-                        image: feed.user.image,
-                        name: feed.user.name,
-                        isUser: feed.user.isUser
-                    }} />
-                ) : (
-                    <div key={feed.id}>
-                    </div>
-                )
-            ))}
+            {feedbacks && feedbacks.length > 0 ? (
+                feedbacks.map((feed) => (
+                    feed.user.isUser || feed.public ? (
+                        <CardFeedback
+                            key={feed.id}
+                            id={feed.id}
+                            stars={feed.stars}
+                            text={feed.text}
+                            publico={feed.public}
+                            projectName={feed.projectName}
+                            user={{
+                                id: feed.user.id,
+                                image: feed.user.image,
+                                name: feed.user.name,
+                                isUser: feed.user.isUser,
+                            }}
+                        />
+                    ) : (
+                        <div key={feed.id} />
+                    )
+                ))
+            ) : (
+                <p className="text-gray-400">Nenhum feedback encontrado.</p>
+            )}
         </div>
+
     )
 }

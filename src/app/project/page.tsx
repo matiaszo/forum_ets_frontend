@@ -6,6 +6,7 @@ import dataUser from '@/constants/dataUserTests.json'
 import Image from "next/image"
 import { useState, ChangeEvent } from "react"
 import ImageComponent from "@/components/image"
+import { Header } from "@/components/header"
 
 type People = {
     id: number
@@ -35,6 +36,7 @@ const Projects = () => {
 
     return (
         <>
+            <Header/>
             {/* Modal to create projects */}
             {open && (
                 <div className={styles.modalContainer}>
@@ -82,7 +84,7 @@ const Projects = () => {
                                 {dataUser
                                     .filter((person) => person.name.toLowerCase().includes(personValue.toLowerCase()))
                                     .map((person) => (
-                                        <div className={styles.person} key={person.id} onClick={() => eventAddToProject(person)}>
+                                        <div className={styles.person} key={person.id}>
                                             <ImageComponent src={person.image} width={40} height={40} alt="" className={styles.imgProfile} />
                                             <p className="self-center">{person.name}</p>
                                             <ImageComponent src={'icons8-adicionar-100.png'} width={30} height={30} alt="" className={styles.iconAdd} />
