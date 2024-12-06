@@ -5,9 +5,10 @@ import { useState } from "react";
 import Image from "next/image";
 import profilePhoto from "@/assets/Koala.jpg";
 import editPhoto from "@/assets/edit.png";
-import {Modal} from "@/components/Modal";
+import {Modal} from "@/components/ModalEditProfile";
 import { InicioProfile } from "@/components/inicioProfile";
 import { FeedbackProfile } from "@/components/feedbackProfile";
+import { InteracaoProfile } from "@/components/interacaoProfile";
 
 interface skillInterface {
     id: string;
@@ -22,6 +23,7 @@ interface user {
     bio: string;
     gitUseraname: string;
     instructor: number;
+    isUser: boolean;
 }
 
 interface feedback {
@@ -33,7 +35,20 @@ interface feedback {
     user : {
         id : string,
         image : string,
-        name : string
+        name : string,
+        isUser : boolean,
+    }
+}
+
+interface interacao {
+    id: string,
+    type : string,
+    timestamp : Date,
+    content : {
+        text : string | null,
+        username : string | null,
+        title : string | null,
+        public : boolean | null,
     }
 }
 
@@ -53,10 +68,49 @@ export default function Home() {
         setNameUser(name)
     };
     
-    const usuario : user = {id: "1", name: "Mariana", bio: "slaaa", image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg", gitUseraname: "xmarimarquesh", instructor: 1}
+    const usuario : user = {id: "1", name: "Mariana", bio: "slaaa", image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg", gitUseraname: "xmarimarquesh", instructor: 1, isUser: false}
     
     const feed : feedback[] = [
-        {id: "1", stars: 2, text: "slaaa", public: true, projectName: "Projeto", user: {id: '1', name: 'Mariana', image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"}}
+        {id: "1", stars: 2, text: "mais ou menos boa", public: true, projectName: "Projeto JAVA FINAL", user: {id: '1', name: 'Kau Menendez', image: "https://borboletariodesaopaulo.com.br/wp-content/uploads/2024/03/borboleta-monarca-foto-macro.jpg", isUser: false}},
+        {id: "2", stars: 4, text: "Muito n sei o que n sei o que lá", public: false, projectName: "Projeto de IoT", user: {id: '1', name: 'Matias Zoniga', image: "https://s2.glbimg.com/RFnG4EgIzgmpejlSjWA8K3apZ5M=/e.glbimg.com/og/ed/f/original/2016/04/15/tiger-02.jpg", isUser: false}}
+    ];
+
+    const inte : interacao[] = [
+        {   
+            id: "1",
+            type: "like",
+            timestamp: new Date(),
+            content: {
+                text:  null,
+                username: "usuario123",
+                title: "Integração dia 12!!!!",
+                public: null,
+            }
+        },
+
+        {
+            id: "2",
+            type: "comment",
+            timestamp: new Date(),
+            content: {
+                text: "Fazendo pipipi popopo",
+                username: null,
+                title: "Como faz n sei o que lá?",
+                public: null,
+            }
+        },
+
+        {
+            id: "3",
+            type: "feedback",
+            timestamp: new Date(),
+            content: {
+                text: "Achei ele muito mandão af",
+                username: "Matias Zoniga",
+                title: null,
+                public: false,
+            }
+        }
     ];
 
     const [nameUser, setNameUser] = useState(usuario.name);
@@ -74,7 +128,7 @@ export default function Home() {
             );
           case 'interacoes':
             return (
-                <div>Conteúdo da aba Início</div>
+                <InteracaoProfile interacoes={inte}/>
             );
           default:
             return null;
@@ -82,7 +136,7 @@ export default function Home() {
     };
 
     return (
-        <div className="w-[100%] mt-10">
+        <div className="w-[100%] mt-7">
             <Header/>
             <div className="w-[100%] flex flex-row p-10 gap-10">
                 <div className="w-[30%] h-screen shadow-lg flex-col rounded-lg flex items-center p-12 justify-between">
@@ -91,7 +145,7 @@ export default function Home() {
                         <h1 className="text-[26px]" >{usuario.name}</h1>
                         <h1 className="text-[18px]" >{usuario.instructor == 1 ? 'Instructor' : 'Aprendice'}</h1>
                         {usuario.bio ? (
-                            <div className="bg-blue4 p-4 rounded-lg w-[100%] mt-10">
+                            <div className="shadow-md p-4 rounded-lg w-[100%] mt-10">
                                 <h1>{usuario.bio}</h1>
                             </div> 
                         ) : (
@@ -99,13 +153,18 @@ export default function Home() {
                             </>
                         )}
                     </div>
-                    <div className="w-[100%] justify-end flex">
-                        <button onClick={openModal} >
-                            <Image src={editPhoto} alt="edit" className="cursor-pointer" />
-                        </button>
+                    <div className="w-[100%] justify-end flex mb-10">
+                        {usuario.isUser ? (
+                            <button onClick={openModal} >
+                                <Image src={editPhoto} alt="edit" className="cursor-pointer" />
+                            </button>
+                        ) : (
+                            <>
+                            </>
+                        )}
                     </div>
                 </div>
-                <div className="w-[70%] shadow-lg rounded-lg h-screen p-5 ">
+                <div className="w-[70%] shadow-lg rounded-lg min-h-screen p-5 ">
                     <HeaderProfile activeTab={activeTab} setActiveTab={setActiveTab} />
                     <div className="pt-5 ">
                         {renderTabContent()}
