@@ -44,14 +44,14 @@ const Home = () => {
                 {dataTests
                     .filter((item) =>
                         item.title.toLowerCase().includes(searchValue.toLowerCase()) || 
-                        item.mainQuestion.toLowerCase().includes(searchValue.toLowerCase())
+                        item.description.toLowerCase().includes(searchValue.toLowerCase())
                     )
                     .map((item, index) => {
                         return (
                             <Card
                                 key={index}
                                 title={item.title}
-                                mainQuestion={item.mainQuestion}
+                                mainQuestion={item.description}
                                 image={item.image}
                             />
                         );

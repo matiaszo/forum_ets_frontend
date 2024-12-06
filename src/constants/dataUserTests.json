@@ -1,73 +1,73 @@
 [
     {
-      "edv": "EDV001",
-      "password": "password123",
+      "id": "1",
       "name": "Eduardo Henrique",
       "email": "eduardo@example.com",
-      "intructor": true
+      "intructor": true,
+      "image": "ribeiro.jpg"
     },
     {
-      "edv": "EDV002",
-      "password": "password123",
-      "name": "Maria Silva",
+      "id": "2",
+      "name": "Nicolle",
       "email": "maria@example.com",
-      "intructor": false
+      "intructor": false,
+      "image": "Nicole.jpg"
     },
     {
-      "edv": "EDV003",
-      "password": "password123",
-      "name": "Carlos Almeida",
+      "id": "3",
+      "name": "Kau",
       "email": "carlos@example.com",
-      "intructor": true
+      "intructor": true,
+      "image": "Kau.jpg"
     },
     {
-      "edv": "EDV004",
-      "password": "password123",
-      "name": "Ana Pereira",
+      "id": "4",
+      "name": "Mariana Marques",
       "email": "ana@example.com",
-      "intructor": false
+      "intructor": false,
+      "image": "Mari.jpg"
     },
     {
-      "edv": "EDV005",
-      "password": "password123",
-      "name": "Lucas Souza",
+      "id": "5",
+      "name": "Helena",
       "email": "lucas@example.com",
-      "intructor": true
+      "intructor": true,
+      "image": "Helena.jpg"
     },
     {
-      "edv": "EDV006",
-      "password": "password123",
-      "name": "Isabela Costa",
+      "id": "6",
+      "name": "Matias",
       "email": "isabela@example.com",
-      "intructor": false
+      "intructor": false,
+      "image": "Matias3.jpg"
     },
     {
-      "edv": "EDV007",
-      "password": "password123",
+      "id": "7",
       "name": "Felipe Martins",
       "email": "felipe@example.com",
-      "intructor": true
+      "intructor": true,
+      "image": "ribeiro.jpg"
     },
     {
-      "edv": "EDV008",
-      "password": "password123",
+      "id": "8",
       "name": "Julia Oliveira",
       "email": "julia@example.com",
-      "intructor": false
+      "intructor": false,
+      "image": "ribeiro.jpg"
     },
     {
-      "edv": "EDV009",
-      "password": "password123",
+      "id": "9",
       "name": "Rafael Silva",
       "email": "rafael@example.com",
-      "intructor": true
+      "intructor": true,
+      "image": "ribeiro.jpg"
     },
     {
-      "edv": "EDV010",
-      "password": "password123",
+      "id": "10",
       "name": "Carla Rodrigues",
       "email": "carla@example.com",
-      "intructor": false
+      "intructor": false,
+      "image": "ribeiro.jpg"
     }
   ]
   

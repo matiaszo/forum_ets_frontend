@@ -2,37 +2,37 @@
     {
       "title": "Título do Card",
       "image": "py_image.webp",
-      "mainQuestion": "Qual é a sua dúvida?"
+      "description": "discussões sobre javaruim"
     },
     {
       "title": "Outro Título",
       "image": "py_image.webp",
-      "mainQuestion": "Qual é a respostaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa?"
+      "description": "forum para discutir sobre javaruim"
     },
     {
       "title": "Outro Título",
       "image": "py_image.webp",
-      "mainQuestion": "Qual é a resposta?"
+      "description": "forum para discutir sobre algo"
     },
     {
       "title": "Outro Título",
       "image": "py_image.webp",
-      "mainQuestion": "Qual é a resposta?"
+      "description": "forum para discutir sobre algo"
     },
     {
       "title": "Outro Título",
       "image": "py_image.webp",
-      "mainQuestion": "Qual é a resposta?"
+      "description": "forum para discutir sobre algo"
     },
     {
       "title": "Outro Título",
       "image": "py_image.webp",
-      "mainQuestion": "Qual é a resposta?"
+      "description": "forum para discutir sobre algo"
     },
     {
       "title": "Outro Título",
       "image": "py_image.webp",
-      "mainQuestion": "Qual é a resposta?"
+      "description": "forum para discutir sobre algo"
     }
 ]
   
