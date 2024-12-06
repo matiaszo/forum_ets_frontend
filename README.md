@@ -1,10 +1,11 @@
 > para abrir use ctrl + shift + v
 
-### Token:
+### LoginResponse:
 ```
 {
-    userId : number
-    instructor : boolean
+    id : number
+    instructor: number
+    token: string
 }
 ```
 # /auth:
@@ -175,6 +176,18 @@
         id : number
         title : string
         idSection : number
+
+        mainComment : {
+            id : number
+            content : string
+
+            user : {
+                id : string
+                name : string
+                instructor : boolean
+                image : string
+            }
+        }
 
         comments : [
             {
@@ -570,7 +583,6 @@
         title : string
     }
     ```
-    
 
   - ## Back-end:
     
@@ -611,6 +623,226 @@
     idSkill
     ```
 
+  - ## Back-end:
+
+    ### Text:
+    ```
+    mensagem de sucesso / erro
+    ```
+
+# /chat
+
+- ## GET /chat
+  
+  - ## Front-end:
+
+    ### Query:
+    ```
+    page
+    name
+    ```
+
+  - ## Back-end:
+
+    ### Json:
+    ```
+    [
+        {
+            id : number
+            name : string
+        },
+        ...
+    ]
+    ```
+
+- ## GET /chat/{idChat}
+
+  - ## Front-end:
+    
+    ### Path:
+    ```
+    idChat
+    ```
+
+  - ## Back-end:
+
+    ### Json:
+    ```
+    {
+        id : number
+        name : string
+
+        messages : [
+            {
+                id : number
+                text : string
+
+                user : {
+                    id : number
+                    image : string
+                    name : string
+                    instructor : boolean
+                }
+            },
+            ...
+        ]
+    }
+    ```
+
+- ## POST /chat
+
+  > Cria um novo chat
+
+  - ## Front-end:
+    
+    ### Body:
+    ```
+    {
+        name : string
+    }
+    ```
+
+  - ## Back-end:
+    
+    ### Json:
+    ```
+    {
+        id : number
+        name : string
+    }
+    ```
+
+- ## POST /chat/{idChat}
+
+  > Posta uma nova mensagem no chat
+  - ## Front-end:
+    
+    ### Path:
+    ```
+    idChat
+    ```
+
+    ### Body:
+    ```
+    {
+        text : string
+    }
+    ```
+
+  - ## Back-end:
+    
+    ### Text:
+    ```
+    mensagem de sucesso / erro
+    ```
+
+# /project
+
+- ## GET /project/{idProject}
+
+  - ## Front-end:
+    
+    ### Path:
+    ```
+    idProject
+    ```
+
+  - ## Back-end:
+
+    ### Json:
+    ```
+    {
+        id : number
+        name : string
+
+        messages : [
+            {
+                id : number
+                text : string
+
+                user : {
+                    id : number
+                    image : string
+                    name : string
+                    instructor : boolean
+                }
+            },
+            ...
+        ]
+    }
+    ```
+
+- ## POST /project
+
+  > Cria um novo projeto
+
+  - ## Front-end:
+    
+    ### Body:
+    ```
+    {
+        name : string
+        goals : string[]
+        description : string
+
+        users : number[]
+    }
+    ```
+
+    > O campo `users` se refere aos id's dos usuários adicionados ao projeto.
+
+  - ## Back-end:
+    
+    ### Json:
+    ```
+    {
+        id : number
+        name : string
+    }
+    ```
+
+- ## POST /project/{idProject}
+
+  > Posta uma nova mensagem no chat do projeto
+  - ## Front-end:
+    
+    ### Path:
+    ```
+    idProject
+    ```
+
+    ### Body:
+    ```
+    {
+        text : string
+    }
+    ```
+
+  - ## Back-end:
+    
+    ### Text:
+    ```
+    mensagem de sucesso / erro
+    ```
+
+# /feedback
+
+- ## POST /feedback
+
+  - ## Front-end:
+
+    ### Body:
+    ```
+    {
+        idSender : number
+        idReceptor : number
+        idProject : number
+        public : boolean
+        text : string
+        stars : number
+    }
+    ```
+  
   - ## Back-end:
 
     ### Text:
