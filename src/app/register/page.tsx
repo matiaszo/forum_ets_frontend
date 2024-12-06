@@ -3,11 +3,11 @@ import check from "@/assets/checked.png";
 import Image from 'next/image';
 import { ROUTES } from "@/constants/routes";
 
-export default function Home() {
+export default function Register() {
 
   const style = {
     firstDiv: "w-1/4 md:w-1/3  h-4/5",
-    secondDiv: "bg-white w-1/4 md:w-1/3  rounded-[8px] flex flex-col items-center justify-center h-4/5 gap-10",
+    secondDiv: "bg-white w-1/4 md:w-1/3 rounded-[8px] flex flex-col items-center justify-center pt-16 pb-16 gap-5",
     principalDiv: "bg-blue1 h-screen flex flex-row w-[100%] justify-center pt-20 pb-20 items-center gap-12"
   }
   return (
@@ -30,15 +30,21 @@ export default function Home() {
         <p className="space betw p center"></p>
       </div>
       <div className={style.secondDiv}>
-        <h1 className="font-robFont text-blue0 font-bold text-[35px]" >Login</h1>
+        <h1 className="font-robFont text-blue0 font-bold text-[35px]" >Register</h1>
         <div className="w-[100%] flex flex-col items-center">
           <label htmlFor="" className=" font-robFont w-[80%] text-start font-bold text-blue0">Edv</label><input  type="text" className=" font-robFont border rounded-[8px] w-[80%] h-10 p-2" placeholder="type your edv..."/>
         </div>
         <div className="w-[100%] flex flex-col items-center">
+          <label htmlFor="" className=" font-robFont w-[80%] text-start font-bold text-blue0">Name</label><input type="text" className=" font-robFont border rounded-[8px] w-[80%] h-10 p-2" placeholder="type your name..."/>
+        </div>
+        <div className="w-[100%] flex flex-col items-center">
+          <label htmlFor="" className=" font-robFont w-[80%] text-start font-bold text-blue0">Email</label><input type="text" className=" font-robFont border rounded-[8px] w-[80%] h-10 p-2" placeholder="type your email..."/>
+        </div>
+        <div className="w-[100%] flex flex-col items-center">
           <label htmlFor="" className=" font-robFont w-[80%] text-start font-bold text-blue0">Password</label><input type="text" className=" font-robFont border rounded-[8px] w-[80%] h-10 p-2" placeholder="type your pass..."/>
         </div>
-        <a href={ROUTES.profile} className="bg-blue1 w-[80%] p-2 text-white rounded-[8px] font-robFont text-center">Sign In</a>
-        <a href={ROUTES.register} className="font-robFont w-[80%] text-end font-bold text-blue0">Sign Up</a>
+        <a className="bg-blue1 w-[80%] p-2 text-white rounded-[8px] font-robFont">Sign Up</a>
+        <a href={ROUTES.login} className="font-robFont w-[80%] text-end font-bold text-blue0">Sign In</a>
       </div>
     </div>
   );

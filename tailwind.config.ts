@@ -24,6 +24,9 @@ export default {
       fontFamily:{
         robFont: "var(--roboto)"
       },
+      screens: {
+        'ml': '900px',
+      }
     },
   },
   plugins: [],
