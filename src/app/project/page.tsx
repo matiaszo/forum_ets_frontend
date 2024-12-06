@@ -7,7 +7,7 @@ import Image from "next/image"
 import { useState, ChangeEvent } from "react"
 import ImageComponent from "@/components/image"
 
-type People = {
+type Person = {
     id: number
     name: string
     image: string
@@ -20,17 +20,18 @@ type Goals = {
 const Projects = () => {
     const [open, setOpen] = useState<boolean>(false)
     const [openNext, setOpenNext] = useState<boolean>(true)
-    const [personValue, setPersonValue] = useState<string>('')
-    const [listPeople, setListPeople] = useState<People[]>([])
+    const [personValue, setPersonValue] = useState<string>('') 
+    const [listPeople, setListPeople] = useState<Person[]>([]) 
 
     // Função para atualizar o valor de pesquisa
     const setValuePerson = (event: ChangeEvent<HTMLInputElement>) => {
         setPersonValue(event.target.value)
     }
 
-    // Adiciona a pessoa à lista de pessoas selecionadas para o projeto
-    const eventAddToProject = (person: People) => {
-        setListPeople((prevList) => [...prevList, person])
+    // Função para criar ou selecionar uma pessoa
+    const createPeople = (person: Person) => {
+        if(!listPeople.includes(person))
+            setListPeople(prevList => [...prevList, person]) // Adiciona a pessoa ao projeto
     }
 
     return (
@@ -80,9 +81,9 @@ const Projects = () => {
                             {/* Exibição das pessoas encontradas */}
                             <div className={styles.peopleSelect}>
                                 {dataUser
-                                    .filter((person) => person.name.toLowerCase().includes(personValue.toLowerCase()))
+                                    .filter((person) => person.name.toLowerCase().includes(personValue.toLowerCase())) // Filtro da pesquisa
                                     .map((person) => (
-                                        <div className={styles.person} key={person.id} onClick={() => eventAddToProject(person)}>
+                                        <div className={styles.person} key={person.id} onClick={() => createPeople(person)}>
                                             <ImageComponent src={person.image} width={40} height={40} alt="" className={styles.imgProfile} />
                                             <p className="self-center">{person.name}</p>
                                             <ImageComponent src={'icons8-adicionar-100.png'} width={30} height={30} alt="" className={styles.iconAdd} />
@@ -96,7 +97,11 @@ const Projects = () => {
                             <div className={styles.people}>
                                 {listPeople.map((person) => (
                                     <div className={styles.person} key={person.id}>
-                                        <ImageComponent src={person.image} width={40} height={40} alt="" className={styles.imgProfile} />
+                                        {person.image ? (
+                                            <ImageComponent src={person.image} width={40} height={40} alt="" className={styles.imgProfile} />
+                                        ) : (
+                                            <div className="w-10 h-10 bg-gray-300 rounded-full" /> // Exibe um fallback caso 'image' esteja ausente
+                                        )}
                                         <p className="self-center">{person.name}</p>
                                     </div>
                                 ))}
@@ -144,12 +149,12 @@ const styles = {
     iconAdd: 'cursor-pointer h-8 w-auto self-end',
     modalContainer: "h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]",
     modalBox: "bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)]",
-    modalNext: "bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[520px]",
+    modalNext: "bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[620px]",
     btnNext: 'bg-blue3 p-2 text-white rounded px-6 py-4 hover:bg-blue2',
     btnCancel: 'bg-red-700 p-2 text-white rounded px-6 py-4 hover:bg-red-800',
-    peopleSelect: 'flex flex-col mt-2 overflow-y-scroll h-40 bg-gray-100 p-4 rounded',
-    people: 'flex flex-col mt-2 overflow-y-scroll h-40',
-    person: 'flex gap-2 items-center cursor-pointer',
+    peopleSelect: 'flex flex-col mt-2 overflow-y-scroll h-40 bg-gray-100 p-4 rounded ',
+    people: 'flex h-20 flex-col mt-2 overflow-y-scroll bg-gray-100 p-4 rounded',
+    person: 'flex  gap-2 items-center cursor-pointer m-2',
     imgProfile: 'object-cover rounded-full w-10 h-10',
 }
 
