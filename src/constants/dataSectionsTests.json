@@ -1,0 +1,63 @@
+[
+    {
+      "id": 1,
+      "title": "Projeto A",
+      "image": "https://via.placeholder.com/150",
+      "mainComment": "Este projeto visa melhorar a eficiência dos processos internos."
+    },
+    {
+      "id": 2,
+      "title": "Projeto B",
+      "image": "https://via.placeholder.com/150",
+      "mainComment": "Focado na criação de uma nova plataforma de e-commerce."
+    },
+    {
+      "id": 3,
+      "title": "Projeto C",
+      "image": "https://via.placeholder.com/150",
+      "mainComment": "Desenvolvimento de um sistema de gestão de tarefas para equipes."
+    },
+    {
+      "id": 4,
+      "title": "Projeto D",
+      "image": "https://via.placeholder.com/150",
+      "mainComment": "Criação de um aplicativo para controle de finanças pessoais."
+    },
+    {
+      "id": 5,
+      "title": "Projeto E",
+      "image": "https://via.placeholder.com/150",
+      "mainComment": "Projeto voltado para o lançamento de um novo produto digital."
+    },
+    {
+      "id": 6,
+      "title": "Projeto F",
+      "image": "https://via.placeholder.com/150",
+      "mainComment": "Desenvolvimento de um sistema de monitoramento de saúde corporativa."
+    },
+    {
+      "id": 7,
+      "title": "Projeto G",
+      "image": "https://via.placeholder.com/150",
+      "mainComment": "Implementação de um sistema de inteligência artificial para análise de dados."
+    },
+    {
+      "id": 8,
+      "title": "Projeto H",
+      "image": "https://via.placeholder.com/150",
+      "mainComment": "Projeto para otimizar o atendimento ao cliente por meio de chatbots."
+    },
+    {
+      "id": 9,
+      "title": "Projeto I",
+      "image": "https://via.placeholder.com/150",
+      "mainComment": "Desenvolvimento de um software para automação de processos industriais."
+    },
+    {
+      "id": 10,
+      "title": "Projeto J",
+      "image": "https://via.placeholder.com/150",
+      "mainComment": "Projeto de transformação digital em empresas de pequeno porte."
+    }
+  ]
+  
