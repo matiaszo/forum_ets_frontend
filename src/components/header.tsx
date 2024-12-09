@@ -9,6 +9,7 @@ export const Header = () => {
     const style= {
         option: "font-robFont text-blue5 text-xl"
     }
+    
     return(
         <div className="flex items-center w-[100%] bg-white shadow-md fixed top-0">
 
