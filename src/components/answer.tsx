@@ -1,18 +1,23 @@
 import React, { useState } from "react";
+import Image, { StaticImageData } from "next/image";
 import blueColor from "@/assets/blueColor.jpg";
-import Image from "next/image";
 
-interface Mention {
-  id: number;
-  username: string;
-  content: string;
+interface AnswerProps {
+  comment: Comment;
+  onReply: (comment: Comment) => void;
 }
 
 interface User {
   id: string;
   name: string;
   instructor: boolean;
-  image: string;
+  image: StaticImageData;
+}
+
+interface Mention {
+  id: number;
+  username: string;
+  content: string;
 }
 
 interface Comment {
@@ -22,52 +27,118 @@ interface Comment {
   mention: Mention | null;
 }
 
-interface AnswerProps {
-  comment: Comment;
-  onReply: (content: string, mention: Mention | null) => void; // Função para adicionar resposta
+interface Topic {
+  id: number;
+  title: string;
+  idSection: number;
+  mainComment: {
+    user: User;
+    content: string;
+  };
+  comments: Comment[];
 }
 
 export const Answer: React.FC<AnswerProps> = ({ comment, onReply }) => {
-  const [answerContent, setAnswerContent] = useState<string>("");
+  const [isReplying, setIsReplying] = useState(false);
+  const [replyContent, setReplyContent] = useState("");
+  const [replies, setReplies] = useState<Comment[]>([]); 
 
-  const handleReply = () => {
-    if (answerContent.trim() !== "") {
-      onReply(answerContent, comment.mention);
-      setAnswerContent(""); // Limpar a textarea
-    }
+  const handleReplySubmit = () => {
+    if (replyContent.trim() === "") return;
+
+    const newComment: Comment = {
+      id: Date.now(),
+      content: replyContent,
+      user: {
+        id: "currentUserId",
+        name: "Current User",
+        instructor: false,
+        image: blueColor,
+      },
+      mention: {
+        id: comment.id,
+        username: comment.user.name,
+        content: comment.content,
+      },
+    };
+
+    setReplies((prevReplies) => [...prevReplies, newComment]); 
+    setReplyContent("");
+    setIsReplying(false);
   };
 
   return (
-    <div className="flex flex-col bg-blue5 rounded-md shadow-xl mb-3 m-10">
-      <div className="flex items-center shadow-inner rounded-md p-3 text-black font-robFont mt-4 m-10 bg-alice">
-        <div className="flex flex-col ml-5 min-w-[90%]">
-          <div className="flex text-blue1 text-md mb-3">
-            <Image className="h-[3%] w-[6px] rounded-full mt-2" src={blueColor} alt="blue" />
-            <h1 className="ml-1">{comment.user.name}</h1>
-          </div>
-          <h3 className="ml-1 text-sm">{comment.content}</h3>
-        </div>
-      </div>
-      {/* Exibe menção se houver */}
+    <div className="flex flex-col bg-blue5 rounded-md shadow-xl mb-3 p-4">
       {comment.mention && (
-        <div className="ml-10 mt-2 text-sm text-gray-500">
-          Resposta de @{comment.mention.username}: {comment.mention.content}
+        <div className="p-3 border-l-2 border-blue4 mb-3 bg-blue1/10 rounded-md">
+          <p className="text-sm text-gray-600">Respondendo a: {comment.mention.username}</p>
+          <p className="text-gray-800 italic">"{comment.mention.content}"</p>
         </div>
       )}
-      {/* Input de resposta */}
-      <div className="flex flex-col border-blue5 border-2 rounded-md m-1">
-        <textarea
-          name="ans"
-          id="ans"
-          className="m-1 text-black placeholder-blue0 p-1 h-30 mb-1 focus:outline-none focus:border-none"
-          placeholder="Digite aqui"
-          value={answerContent}
-          onChange={(e) => setAnswerContent(e.target.value)}
+
+      <div className="flex items-center mb-2">
+        <Image
+          src={comment.user.image}
+          alt={comment.user.name}
+          className="h-8 w-8 rounded-full mr-3"
+          width={32}
+          height={32}
         />
-        <button className="bg-blue5 w-20 rounded-md p-2 ml-auto m-1" onClick={handleReply}>
-          Send
-        </button>
+        <p className="font-bold text-blue1">{comment.user.name}</p>
       </div>
+      <p className="mt-1 text-black">{comment.content}</p>
+
+      <button
+        className="mt-3 text-alice underline text-sm bg-blue4"
+        onClick={() => setIsReplying(true)}
+      >
+        Responder
+      </button>
+
+      {isReplying && (
+        <div className="mt-3 border-t pt-3">
+          <textarea
+            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue5"
+            placeholder={`Responda a ${comment.user.name}`}
+            value={replyContent}
+            onChange={(e) => setReplyContent(e.target.value)}
+          />
+          <div className="flex justify-end mt-2">
+            <button
+              className="bg-gray-300 text-black px-4 py-2 rounded-md mr-2"
+              onClick={() => setIsReplying(false)}
+            >
+              Cancelar
+            </button>
+            <button
+              className="bg-blue5 text-white px-4 py-2 rounded-md"
+              onClick={handleReplySubmit}
+            >
+              Enviar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {replies.length > 0 && (
+        <div className="mt-3">
+          {replies.map((reply) => (
+            <div key={reply.id} className="flex flex-col bg-blue3 rounded-md shadow-xl mb-3 p-4">
+              <div className="flex items-center mb-2">
+                <Image
+                  src={reply.user.image}
+                  alt={reply.user.name}
+                  className="h-8 w-8 rounded-full mr-3"
+                  width={32}
+                  height={32}
+                />
+                <p className="font-bold text-blue1">{reply.user.name}</p>
+              </div>
+              <p className="text-black">{reply.content}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
