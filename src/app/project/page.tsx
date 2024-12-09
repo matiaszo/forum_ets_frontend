@@ -20,6 +20,7 @@ type IProject = {
   goals: string[];
   description: string;
   users: Person[];
+  image: string;
 };
 
 interface user {
@@ -32,11 +33,6 @@ interface user {
     isUser: boolean;
 }
 
-interface project {
-    title: string;
-    image: string;
-    description: string | null;
-}
 
 const Projects = () => {
 
@@ -98,6 +94,128 @@ const Projects = () => {
     }
   };
 
+  const teste : IProject[] = [
+    {
+        name: "Título do Card",
+        image: "py_image.webp",
+        description: "discussões sobre javaruim",
+        goals: [
+            "seila", "nsei"
+        ],
+        users: [
+            {
+                id: 1,
+                name: "Mariana",
+                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
+            }
+        ]
+      },
+      {
+        name: "Outro Título",
+        image: "py_image.webp",
+        description: "forum para discutir sobre javaruim",
+        goals: [
+            "seila", "nsei"
+        ],
+        users: [
+            {
+                id: 1,
+                name: "Mariana",
+                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
+            }
+        ]
+      },
+      {
+        name: "Outro Título",
+        image: "py_image.webp",
+        description: "forum para discutir sobre algo",
+        goals: [
+            "seila", "nsei"
+        ],
+        users: [
+            {
+                id: 1,
+                name: "Mariana",
+                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
+            }
+        ]
+      },
+      {
+        name: "Outro Título",
+        image: "py_image.webp",
+        description: "forum para discutir sobre algo",
+        goals: [
+            "seila", "nsei"
+        ],
+        users: [
+            {
+                id: 1,
+                name: "Mariana",
+                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
+            }
+        ]
+      },
+      {
+        name: "Outro Título",
+        image: "py_image.webp",
+        description: "forum para discutir sobre algo",
+        goals: [
+            "seila", "nsei"
+        ],
+        users: [
+            {
+                id: 1,
+                name: "Mariana",
+                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
+            }
+        ]
+      },
+      {
+        name: "Outro Título",
+        image: "py_image.webp",
+        description: "forum para discutir sobre algo",
+        goals: [
+            "seila", "nsei"
+        ],
+        users: [
+            {
+                id: 1,
+                name: "Mariana",
+                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
+            }
+        ]
+      },
+      {
+        name: "Outro Título",
+        image: "py_image.webp",
+        description: "forum para discutir sobre algo",
+        goals: [
+            "seila", "nsei"
+        ],
+        users: [
+            {
+                id: 1,
+                name: "Mariana",
+                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
+            }
+        ]
+      }
+   ]
+
+    const [project, setProject] = useState<IProject[]>(teste);
+    const [newImage, setNewImage] = useState<string>("");
+
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            setNewImage(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+        }
+    };
+
   // função para finalizar o projeto e salvar os dados
   const setInfos = () => {
 
@@ -106,10 +224,13 @@ const Projects = () => {
       goals: goals,
       description: description,
       users: listContributors,
+      image: newImage
     };
 
     // adiciona o novo projeto à lista de projetos
     setInfoProject(newProject);
+
+    setProject((prevProjects) => [...prevProjects, newProject]);
 
     // reseta os campos para o próximo projeto
     setNameProject("");
@@ -135,19 +256,9 @@ const Projects = () => {
 
    // IMAGEMMMMMMMMMM
 
-    const [project, setProject] = useState<project[]>(dataTests);
-    const [newImage, setNewImage] = useState<string>("");
+ 
 
-    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-            setNewImage(reader.result as string);
-        };
-        reader.readAsDataURL(file);
-        }
-    };
+    
 
   return (
     <div className="flex flex-col mt-20">
@@ -267,14 +378,13 @@ const Projects = () => {
                 <form action={"POST"} id="modal" className={styles.modalNext}>
                     <h1 className={styles.title}>Adicione pessoas ao seu projeto</h1>
                     <div className={`${styles.content} mb-8`}>
-                    <p>Busque por nome</p>
                     <div className="flex gap-10">
                         <input
                         id="person"
                         className={styles.input}
                         onChange={setValuePerson}
                         type="text"
-                        placeholder="ex: Eduardo Henrique Ribeiro"
+                        placeholder="Pesquise por participantes..."
                         value={personValue}
                         />
                     </div>
@@ -379,8 +489,8 @@ const Projects = () => {
 
             {/* Cards view */}
             <div className={styles.container}>
-                {dataTests.map((item, index) => (
-                    <Card key={index} title={item.title} mainQuestion={item.description} image={item.image} />
+                {project.map((item, index) => (
+                    <Card key={index} title={item.name} mainQuestion={item.description} image={item.image} />
                 ))}
             </div>
 
@@ -394,8 +504,8 @@ export default Projects;
 
 const styles = {
   title: "text-blue1 text-3xl",
-  input: "bg-gray-100 w-full p-4 my-4 border-b-2 border-blue3 outline-none ease-in-out hover:border-blue1 ",
-  inputObj: "capitalize bg-gray-100 w-[500px] p-4 my-4 border-b-2 border-blue3 outline-none ease-in-out hover:border-blue1",
+  input: " w-full p-4 my-4 border-b-2 border-blue3 outline-none ease-in-out hover:border-blue1 ",
+  inputObj: "capitalize w-[500px] p-4 my-4 border-b-2 border-blue3 outline-none ease-in-out hover:border-blue1",
   content: "m-4",
   header: "",
   container: "flex justify-center items-center flex-wrap m-10 mx-35 gap-8",
