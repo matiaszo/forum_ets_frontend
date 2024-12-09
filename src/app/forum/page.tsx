@@ -9,7 +9,7 @@ import { Header } from "@/components/header";
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 
-const Home = () => {
+const Forum = () => {
     
     const [searchValue, setSearchValue] = useState('');
 
@@ -68,4 +68,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Forum;
