@@ -51,7 +51,7 @@ const Forum = () => {
                     )
                     .map((item, index) => {
                         return (
-                            <Link href={ROUTES.section} key={index}>
+                            <Link href={ROUTES.session} key={index}>
                                 <Card
                                 title={item.title}
                                 mainQuestion={item.description}

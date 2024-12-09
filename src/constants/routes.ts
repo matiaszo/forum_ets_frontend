@@ -7,5 +7,5 @@ export enum ROUTES{
     project = "/project",
     profile = "/profile",
     topic = "/topic",
-    section = "/section",
+    session = "/session",
 }
