@@ -114,7 +114,7 @@ export default function Chat() {
         </div>
       </div>
 
-      <div className="flex flex-co rounded-lg items-center justify-center min-h-[100%] w-[70%] bg-alice">
+      <div className="flex flex-col rounded-lg items-center justify-center min-h-[100%] w-[70%] bg-alice">
         {selectedGroup ? (
           <>
             <div className="flex items-center justify-center w-full bg-blue4 rounded-md p-3">

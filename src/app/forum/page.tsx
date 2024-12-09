@@ -6,6 +6,8 @@ import search from "@/assets/search.png";
 import Image from "next/image";
 import { useState } from "react";
 import { Header } from "@/components/header";
+import Link from "next/link";
+import { ROUTES } from "@/constants/routes";
 
 const Home = () => {
     
@@ -51,12 +53,13 @@ const Home = () => {
                     )
                     .map((item, index) => {
                         return (
-                            <Card
-                            key={index}
-                            title={item.title}
-                            mainQuestion={item.description}
-                            image={item.image}
-                            />
+                            <Link href={ROUTES.section} key={index}>
+                                <Card
+                                title={item.title}
+                                mainQuestion={item.description}
+                                image={item.image}
+                                />
+                            </Link>
                         );
                     })}
                 </div>
