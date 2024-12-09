@@ -21,7 +21,7 @@ const Home = () => {
     };
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col mt-20">
             <div className="flex flex-col flex-wrap m-6 ml-14">
                 <h1 className={styles.h1}>Acesse o fórum do setor aqui</h1>
                 <p>Converse com seus colegas sobre os mais diversos tópicos.</p>
