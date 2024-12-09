@@ -22,8 +22,29 @@ type IProject = {
   users: Person[];
 };
 
+interface user {
+    id: string;
+    name: string;
+    image: string;
+    bio: string;
+    gitUseraname: string | null;
+    instructor: number;
+    isUser: boolean;
+}
+
+interface project {
+    title: string;
+    image: string;
+    description: string | null;
+}
+
 const Projects = () => {
-  const [openModalInfo, setOpenModalInfo] = useState<boolean>(true);
+
+    const u : user = {id: "1", name: "Mariana", bio: "slaaa", image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg", gitUseraname: 'xmarimarquesh', instructor: 0, isUser: true}
+    
+    const [usuario, setUsuario] = useState(u);
+
+  const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
   const [openModalAddPeople, setOpenModalAddPeople] = useState<boolean>(false);
 
   // variáveis de estado para o projeto
@@ -112,6 +133,22 @@ const Projects = () => {
         setListContributors((prevList) => prevList.filter(person => person !== personToRemove))
    }
 
+   // IMAGEMMMMMMMMMM
+
+    const [project, setProject] = useState<project[]>(dataTests);
+    const [newImage, setNewImage] = useState<string>("");
+
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            setNewImage(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+        }
+    };
+
   return (
     <div className="flex flex-col mt-20">
         <Header/>
@@ -121,6 +158,17 @@ const Projects = () => {
                 <div className={styles.modalContainer}>
                 <form action={"POST"} id="modal" className={styles.modalBox}>
                     <h1 className={styles.title}>Crie um novo projeto</h1>
+                    <p className="mt-5">Selecione a imagem de seu projeto</p>
+                    <div className="flex flex-col items-center space-y-4">
+                        <input type="file" accept="image/*" capture="environment" id="cameraInput" onChange={handleImageChange} className="hidden"/>
+                        <label htmlFor="cameraInput" className="cursor-pointer">
+                        {newImage ? (
+                            <img src={newImage} alt="Nova Imagem" className="w-96 h-64 object-cover rounded-lg"/>
+                            ) : (
+                                <div className="w-96 h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">Sem Foto</div>
+                            )}
+                        </label>
+                    </div>
                     <div className={styles.content}>
                     <p>Digite um nome para o seu projeto</p>
 
@@ -320,11 +368,11 @@ const Projects = () => {
                 <p>Seus projetos aparecem aqui</p>
 
                 {/* Add projects */}
-                <div className="flex justify-end">
-                    <div  className="w-auto" onClick={() => setOpenModalInfo(true)}>
-                        <ImageComponent src={'icons8-adicionar-100.png'} width={50} height={50} alt="" className={styles.icon} />
+                    <div className="flex justify-end">
+                        <div  className="w-auto" onClick={() => setOpenModalInfo(true)}>
+                            <ImageComponent src={'icons8-adicionar-100.png'} width={50} height={50} alt="" className={styles.icon} />
+                        </div>
                     </div>
-                </div>
             </div>
 
             {/* Cards view */}
@@ -356,12 +404,12 @@ const styles = {
   modalBox:
     "bg-white w-[600px] p-4 w-auto flex-wrap rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)]",
   modalNext:
-    "bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[620px]",
+    "bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[90%]",
   btnNext: "bg-blue3 p-2 text-white rounded px-6 py-4 hover:bg-blue2",
   btnCancel: "bg-red-700 p-2 text-white rounded px-6 py-4 hover:bg-red-800",
-  peopleSelect: "flex flex-col mt-2 overflow-y-scroll h-40 bg-gray-100 p-4 rounded ",
-  people: "flex max-h-28 flex-col mt-2 overflow-y-scroll bg-gray-100 rounded",
+  peopleSelect: "flex flex-col mt-2 overflow-y-scroll h-60 bg-gray-100 p-4 rounded ",
+  people: "flex max-h-60 flex-col mt-2 overflow-y-scroll bg-gray-100 rounded",
   person: "flex gap-2 items-center cursor-pointer m-2",
-  imgProfile: "object-cover rounded-full w-10 h-10",
+  imgProfile: "object-cover rounded-full w-10 h-10 flex flex-row items-end justify-end",
 };
 

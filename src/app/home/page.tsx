@@ -15,7 +15,22 @@ interface noticia {
   content: string;
 }
 
+interface user {
+    id: string;
+    name: string;
+    image: string;
+    bio: string;
+    gitUseraname: string | null;
+    instructor: number;
+    isUser: boolean;
+}
+
+
 const Home = () => {
+    const u : user = {id: "1", name: "Mariana", bio: "slaaa", image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg", gitUseraname: 'xmarimarquesh', instructor: 1, isUser: true}
+    
+    const [usuario, setUsuario] = useState(u);
+
   const initialNoticias: noticia[] = [
     {
       image: "https://www.autoindustria.com.br/wp-content/uploads/2017/07/f%C3%A1brica-bosch.jpg",
@@ -99,7 +114,17 @@ const Home = () => {
             </div>
             <div className="flex justify-end w-[100%]">
             <div className="flex items-end justify-end cursor-pointer w-[100%]" onClick={() => setModalAdd(true)}>
-                <Image src={plus} width={50} height={50} alt="Adicionar Notícia" />
+                { usuario.instructor == 1 ? (
+                    <div className="flex justify-end">
+                        <div  className="w-auto" onClick={() => setModalAdd(true)}>
+                            <Image src={plus} width={50} height={50} alt="Adicionar Notícia" />
+                        </div>
+                    </div>
+
+                ) : (
+                    <>
+                    </>
+                )}
             </div>
             </div>
             <div className="flex justify-center mt-10 flex-col gap-8 w-[100%]">

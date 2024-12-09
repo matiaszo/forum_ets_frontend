@@ -338,13 +338,13 @@ export default function Home() {
                 </div>
                 <div className="w-[70%] shadow-lg rounded-lg min-h-[80%] p-5 ">
                     <HeaderProfile activeTab={activeTab} setActiveTab={setActiveTab} />
-                    <div className="pt-5 ">
+                    <div className="pt-2 ">
                         {renderTabContent()}
                     </div>
                 </div>
 
                 <Modal isOpen={isModalOpen} onClose={closeModal} className="m-0">
-                    <div className="max-h-screen overflow-y-auto flex flex-col w-[100%] items-center scrollbar scrollbar-thumb-blue5 scrollbar-track-gray-100 gap-2 p-2">
+                    <div className="max-h-[90vh] overflow-y-auto flex flex-col w-[100%] items-center scrollbar scrollbar-thumb-blue5 scrollbar-track-gray-100 gap-2 p-2">
                         <h1 className="text-[32px] mt-5 font-robFont ">Editar Perfil</h1>
                         <div className="flex flex-col items-center space-y-4">
                             <input type="file" accept="image/*" capture="environment" id="cameraInput" onChange={handleImageChange} className="hidden" />
