@@ -1,0 +1,83 @@
+[
+  {
+      "name": "Projeto Alpha",
+      "goals": ["Desenvolver um novo produto", "Expandir para o mercado internacional", "Melhorar a experiência do usuário"],
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit officiis fugit culpa in. Rem sunt magnam consequuntur facere, quos nulla distinctio, sit fugiat voluptatum in autem minima, repellat cupiditate quod.Vitae illo commodi cupiditate officia corporis, culpa pariatur. Quasi explicabo aut quidem, iure a, optio odit aperiam corporis animi cumque adipisci porro incidunt tempore consectetur saepe illum error velit accusamus.Neque ea molestias minima voluptatibus! Reprehenderit quo ad, eos odio natus architecto quam, quisquam aspernatur voluptatum facilis, nobis reiciendis. Quas animi officiis mollitia iste illum magnam omnis eius, nostrum autem!Veniam velit aliquid ipsam, ex nam necessitatibus doloribus quia dignissimos, rerum tempora harum voluptate cum provident et esse soluta molestias itaque? Natus illo deleniti reprehenderit cupiditate asperiores praesentium fugit eum?Numquam aspernatur et beatae alias excepturi nemo laudantium cupiditate nisi quia nobis explicabo esse nostrum recusandae, placeat vero eos, odio in facere officia est accusamus sapiente similique mollitia? Odio, iure!",
+      "users": [
+          { "id": 1, "image": "https://www.example.com/user1.jpg", "name": "John Doe", "instructor": true },
+          { "id": 2, "image": "https://www.example.com/user2.jpg", "name": "Jane Smith", "instructor": false },
+          { "id": 3, "image": "https://www.example.com/user3.jpg", "name": "Sam Brown", "instructor": false },
+          { "id": 5, "image": "https://www.example.com/user5.jpg", "name": "Paul White", "instructor": true }
+      ]
+  },
+  {
+      "name": "Projeto Beta",
+      "goals": ["Aumentar a base de clientes", "Reduzir custos operacionais", "Melhorar a integração com parceiros"],
+      "description": "O objetivo deste projeto é melhorar a eficiência operacional e expandir a base de clientes através de melhorias nos processos internos.",
+      "users": [
+          { "id": 4, "image": "https://www.example.com/user4.jpg", "name": "Lucy Black", "instructor": false },
+          { "id": 6, "image": "https://www.example.com/user6.jpg", "name": "Michael Green", "instructor": true },
+          { "id": 7, "image": "https://www.example.com/user7.jpg", "name": "Emma Davis", "instructor": false }
+      ]
+  },
+  {
+      "name": "Projeto Gamma",
+      "goals": ["Lançar uma nova versão do software", "Aumentar a segurança do sistema", "Otimizar a performance do servidor"],
+      "description": "Atualização da plataforma para garantir maior segurança, performance e oferecer novas funcionalidades para os usuários.",
+      "users": [
+          { "id": 2, "image": "https://www.example.com/user2.jpg", "name": "Jane Smith", "instructor": false },
+          { "id": 8, "image": "https://www.example.com/user8.jpg", "name": "Chris Jones", "instructor": false },
+          { "id": 10, "image": "https://www.example.com/user10.jpg", "name": "Sarah Lee", "instructor": true }
+      ]
+  },
+  {
+      "name": "Projeto Delta",
+      "goals": ["Desenvolver uma nova funcionalidade", "Reduzir o tempo de resposta do sistema", "Aprimorar a interface do usuário"],
+      "description": "Foco em melhorias na interface do usuário e na performance do sistema, para proporcionar uma melhor experiência ao cliente.",
+      "users": [
+          { "id": 1, "image": "https://www.example.com/user1.jpg", "name": "John Doe", "instructor": true },
+          { "id": 4, "image": "https://www.example.com/user4.jpg", "name": "Lucy Black", "instructor": false },
+          { "id": 9, "image": "https://www.example.com/user9.jpg", "name": "Oliver Taylor", "instructor": false }
+      ]
+  },
+  {
+      "name": "Projeto Epsilon",
+      "goals": ["Realizar uma pesquisa de mercado", "Lançar um novo serviço", "Expandir para novos segmentos"],
+      "description": "Pesquisa e desenvolvimento de um novo serviço baseado nas necessidades emergentes do mercado.",
+      "users": [
+          { "id": 5, "image": "https://www.example.com/user5.jpg", "name": "Paul White", "instructor": true },
+          { "id": 7, "image": "https://www.example.com/user7.jpg", "name": "Emma Davis", "instructor": false },
+          { "id": 10, "image": "https://www.example.com/user10.jpg", "name": "Sarah Lee", "instructor": true }
+      ]
+  },
+  {
+      "name": "Projeto Zeta",
+      "goals": ["Automatizar processos internos", "Reduzir erros humanos", "Aumentar a produtividade"],
+      "description": "Implementação de tecnologias de automação para otimizar processos e aumentar a eficiência operacional.",
+      "users": [
+          { "id": 3, "image": "https://www.example.com/user3.jpg", "name": "Sam Brown", "instructor": false },
+          { "id": 6, "image": "https://www.example.com/user6.jpg", "name": "Michael Green", "instructor": true },
+          { "id": 8, "image": "https://www.example.com/user8.jpg", "name": "Chris Jones", "instructor": false }
+      ]
+  },
+  {
+      "name": "Projeto Eta",
+      "goals": ["Melhorar a colaboração entre equipes", "Desenvolver ferramentas de comunicação", "Integrar sistemas diferentes"],
+      "description": "Projeto focado em melhorar a comunicação e colaboração interna através da implementação de novas ferramentas e integração de sistemas.",
+      "users": [
+          { "id": 2, "image": "https://www.example.com/user2.jpg", "name": "Jane Smith", "instructor": false },
+          { "id": 4, "image": "https://www.example.com/user4.jpg", "name": "Lucy Black", "instructor": false },
+          { "id": 7, "image": "https://www.example.com/user7.jpg", "name": "Emma Davis", "instructor": false }
+      ]
+  },
+  {
+      "name": "Projeto Theta",
+      "goals": ["Criar uma versão mobile do produto", "Aumentar a acessibilidade", "Expandir para novos mercados"],
+      "description": "Desenvolver uma versão mobile do produto para atender usuários em diferentes plataformas e aumentar a acessibilidade.",
+      "users": [
+          { "id": 1, "image": "https://www.example.com/user1.jpg", "name": "John Doe", "instructor": true },
+          { "id": 5, "image": "https://www.example.com/user5.jpg", "name": "Paul White", "instructor": true },
+          { "id": 9, "image": "https://www.example.com/user9.jpg", "name": "Oliver Taylor", "instructor": false }
+      ]
+  }
+]
