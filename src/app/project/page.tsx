@@ -271,7 +271,7 @@ const Projects = () => {
                     <div className="flex gap-10">
                         <input
                         id="person"
-                        className={styles.inputObj}
+                        className={styles.input}
                         onChange={setValuePerson}
                         type="text"
                         placeholder="ex: Eduardo Henrique Ribeiro"
@@ -298,19 +298,21 @@ const Projects = () => {
                                 alt={person.name}
                                 className={styles.imgProfile}
                             />
-                            <p className="self-center">{person.name}</p>
-                            <ImageComponent
-                                src={"icons8-adicionar-100.png"}
-                                width={30}
-                                height={30}
-                                alt=""
-                                className={styles.iconAdd}
-                            />
+                            <p className="self-center ">{person.name}</p>
+                            <div className="ml-auto" >
+                                <ImageComponent
+                                    src={"icons8-adicionar-100.png"}
+                                    width={30}
+                                    height={30}
+                                    alt=""
+                                    className={styles.iconAdd}
+                                />
+                            </div>
                             </div>
                         ))}
                     </div>
 
-                    <p className="my-4">Abaixo irão aparecer as pessoas adicionadas</p>
+                    <p className="my-4 ">Abaixo irão aparecer as pessoas adicionadas</p>
 
                     {/* exibe as pessoas que foram selecionadas */}
                     {listContributors.length > 0 && (
