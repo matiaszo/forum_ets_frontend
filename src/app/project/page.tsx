@@ -108,190 +108,191 @@ const Projects = () => {
   console.log(infoProject)
 
   return (
-    <>
-      <Header />
+    <div className="flex flex-col mt-20">
+        <Header/>
+        <div className="pr-20 pl-20 pt-10 w-[100%]">
+            {/* Modal de criação do projeto */}
+            {openModalInfo && (
+                <div className={styles.modalContainer}>
+                <form action={"POST"} id="modal" className={styles.modalBox}>
+                    <h1 className={styles.title}>Crie um novo projeto</h1>
+                    <div className={styles.content}>
+                    <p>Digite um nome para o seu projeto</p>
 
-      {/* Modal de criação do projeto */}
-      {openModalInfo && (
-        <div className={styles.modalContainer}>
-          <form action={"POST"} id="modal" className={styles.modalBox}>
-            <h1 className={styles.title}>Crie um novo projeto</h1>
-            <div className={styles.content}>
-              <p>Digite um nome para o seu projeto</p>
+                    <input
+                        className={styles.input}
+                        onChange={setNameOfProject}
+                        value={nameProject}
+                        type="text"
+                    />
 
-              <input
-                className={styles.input}
-                onChange={setNameOfProject}
-                value={nameProject}
-                type="text"
-              />
+                    <p>Digite uma descrição para o seu projeto</p>
 
-              <p>Digite uma descrição para o seu projeto</p>
+                    <input
+                        className={styles.input}
+                        onChange={setDescriptionOfProject}
+                        value={description}
+                        type="text"
+                    />
 
-              <input
-                className={styles.input}
-                onChange={setDescriptionOfProject}
-                value={description}
-                type="text"
-              />
-
-              <p>Adicione os objetivos do seu projeto</p>
-              <div className="flex gap-10">
-                <input
-                  className={styles.inputObj}
-                  type="text"
-                  value={goalValue} 
-                  onChange={(e) => setGoalValue(e.target.value)} // atualiza o valor do objetivo
-                  onKeyDown={handleGoalKeyDown} // chama addGoal quando pressionar Enter
-                />
-                <div onClick={addGoal}>
-                  <ImageComponent
-                    src={"icons8-adicionar-100.png"}
-                    width={50}
-                    height={50}
-                    alt="Adicionar objetivo"
-                    className={styles.icon}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-center gap-3">
-              <button
-                className={styles.btnNext}
-                onClick={() => {
-                  setOpenModalInfo(false);
-                  setOpenModalAddPeople(true);
-                //   setInfos(); // Salva o projeto ao clicar
-                }}
-              >
-                Próximo
-              </button>
-              <button
-                className={styles.btnCancel}
-                onClick={() => {
-                  setOpenModalInfo(false);
-                }}
-              >
-                Cancelar
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      {/* Modal para adicionar pessoas ao projeto */}
-      {openModalAddPeople && (
-        <div className={styles.modalContainer}>
-          <form action={"POST"} id="modal" className={styles.modalNext}>
-            <h1 className={styles.title}>Adicione pessoas ao seu projeto</h1>
-            <div className={`${styles.content} mb-8`}>
-              <p>Busque por nome</p>
-              <div className="flex gap-10">
-                <input
-                  id="person"
-                  className={styles.inputObj}
-                  onChange={setValuePerson}
-                  type="text"
-                  placeholder="ex: Eduardo Henrique Ribeiro"
-                  value={personValue}
-                />
-              </div>
-
-              {/* exibição das pessoas encontradas */}
-              <div className={styles.peopleSelect}>
-                {dataUser
-                  .filter((person) =>
-                    person.name.toLowerCase().includes(personValue.toLowerCase())
-                  )
-                  .map((person) => (
-                    <div
-                      key={person.id}
-                      className={styles.person}
-                      onClick={() => addPeopleToList(person)}
+                    <p>Adicione os objetivos do seu projeto</p>
+                    <div className="flex gap-10">
+                        <input
+                        className={styles.inputObj}
+                        type="text"
+                        value={goalValue} 
+                        onChange={(e) => setGoalValue(e.target.value)} // atualiza o valor do objetivo
+                        onKeyDown={handleGoalKeyDown} // chama addGoal quando pressionar Enter
+                        />
+                        <div onClick={addGoal}>
+                        <ImageComponent
+                            src={"icons8-adicionar-100.png"}
+                            width={50}
+                            height={50}
+                            alt="Adicionar objetivo"
+                            className={styles.icon}
+                        />
+                        </div>
+                    </div>
+                    </div>
+                    <div className="flex justify-center gap-3">
+                    <button
+                        className={styles.btnNext}
+                        onClick={() => {
+                        setOpenModalInfo(false);
+                        setOpenModalAddPeople(true);
+                        //   setInfos(); // Salva o projeto ao clicar
+                        }}
                     >
-                      <ImageComponent
-                        src={person.image}
-                        width={40}
-                        height={40}
-                        alt={person.name}
-                        className={styles.imgProfile}
-                      />
-                      <p className="self-center">{person.name}</p>
-                      <ImageComponent
-                        src={"icons8-adicionar-100.png"}
-                        width={30}
-                        height={30}
-                        alt=""
-                        className={styles.iconAdd}
-                      />
+                        Próximo
+                    </button>
+                    <button
+                        className={styles.btnCancel}
+                        onClick={() => {
+                        setOpenModalInfo(false);
+                        }}
+                    >
+                        Cancelar
+                    </button>
                     </div>
-                  ))}
-              </div>
-
-              <p className="my-4">Abaixo irão aparecer as pessoas adicionadas</p>
-
-              {/* exibe as pessoas que foram selecionadas */}
-              {listContributors.length > 0 && (
-                <div className={styles.people}>
-                  {listContributors.map((person) => (
-                    <div key={person.id} className={styles.person}>
-                      <ImageComponent
-                        src={person.image}
-                        width={40}
-                        height={40}
-                        alt={person.name}
-                        className={styles.imgProfile}
-                      />
-                      <p className="self-center">{person.name}</p>
-                    </div>
-                  ))}
+                </form>
                 </div>
-              )}
+            )}
+
+            {/* Modal para adicionar pessoas ao projeto */}
+            {openModalAddPeople && (
+                <div className={styles.modalContainer}>
+                <form action={"POST"} id="modal" className={styles.modalNext}>
+                    <h1 className={styles.title}>Adicione pessoas ao seu projeto</h1>
+                    <div className={`${styles.content} mb-8`}>
+                    <p>Busque por nome</p>
+                    <div className="flex gap-10">
+                        <input
+                        id="person"
+                        className={styles.inputObj}
+                        onChange={setValuePerson}
+                        type="text"
+                        placeholder="ex: Eduardo Henrique Ribeiro"
+                        value={personValue}
+                        />
+                    </div>
+
+                    {/* exibição das pessoas encontradas */}
+                    <div className={styles.peopleSelect}>
+                        {dataUser
+                        .filter((person) =>
+                            person.name.toLowerCase().includes(personValue.toLowerCase())
+                        )
+                        .map((person) => (
+                            <div
+                            key={person.id}
+                            className={styles.person}
+                            onClick={() => addPeopleToList(person)}
+                            >
+                            <ImageComponent
+                                src={person.image}
+                                width={40}
+                                height={40}
+                                alt={person.name}
+                                className={styles.imgProfile}
+                            />
+                            <p className="self-center">{person.name}</p>
+                            <ImageComponent
+                                src={"icons8-adicionar-100.png"}
+                                width={30}
+                                height={30}
+                                alt=""
+                                className={styles.iconAdd}
+                            />
+                            </div>
+                        ))}
+                    </div>
+
+                    <p className="my-4">Abaixo irão aparecer as pessoas adicionadas</p>
+
+                    {/* exibe as pessoas que foram selecionadas */}
+                    {listContributors.length > 0 && (
+                        <div className={styles.people}>
+                        {listContributors.map((person) => (
+                            <div key={person.id} className={styles.person}>
+                            <ImageComponent
+                                src={person.image}
+                                width={40}
+                                height={40}
+                                alt={person.name}
+                                className={styles.imgProfile}
+                            />
+                            <p className="self-center">{person.name}</p>
+                            </div>
+                        ))}
+                        </div>
+                    )}
+                    </div>
+
+                    <div className="flex justify-center gap-3">
+                    <button
+                        className={styles.btnNext}
+                        onClick={() => {
+                        setInfos(); // finaliza o projeto e salva
+                        }}
+                    >
+                        Finalizar
+                    </button>
+
+                    <button
+                        className={styles.btnCancel}
+                        onClick={() => {
+                        setOpenModalAddPeople(false);
+                        }}
+                    >
+                        Cancelar
+                    </button>
+                    </div>
+                </form>
+                </div>
+            )}
+
+            <div className={styles.header}>
+                <h1 className={styles.title}>Seus projetos</h1>
+                <p>Seus projetos aparecem aqui</p>
+
+                {/* Add projects */}
+                <div className="flex justify-end">
+                    <div className="w-auto" onClick={() => setOpenModalInfo(true)}>
+                        <ImageComponent src={'icons8-adicionar-100.png'} width={50} height={50} alt="" className={styles.icon} />
+                    </div>
+                </div>
             </div>
 
-            <div className="flex justify-center gap-3">
-              <button
-                className={styles.btnNext}
-                onClick={() => {
-                  setInfos(); // finaliza o projeto e salva
-                }}
-              >
-                Finalizar
-              </button>
-
-              <button
-                className={styles.btnCancel}
-                onClick={() => {
-                  setOpenModalAddPeople(false);
-                }}
-              >
-                Cancelar
-              </button>
+            {/* Cards view */}
+            <div className={styles.container}>
+                {dataTests.map((item, index) => (
+                    <Card key={index} title={item.title} mainQuestion={item.description} image={item.image} />
+                ))}
             </div>
-          </form>
+
+            </div>
         </div>
-      )}
-
-    <div className={styles.header}>
-        <h1 className={styles.title}>Seus projetos</h1>
-        <p>Seus projetos aparecem aqui</p>
-
-        {/* Add projects */}
-        <div className="flex justify-end">
-            <div className="w-auto" onClick={() => setOpenModalInfo(true)}>
-                <ImageComponent src={'icons8-adicionar-100.png'} width={50} height={50} alt="" className={styles.icon} />
-            </div>
-        </div>
-    </div>
-
-    {/* Cards view */}
-    <div className={styles.container}>
-        {dataTests.map((item, index) => (
-            <Card key={index} title={item.title} mainQuestion={item.description} image={item.image} />
-        ))}
-    </div>
-
-    </>
   );
 };
 
@@ -299,12 +300,12 @@ export default Projects;
 
 
 const styles = {
-  title: "text-blue1 text-3xl mt-4",
+  title: "text-blue1 text-3xl",
   input: "bg-gray-100 w-full p-4 my-4 border-b-4 border-blue3",
   inputObj: "bg-gray-100 w-[500px] p-4 my-4 border-b-4 border-blue3",
   content: "m-4",
-  header: "m-10 mt-32",
-  container: "flex justify-center items-center flex-wrap m-10 mx-35",
+  header: "",
+  container: "flex justify-center items-center flex-wrap m-10 mx-35 gap-8",
   icon: "cursor-pointer h-16 w-auto self-center",
   iconAdd: "cursor-pointer h-8 w-auto self-end",
   modalContainer:

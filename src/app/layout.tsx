@@ -25,7 +25,6 @@ export default function RootLayout({
       <body
         className={`${roboto.variable} antialiased h-fit`}
       >
-        <Header/>
         <main>{children}</main>
         
       </body>

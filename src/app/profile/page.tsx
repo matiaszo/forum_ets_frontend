@@ -296,7 +296,7 @@ export default function Home() {
         <div className="w-[100%] mt-7">
             <Header/>
             <div className="w-[100%] flex flex-row p-10 gap-10">
-                <div className="w-[30%] h-screen shadow-lg flex-col rounded-lg flex items-center p-12 justify-between">
+                <div className="w-[30%] min-h-[80%] shadow-lg flex-col rounded-lg flex items-center p-12 justify-between">
                     <div className="flex flex-col items-center w-[100%]">
                         <img src={image} alt="profile photo" className="w-64 h-64 object-cover rounded-full" />
                         <h1 className="text-[26px] font-robFont mt-2" >{usuario.name}</h1>
@@ -336,7 +336,7 @@ export default function Home() {
                         )}
                     </div>
                 </div>
-                <div className="w-[70%] shadow-lg rounded-lg min-h-screen p-5 ">
+                <div className="w-[70%] shadow-lg rounded-lg min-h-[80%] p-5 ">
                     <HeaderProfile activeTab={activeTab} setActiveTab={setActiveTab} />
                     <div className="pt-5 ">
                         {renderTabContent()}
