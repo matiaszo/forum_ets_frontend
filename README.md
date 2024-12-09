@@ -1,3 +1,5 @@
+baixar: npm install tailwind-scrollbar
+
 > para abrir use ctrl + shift + v
 
 ### LoginResponse:
