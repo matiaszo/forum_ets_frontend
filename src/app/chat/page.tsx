@@ -87,8 +87,8 @@ export default function Chat() {
       <Header/>
       <div className="mr-20 ml-20 flex w-[100%] gap-3">
 
-      <div className="flex flex-col gap-4 bg-blue1 min-h-[100%] rounded-md p-3 items-center w-[30%]">
-        <h1 className="flex items-center justify-center bg-blue4 rounded-md w-[60%] text-center h-8">
+      <div className="flex flex-col gap-4 bg-white shadow-lg min-h-[100%] rounded-md p-3 items-center w-[30%]">
+        <h1 className="flex items-center justify-center rounded-md w-[60%] text-center h-8 text-black font-bold text-[24px]">
           Seus grupos
         </h1>
 
@@ -100,12 +100,12 @@ export default function Chat() {
               <div
               key={group.id}
               onClick={() => setSelectedGroup(group)}
-              className={`flex flex-col bg-blue4 p-3 rounded-md shadow-md w-full cursor-pointer ${
-                selectedGroup?.id === group.id ? "bg-blue3" : ""
+              className={`flex flex-col p-3 border-b border-blue2 w-full cursor-pointer ${
+                selectedGroup?.id === group.id ? "bg-blue-100 rounded-lg" : ""
               }`}
               >
-                <h2 className="text-lg font-bold">{group.name}</h2>
-                <p className="text-sm text-gray-200">
+                <h2 className="text-lg font-bold ">{group.name}</h2>
+                <p className="text-[15px] text-gray-700">
                   {lastMessage?.text || "Nenhuma mensagem ainda."}
                 </p>
               </div>
@@ -117,8 +117,8 @@ export default function Chat() {
       <div className="flex flex-col rounded-lg items-center justify-center min-h-[100%] w-[70%] bg-alice">
         {selectedGroup ? (
           <>
-            <div className="flex items-center justify-center w-full bg-blue4 rounded-md p-3">
-              <h1 className="text-xl font-bold text-white">
+            <div className="flex items-center justify-center w-full bg-blue2 rou p-3 rounded-t-lg">
+              <h1 className="text-xl font-bold text-white ">
                 {selectedGroup.name}
               </h1>
             </div>
@@ -142,16 +142,16 @@ export default function Chat() {
               ))}
             </div>
 
-            <div className="flex items-center w-[50%] mt-4 mb-5">
+            <div className="flex w-[90%] mt-4 mb-5">
               <input
                 type="text"
-                className="flex-1 p-3 rounded-md border-2 border-blue5 mr-2"
+                className="flex-1 p-3 rounded-md border-2 border-blue-200 mr-2 outline-none"
                 placeholder="Digite sua mensagem"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 />
               <button
-                className="px-4 py-2 bg-blue5 text-white rounded-md"
+                className="px-4 py-2 bg-blue2 text-white rounded-md"
                 onClick={sendMessage}
                 >
                 Enviar
