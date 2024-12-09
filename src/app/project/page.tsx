@@ -197,7 +197,7 @@ const Projects = () => {
                 />
               </div>
 
-              {/* Exibição das pessoas encontradas */}
+              {/* exibição das pessoas encontradas */}
               <div className={styles.peopleSelect}>
                 {dataUser
                   .filter((person) =>
@@ -230,7 +230,7 @@ const Projects = () => {
 
               <p className="my-4">Abaixo irão aparecer as pessoas adicionadas</p>
 
-              {/* Exibe as pessoas que foram selecionadas */}
+              {/* exibe as pessoas que foram selecionadas */}
               {listContributors.length > 0 && (
                 <div className={styles.people}>
                   {listContributors.map((person) => (
