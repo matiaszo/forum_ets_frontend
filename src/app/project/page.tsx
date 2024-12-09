@@ -23,7 +23,7 @@ type IProject = {
 };
 
 const Projects = () => {
-  const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
+  const [openModalInfo, setOpenModalInfo] = useState<boolean>(true);
   const [openModalAddPeople, setOpenModalAddPeople] = useState<boolean>(false);
 
   // variáveis de estado para o projeto
@@ -102,7 +102,15 @@ const Projects = () => {
     setOpenModalAddPeople(false)
   };
 
+  const deleteGoal = (goalToRemove : string) => {
+    setGoals((prevGoals) => prevGoals.filter(goal => goal !== goalToRemove));
+  }
+
   console.log(infoProject)
+
+   function deletePerson(personToRemove: Person) {
+        setListContributors((prevList) => prevList.filter(person => person !== personToRemove))
+   }
 
   return (
     <div className="flex flex-col mt-20">
@@ -117,7 +125,7 @@ const Projects = () => {
                     <p>Digite um nome para o seu projeto</p>
 
                     <input
-                        className={styles.input}
+                        className={styles.input + 'capitalize'}
                         onChange={setNameOfProject}
                         value={nameProject}
                         type="text"
@@ -155,6 +163,30 @@ const Projects = () => {
                         </div>
                     </div>
                     </div>
+
+                    {goals.length > 0 && (
+                    <div className="flex flex-col justify-items-stretch bg-gray-100 overflow-y-scroll max-h-[100px] rounded p-2 m-4 w-[79%]">
+                        {goals.map((goal, index) => {
+                        return (
+                            <div key={index} className="flex items-center justify-between m-2">
+                            <ImageComponent src="topic3.png" width={25} height={25} alt="topic" />
+                            <h1 className="flex-wrap">{goal}</h1>
+                            <div className="ml-auto" onClick={() => {deleteGoal(goal)}} >
+                                <ImageComponent
+                                className="cursor-pointer"
+                                src="menos.png"
+                                width={30}
+                                height={30}
+                                alt="topic"
+                                />
+                            </div>
+                            </div>
+                        );
+                        })}
+                    </div>
+                    )}
+
+
                     <div className="flex justify-center gap-3">
                     <button
                         className={styles.btnNext}
@@ -165,8 +197,7 @@ const Projects = () => {
                             setOpenModalAddPeople(true);
                             //   setInfos(); // Salva o projeto ao clicar
                         }
-                        }}
-                    >
+                        }}>
                         Próximo
                     </button>
                     <button
@@ -246,6 +277,15 @@ const Projects = () => {
                                 className={styles.imgProfile}
                             />
                             <p className="self-center">{person.name}</p>
+                            <div className="ml-auto" onClick={() => {deletePerson(person)}} >
+                                <ImageComponent
+                                className="cursor-pointer"
+                                src="menos.png"
+                                width={30}
+                                height={30}
+                                alt="topic"
+                                />
+                            </div>
                             </div>
                         ))}
                         </div>
@@ -304,8 +344,8 @@ export default Projects;
 
 const styles = {
   title: "text-blue1 text-3xl",
-  input: "bg-gray-100 w-full p-4 my-4 border-b-2 border-blue3 outline-none ease-in-out hover:border-blue1",
-  inputObj: "bg-gray-100 w-[500px] p-4 my-4 border-b-2 border-blue3 outline-none ease-in-out hover:border-blue1",
+  input: "bg-gray-100 w-full p-4 my-4 border-b-2 border-blue3 outline-none ease-in-out hover:border-blue1 ",
+  inputObj: "capitalize bg-gray-100 w-[500px] p-4 my-4 border-b-2 border-blue3 outline-none ease-in-out hover:border-blue1",
   content: "m-4",
   header: "",
   container: "flex justify-center items-center flex-wrap m-10 mx-35 gap-8",
@@ -320,7 +360,7 @@ const styles = {
   btnNext: "bg-blue3 p-2 text-white rounded px-6 py-4 hover:bg-blue2",
   btnCancel: "bg-red-700 p-2 text-white rounded px-6 py-4 hover:bg-red-800",
   peopleSelect: "flex flex-col mt-2 overflow-y-scroll h-40 bg-gray-100 p-4 rounded ",
-  people: "flex h-16 flex-col mt-2 overflow-y-scroll bg-gray-100 rounded",
+  people: "flex max-h-28 flex-col mt-2 overflow-y-scroll bg-gray-100 rounded",
   person: "flex gap-2 items-center cursor-pointer m-2",
   imgProfile: "object-cover rounded-full w-10 h-10",
 };
