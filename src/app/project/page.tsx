@@ -165,7 +165,7 @@ const Projects = () => {
                     </div>
 
                     {goals.length > 0 && (
-                    <div className="flex flex-col justify-items-stretch bg-gray-100 overflow-y-scroll max-h-[100px] rounded p-2 m-4 w-[79%]">
+                    <div className="flex flex-col justify-items-stretch bg-gray-100 overflow-y-scroll max-h-[100px] rounded p-2 m-4 w-[79%] scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100">
                         {goals.map((goal, index) => {
                         return (
                             <div key={index} className="flex items-center justify-between m-2">
