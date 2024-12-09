@@ -79,9 +79,6 @@ const Projects = () => {
 
   // função para finalizar o projeto e salvar os dados
   const setInfos = () => {
-    if (!nameProject || !description || listContributors.length === 0 || goals.length === 0) {
-      alert("Preencha todos os campos do projeto.");
-    }
 
     const newProject: IProject = {
       name: nameProject,
@@ -124,6 +121,7 @@ const Projects = () => {
                         onChange={setNameOfProject}
                         value={nameProject}
                         type="text"
+                        required
                     />
 
                     <p>Digite uma descrição para o seu projeto</p>
@@ -133,6 +131,7 @@ const Projects = () => {
                         onChange={setDescriptionOfProject}
                         value={description}
                         type="text"
+                        required
                     />
 
                     <p>Adicione os objetivos do seu projeto</p>
@@ -143,8 +142,9 @@ const Projects = () => {
                         value={goalValue} 
                         onChange={(e) => setGoalValue(e.target.value)} // atualiza o valor do objetivo
                         onKeyDown={handleGoalKeyDown} // chama addGoal quando pressionar Enter
+                        required
                         />
-                        <div onClick={addGoal}>
+                        <div className="self-center " onClick={addGoal}>
                         <ImageComponent
                             src={"icons8-adicionar-100.png"}
                             width={50}
@@ -159,9 +159,12 @@ const Projects = () => {
                     <button
                         className={styles.btnNext}
                         onClick={() => {
-                        setOpenModalInfo(false);
-                        setOpenModalAddPeople(true);
-                        //   setInfos(); // Salva o projeto ao clicar
+                        if((nameProject && description)) {
+
+                            setOpenModalInfo(false);
+                            setOpenModalAddPeople(true);
+                            //   setInfos(); // Salva o projeto ao clicar
+                        }
                         }}
                     >
                         Próximo
@@ -278,7 +281,7 @@ const Projects = () => {
 
                 {/* Add projects */}
                 <div className="flex justify-end">
-                    <div className="w-auto" onClick={() => setOpenModalInfo(true)}>
+                    <div  className="w-auto" onClick={() => setOpenModalInfo(true)}>
                         <ImageComponent src={'icons8-adicionar-100.png'} width={50} height={50} alt="" className={styles.icon} />
                     </div>
                 </div>
@@ -301,8 +304,8 @@ export default Projects;
 
 const styles = {
   title: "text-blue1 text-3xl",
-  input: "bg-gray-100 w-full p-4 my-4 border-b-4 border-blue3",
-  inputObj: "bg-gray-100 w-[500px] p-4 my-4 border-b-4 border-blue3",
+  input: "bg-gray-100 w-full p-4 my-4 border-b-2 border-blue3 outline-none ease-in-out hover:border-blue1",
+  inputObj: "bg-gray-100 w-[500px] p-4 my-4 border-b-2 border-blue3 outline-none ease-in-out hover:border-blue1",
   content: "m-4",
   header: "",
   container: "flex justify-center items-center flex-wrap m-10 mx-35 gap-8",
