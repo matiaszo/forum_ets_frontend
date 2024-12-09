@@ -36,6 +36,10 @@ const nextConfig = {
               source: "/topic",
               destination: "/topic",
           },
+          {
+            source: "/section",
+            destination: "/section",
+        },
       ]
       
   },

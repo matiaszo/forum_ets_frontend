@@ -4,6 +4,7 @@ import { useState } from "react";
 import blueColor from "@/assets/blueColor.jpg";
 import Image, { StaticImageData } from "next/image";
 import { Answer } from "@/components/answer";
+import { Header } from "@/components/header";
 
 export default function Topic() {
   interface User {
@@ -73,8 +74,9 @@ export default function Topic() {
   };
 
   return (
-    <div className="h-screen">
-      <div className="flex m-12 flex-col">
+    <div className="h-screen mt-20">
+      <Header/>
+      <div className="flex m-10 flex-col">
         <div className="flex flex-col items-center rounded-xl p-3 font-robFont mb-3 text-black">
           <div className="flex flex-col ml-10 min-w-[90%]">
             <h1 className="text-blue1 text-3xl mb-3 text-center">{topic.title}</h1>

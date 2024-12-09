@@ -6,5 +6,6 @@ export enum ROUTES{
     chat = "/chat",
     project = "/project",
     profile = "/profile",
-    topic = "/topic"
+    topic = "/topic",
+    section = "/section",
 }

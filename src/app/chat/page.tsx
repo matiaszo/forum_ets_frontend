@@ -1,5 +1,6 @@
 "use client";
 
+import { Header } from "@/components/header";
 import React, { useState, useEffect } from "react";
 
 export default function Chat() {
@@ -82,8 +83,11 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-row ml-10 mt-5 mr-10 justify-between h-screen">
-      <div className="flex flex-col gap-4 bg-blue1 rounded-md p-3 items-center w-[30%]">
+    <div className="flex flex-row mt-20 justify-between min-h-[90vh]">
+      <Header/>
+      <div className="mr-20 ml-20 flex w-[100%] gap-3">
+
+      <div className="flex flex-col gap-4 bg-blue1 min-h-[100%] rounded-md p-3 items-center w-[30%]">
         <h1 className="flex items-center justify-center bg-blue4 rounded-md w-[60%] text-center h-8">
           Seus grupos
         </h1>
@@ -91,14 +95,14 @@ export default function Chat() {
         <div className="flex flex-col gap-4 items-center overflow-auto w-[90%]">
           {groups.map((group) => {
             const lastMessage = group.messages[group.messages.length - 1];
-
+            
             return (
               <div
-                key={group.id}
-                onClick={() => setSelectedGroup(group)}
-                className={`flex flex-col bg-blue4 p-3 rounded-md shadow-md w-full cursor-pointer ${
-                  selectedGroup?.id === group.id ? "bg-blue3" : ""
-                }`}
+              key={group.id}
+              onClick={() => setSelectedGroup(group)}
+              className={`flex flex-col bg-blue4 p-3 rounded-md shadow-md w-full cursor-pointer ${
+                selectedGroup?.id === group.id ? "bg-blue3" : ""
+              }`}
               >
                 <h2 className="text-lg font-bold">{group.name}</h2>
                 <p className="text-sm text-gray-200">
@@ -110,7 +114,7 @@ export default function Chat() {
         </div>
       </div>
 
-      <div className="flex flex-col items-center justify-center h-screen w-[60%] bg-alice">
+      <div className="flex flex-co rounded-lg items-center justify-center min-h-[100%] w-[70%] bg-alice">
         {selectedGroup ? (
           <>
             <div className="flex items-center justify-center w-full bg-blue4 rounded-md p-3">
@@ -122,16 +126,16 @@ export default function Chat() {
             <div className="flex flex-col bg-alice rounded-md w-[100%] p-4 h-[85%] overflow-y-auto">
               {selectedGroup.messages.map((msg) => (
                 <div
-                  key={msg.id}
-                  className={`flex mb-4 ${
-                    msg.sender === "user" ? "justify-end" : "justify-start"
-                  }`}
+                key={msg.id}
+                className={`flex mb-4 ${
+                  msg.sender === "user" ? "justify-end" : "justify-start"
+                }`}
                 >
                   <div
                     className={`${
                       msg.sender === "user" ? "bg-blue1" : "bg-blue0"
                     } text-white p-3 rounded-lg max-w-[70%]`}
-                  >
+                    >
                     <p>{msg.text}</p>
                   </div>
                 </div>
@@ -145,11 +149,11 @@ export default function Chat() {
                 placeholder="Digite sua mensagem"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-              />
+                />
               <button
                 className="px-4 py-2 bg-blue5 text-white rounded-md"
                 onClick={sendMessage}
-              >
+                >
                 Enviar
               </button>
             </div>
@@ -159,6 +163,7 @@ export default function Chat() {
             Selecione um grupo para começar o chat
           </div>
         )}
+      </div>
       </div>
     </div>
   );
