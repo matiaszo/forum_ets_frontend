@@ -45,7 +45,7 @@ const Forum = () => {
                 </div>
 
                 {/* Renderizando os cards */}
-                <div className="flex justify-center mt-10 flex-wrap gap-8 max-w-[80%]">
+                <div className="flex justify-center mt-10 flex-wrap gap-8 max-w-[90%]">
                     {dataTests
                         .filter((item) =>
                             item.title.toLowerCase().includes(searchValue.toLowerCase()) || 
