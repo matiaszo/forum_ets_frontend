@@ -24,7 +24,7 @@ const Home = () => {
     };
 
     return (
-        <div className="flex flex-col mt-20">
+        <div className="flex flex-col mt-20 font-robFont">
             <Header/>
             <div className="pr-20 pl-20 pt-10 flex flex-col items-center">
                 <div className="flex flex-col flex-wrap w-[100%]">
@@ -32,7 +32,6 @@ const Home = () => {
                     <p>Converse com seus colegas sobre os mais diversos tópicos.</p>
                 </div>
 
-                {/* Caixa de pesquisa */}
                 <div className={styles.box}>
                     <input
                         className={styles.search}
@@ -44,7 +43,6 @@ const Home = () => {
                     <Image className="cursor-pointer" src={search} alt={""} width={33} height={33}/>
                 </div>
 
-                {/* Renderizando os cards */}
                 <div className="flex justify-center mt-10 flex-wrap gap-8 max-w-[80%]">
                     {dataTests
                         .filter((item) =>

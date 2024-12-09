@@ -76,10 +76,9 @@ export default function Topic() {
   };
 
   return (
-    <div className="h-screen mt-20">
+    <div className="h-screen mt-20 font-robFont">
       <Header />
       <div className="flex m-10 flex-col">
-        {/* Título e pergunta principal */}
         <div className="flex flex-col items-center rounded-xl p-3 font-robFont mb-3 text-black">
           <div className="flex flex-col ml-10 min-w-[90%]">
             <h1 className="text-blue1 text-3xl mb-3 text-center">{topic.title}</h1>
@@ -91,7 +90,6 @@ export default function Topic() {
           <hr className="w-full border-t-1 border-black" />
         </div>
 
-        {/* Campo para adicionar resposta à pergunta principal */}
         <div className="flex flex-col border-blue5 border-2 rounded-md m-10">
           <textarea
             name="ans"
@@ -109,7 +107,6 @@ export default function Topic() {
           </button>
         </div>
 
-        {/* Renderizar todos os comentários como cards independentes */}
         {topic.comments.map((comment) => (
           <div key={comment.id} className="mb-5">
             <Answer
@@ -120,7 +117,6 @@ export default function Topic() {
           </div>
         ))}
 
-        {/* Modal para responder a outro comentário */}
         {replyingTo && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md">

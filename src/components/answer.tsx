@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Image, { StaticImageData } from "next/image";
-import blueColor from "@/assets/blueColor.jpg";
 
 interface AnswerProps {
   comment: Comment;
@@ -50,7 +49,7 @@ export const Answer: React.FC<AnswerProps> = ({
   };
 
   return (
-    <div className="flex flex-col bg-blue5 rounded-md shadow-xl mb-3 p-4">
+    <div className="flex flex-col bg-blue5 rounded-md shadow-xl mb-3 p-4 font-robFont">
       {comment.mention && (
         <div className="p-3 border-l-2 border-blue4 mb-3 bg-blue1/10 rounded-md">
           <p className="text-sm text-gray-600">Respondendo a: {comment.mention.username}</p>
@@ -69,14 +68,11 @@ export const Answer: React.FC<AnswerProps> = ({
         <p className="font-bold text-blue1">{comment.user.name}</p>
       </div>
       <p className="mt-1 text-black">{comment.content}</p>
-
-      <button
-        className="mt-3 text-alice underline text-sm bg-blue4"
-        onClick={() => setIsReplying(true)}
-      >
-        Responder
-      </button>
-
+      <div className="flex justify-center items-center">
+        <button className="mt-3 text-black text-sm bg-alice rounded-md w-[90%]" onClick={() => setIsReplying(true)}>
+          <p>Answer</p>
+        </button>
+      </div>
       {isReplying && (
         <div className="mt-3 border-t pt-3">
           <textarea
