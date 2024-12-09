@@ -5,6 +5,7 @@ import blueColor from "@/assets/blueColor.jpg";
 interface AnswerProps {
   comment: Comment;
   onReply: (comment: Comment) => void;
+  addNewComment: (content: string, mention: Mention | null) => void;
 }
 
 interface User {
@@ -27,42 +28,23 @@ interface Comment {
   mention: Mention | null;
 }
 
-interface Topic {
-  id: number;
-  title: string;
-  idSection: number;
-  mainComment: {
-    user: User;
-    content: string;
-  };
-  comments: Comment[];
-}
-
-export const Answer: React.FC<AnswerProps> = ({ comment, onReply }) => {
+export const Answer: React.FC<AnswerProps> = ({
+  comment,
+  onReply,
+  addNewComment,
+}) => {
   const [isReplying, setIsReplying] = useState(false);
   const [replyContent, setReplyContent] = useState("");
-  const [replies, setReplies] = useState<Comment[]>([]); 
 
   const handleReplySubmit = () => {
     if (replyContent.trim() === "") return;
 
-    const newComment: Comment = {
-      id: Date.now(),
-      content: replyContent,
-      user: {
-        id: "currentUserId",
-        name: "Current User",
-        instructor: false,
-        image: blueColor,
-      },
-      mention: {
-        id: comment.id,
-        username: comment.user.name,
-        content: comment.content,
-      },
-    };
+    addNewComment(replyContent, {
+      id: comment.id,
+      username: comment.user.name,
+      content: comment.content,
+    });
 
-    setReplies((prevReplies) => [...prevReplies, newComment]); 
     setReplyContent("");
     setIsReplying(false);
   };
@@ -117,26 +99,6 @@ export const Answer: React.FC<AnswerProps> = ({ comment, onReply }) => {
               Enviar
             </button>
           </div>
-        </div>
-      )}
-
-      {replies.length > 0 && (
-        <div className="mt-3">
-          {replies.map((reply) => (
-            <div key={reply.id} className="flex flex-col bg-blue3 rounded-md shadow-xl mb-3 p-4">
-              <div className="flex items-center mb-2">
-                <Image
-                  src={reply.user.image}
-                  alt={reply.user.name}
-                  className="h-8 w-8 rounded-full mr-3"
-                  width={32}
-                  height={32}
-                />
-                <p className="font-bold text-blue1">{reply.user.name}</p>
-              </div>
-              <p className="text-black">{reply.content}</p>
-            </div>
-          ))}
         </div>
       )}
     </div>
