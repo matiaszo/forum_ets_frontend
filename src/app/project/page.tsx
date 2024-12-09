@@ -23,8 +23,8 @@ type IProject = {
 };
 
 const Projects = () => {
-  const [openModalInfo, setOpenModalInfo] = useState<boolean>(true);
-  const [openModalAddPeople, setOpenModalAddPeople] = useState<boolean>(false);
+  const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
+  const [openModalAddPeople, setOpenModalAddPeople] = useState<boolean>(true);
 
   // variáveis de estado para o projeto
   const [nameProject, setNameProject] = useState<string>("");
@@ -223,7 +223,7 @@ const Projects = () => {
                     <div className="flex gap-10">
                         <input
                         id="person"
-                        className={styles.inputObj}
+                        className={styles.input}
                         onChange={setValuePerson}
                         type="text"
                         placeholder="ex: Eduardo Henrique Ribeiro"
@@ -250,19 +250,21 @@ const Projects = () => {
                                 alt={person.name}
                                 className={styles.imgProfile}
                             />
-                            <p className="self-center">{person.name}</p>
-                            <ImageComponent
-                                src={"icons8-adicionar-100.png"}
-                                width={30}
-                                height={30}
-                                alt=""
-                                className={styles.iconAdd}
-                            />
+                            <p className="self-center ">{person.name}</p>
+                            <div className="ml-auto" >
+                                <ImageComponent
+                                    src={"icons8-adicionar-100.png"}
+                                    width={30}
+                                    height={30}
+                                    alt=""
+                                    className={styles.iconAdd}
+                                />
+                            </div>
                             </div>
                         ))}
                     </div>
 
-                    <p className="my-4">Abaixo irão aparecer as pessoas adicionadas</p>
+                    <p className="my-4 ">Abaixo irão aparecer as pessoas adicionadas</p>
 
                     {/* exibe as pessoas que foram selecionadas */}
                     {listContributors.length > 0 && (
@@ -359,8 +361,8 @@ const styles = {
     "bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[620px]",
   btnNext: "bg-blue3 p-2 text-white rounded px-6 py-4 hover:bg-blue2",
   btnCancel: "bg-red-700 p-2 text-white rounded px-6 py-4 hover:bg-red-800",
-  peopleSelect: "flex flex-col mt-2 overflow-y-scroll h-40 bg-gray-100 p-4 rounded ",
-  people: "flex max-h-28 flex-col mt-2 overflow-y-scroll bg-gray-100 rounded",
+  peopleSelect: "flex flex-col mt-2 overflow-y-scroll h-40 bg-gray-100 p-4 rounded scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100 ",
+  people: "flex max-h-28 flex-col mt-2 overflow-y-scroll bg-gray-100 rounded scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100",
   person: "flex gap-2 items-center cursor-pointer m-2",
   imgProfile: "object-cover rounded-full w-10 h-10",
 };
