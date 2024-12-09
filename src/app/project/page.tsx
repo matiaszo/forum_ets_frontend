@@ -24,7 +24,7 @@ type IProject = {
 
 const Projects = () => {
   const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
-  const [openModalAddPeople, setOpenModalAddPeople] = useState<boolean>(true);
+  const [openModalAddPeople, setOpenModalAddPeople] = useState<boolean>(false);
 
   // variáveis de estado para o projeto
   const [nameProject, setNameProject] = useState<string>("");
