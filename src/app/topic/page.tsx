@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import blueColor from "@/assets/blueColor.jpg";
-import Image, { StaticImageData } from "next/image";
 import { Answer } from "@/components/answer";
 import { Header } from "@/components/header";
+import { StaticImageData } from "next/image";
 
 export default function Topic() {
   interface User {
@@ -43,7 +43,7 @@ export default function Topic() {
     title: "Título do Tópico",
     idSection: 1,
     mainComment: {
-      user: { id: "1", name: "Instrutor", instructor: true, image: blueColor }, 
+      user: { id: "1", name: "Instrutor", instructor: true, image: blueColor },
       content: "Esta é a pergunta principal do tópico.",
     },
     comments: [
@@ -56,14 +56,14 @@ export default function Topic() {
     ],
   });
 
-  const [replyingTo, setReplyingTo] = useState<Comment | null>(null);
   const [newReply, setNewReply] = useState("");
+  const [replyingTo, setReplyingTo] = useState<Comment | null>(null);
 
   const handleAddAnswer = (content: string, mention: Mention | null) => {
     const newComment: Comment = {
       id: topic.comments.length + 1,
       content,
-      user: { id: "2", name: "Usuário", instructor: false, image: blueColor }, 
+      user: { id: "2", name: "Usuário", instructor: false, image: blueColor },
       mention,
     };
 
@@ -71,11 +71,13 @@ export default function Topic() {
       ...prev,
       comments: [...prev.comments, newComment],
     }));
+    setReplyingTo(null);
+    setNewReply("");
   };
 
   return (
-    <div className="h-screen mt-20">
-      <Header/>
+    <div className="h-screen mt-20 font-robFont">
+      <Header />
       <div className="flex m-10 flex-col">
         <div className="flex flex-col items-center rounded-xl p-3 font-robFont mb-3 text-black">
           <div className="flex flex-col ml-10 min-w-[90%]">
@@ -99,10 +101,7 @@ export default function Topic() {
           />
           <button
             className="bg-blue5 w-20 rounded-md p-2 ml-auto m-1"
-            onClick={() => {
-              handleAddAnswer(newReply, null);
-              setNewReply("");
-            }}
+            onClick={() => handleAddAnswer(newReply, null)}
           >
             Enviar
           </button>
@@ -113,6 +112,7 @@ export default function Topic() {
             <Answer
               comment={comment}
               onReply={() => setReplyingTo(comment)}
+              addNewComment={handleAddAnswer}
             />
           </div>
         ))}
@@ -133,15 +133,13 @@ export default function Topic() {
               <div className="flex justify-between">
                 <button
                   className="bg-blue5 w-20 rounded-md p-2"
-                  onClick={() => {
+                  onClick={() =>
                     handleAddAnswer(newReply, {
                       id: replyingTo.id,
                       username: replyingTo.user.name,
                       content: replyingTo.content,
-                    });
-                    setNewReply("");
-                    setReplyingTo(null);
-                  }}
+                    })
+                  }
                 >
                   Enviar
                 </button>

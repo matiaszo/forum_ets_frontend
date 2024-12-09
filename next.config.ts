@@ -37,8 +37,8 @@ const nextConfig = {
               destination: "/topic",
           },
           {
-            source: "/section",
-            destination: "/section",
+            source: "/session",
+            destination: "/session",
         },
       ]
       

@@ -83,7 +83,7 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-row mt-20 justify-between min-h-[90vh]">
+    <div className="flex flex-row mt-20 justify-between min-h-[90vh] font-robFont">
       <Header/>
       <div className="mr-20 ml-20 flex w-[100%] gap-3">
 

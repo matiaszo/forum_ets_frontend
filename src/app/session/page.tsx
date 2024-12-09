@@ -8,14 +8,14 @@ interface Topic {
   description: string;
 }
 
-interface Session {
+interface UserSession {
   id: string;
   title: string;
   description: string;
   topics: Topic[];
 }
 
-const forums: Session[] = [
+const forums: UserSession[] = [
   {
     id: "1",
     title: "Titulo da sessao",
@@ -35,7 +35,7 @@ const forums: Session[] = [
   },
 ];
 
-const Forum = () => {
+const Session = () => {
   const forum = forums[0];
   return (
     <div className="flex flex-col border-black rounded-md mt-20 font-robFont">
@@ -54,4 +54,4 @@ const Forum = () => {
   );
 };
 
-export default Forum;
+export default Session;

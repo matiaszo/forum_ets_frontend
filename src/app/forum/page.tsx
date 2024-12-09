@@ -24,7 +24,7 @@ const Forum = () => {
     };
 
     return (
-        <div className="flex flex-col mt-20">
+        <div className="flex flex-col mt-20 font-robFont">
             <Header/>
             <div className="pr-20 pl-20 pt-10 flex flex-col items-center">
                 <div className="flex flex-col flex-wrap w-[100%]">
@@ -32,7 +32,6 @@ const Forum = () => {
                     <p>Converse com seus colegas sobre os mais diversos tópicos.</p>
                 </div>
 
-                {/* Caixa de pesquisa */}
                 <div className={styles.box}>
                     <input
                         className={styles.search}
@@ -53,7 +52,7 @@ const Forum = () => {
                     )
                     .map((item, index) => {
                         return (
-                            <Link href={ROUTES.section} key={index}>
+                            <Link href={ROUTES.session} key={index}>
                                 <Card
                                 title={item.title}
                                 mainQuestion={item.description}
