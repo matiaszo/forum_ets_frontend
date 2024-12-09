@@ -1,69 +1,69 @@
 [
     {
-      "id": "1",
+      "id": 1,
       "name": "Eduardo Henrique",
       "email": "eduardo@example.com",
       "intructor": true,
       "image": "ribeiro.jpg"
     },
     {
-      "id": "2",
+      "id": 2,
       "name": "Nicolle",
       "email": "maria@example.com",
       "intructor": false,
       "image": "Nicole.jpg"
     },
     {
-      "id": "3",
+      "id": 3,
       "name": "Kau",
       "email": "carlos@example.com",
       "intructor": true,
       "image": "Kau.jpg"
     },
     {
-      "id": "4",
+      "id": 4,
       "name": "Mariana Marques",
       "email": "ana@example.com",
       "intructor": false,
       "image": "Mari.jpg"
     },
     {
-      "id": "5",
+      "id": 5,
       "name": "Helena",
       "email": "lucas@example.com",
       "intructor": true,
       "image": "Helena.jpg"
     },
     {
-      "id": "6",
+      "id": 6,
       "name": "Matias",
       "email": "isabela@example.com",
       "intructor": false,
       "image": "Matias3.jpg"
     },
     {
-      "id": "7",
+      "id": 7,
       "name": "Felipe Martins",
       "email": "felipe@example.com",
       "intructor": true,
       "image": "ribeiro.jpg"
     },
     {
-      "id": "8",
+      "id": 8,
       "name": "Julia Oliveira",
       "email": "julia@example.com",
       "intructor": false,
       "image": "ribeiro.jpg"
     },
     {
-      "id": "9",
+      "id": 9,
       "name": "Rafael Silva",
       "email": "rafael@example.com",
       "intructor": true,
       "image": "ribeiro.jpg"
     },
     {
-      "id": "10",
+      "id": 10,
       "name": "Carla Rodrigues",
       "email": "carla@example.com",
       "intructor": false,
