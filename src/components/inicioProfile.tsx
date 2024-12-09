@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Image from "next/image";
 
@@ -14,22 +14,30 @@ interface user {
     instructor: number;
     isUser: boolean;
 }
+
 interface skillInterface {
     id: string;
     title: string;
     image: string;
 }
 
-export const InicioProfile = ({ usuario }: { usuario: user }) => {
-    const [selectedColor, setSelectedColor] = useState("blue"); 
+
+export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skillInterface[] }) => {
+    const [selectedColor, setSelectedColor] = useState<string | undefined>(localStorage.getItem("colorGit") || 'blue');
     const [showColors, setShowColors] = useState(false); 
     
     const [bio, setBio] = useState("Oiê ME CHAMO MARI"); 
 
     const [theme, setTheme] = useState('dark');
 
-    const [skills, setSkills] = useState<skillInterface[]>([]);
+    // const [skills, setSkills] = useState<skillInterface[]>([]);
 
+    useEffect(() => {
+        if (selectedColor) {
+          localStorage.setItem('colorGit', selectedColor);
+          setGitTheme(themes[selectedColor]);
+        }
+    }, [selectedColor]);
     
     const colors = ["red", "blue", "green", "black", "purple"];
     const themes: { [key: string]: string } =  theme == 'dark' ? {
@@ -60,21 +68,6 @@ export const InicioProfile = ({ usuario }: { usuario: user }) => {
         setGitHubName(name)
     };
 
-    const teste : skillInterface[] = [
-        {id: '1', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '2', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '3', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '4', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '5', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '6', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '7', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '8', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '9', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '11', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'},
-        {id: '12', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'},
-        {id: '13', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'},
-        {id: '14', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}
-    ]
 
     return (
         <div>
@@ -115,8 +108,9 @@ export const InicioProfile = ({ usuario }: { usuario: user }) => {
                                                     cursor: "pointer",
                                                 }}
                                                 onClick={() => {
-                                                    setSelectedColor(color);
+                                                    localStorage.setItem('colorGit', color);
                                                     setGitTheme(themes[color]);
+                                                    setSelectedColor(color);
                                                     setShowColors(false);
                                                 }}
                                             />
@@ -128,16 +122,6 @@ export const InicioProfile = ({ usuario }: { usuario: user }) => {
                                 <></>
                             )}
                             
-                            <div className="w-[100%] justify-end flex">
-                                {usuario.isUser ? (
-                                    <button onClick={openModal} >
-                                        <Image src={editPhoto} alt="edit" className="cursor-pointer" />
-                                    </button>
-                                ) : (
-                                    <>
-                                    </>
-                                )}
-                            </div>
                         </div>
                     </div>
                 ) : (
@@ -145,7 +129,7 @@ export const InicioProfile = ({ usuario }: { usuario: user }) => {
                         <div className="shadow-md w-[100%] h-1/2 rounded-lg p-2">
                                 {usuario.isUser ? (
                                     <button>
-                                        Add GitHub Status
+                                        Adicione seu GitHub Status em "Editar Perfil"
                                     </button>
                                 ) : (
                                     <>
@@ -156,33 +140,24 @@ export const InicioProfile = ({ usuario }: { usuario: user }) => {
                     </div>
                 )}
 
-            {teste && teste.length > 0 ? (
+            {skills && skills.length > 0 ? (
                 <div className="w-[100%] mb-2">
                     <div className="shadow-md w-[100%] rounded-lg p-2">
                         <h1 className="text-[22px] font-robFont mb-2">Skills</h1>
                         <div className="flex flex-wrap gap-5 items-center justify-center p-2">
-                            {teste.map((skill) => (
+                            {skills.map((skill) => (
                                 <div key={skill.id} className="flex flex-col items-center">
                                     <img
                                         src={skill.image}
                                         alt={skill.title}
                                         width={100}
                                         height={100}
+                                        className="rounded-lg"    
                                     />
                                     <h3>{skill.title}</h3>
                                 </div>
                             ))}
                         </div>
-                        <div className="w-[100%] justify-end flex">
-                                {usuario.isUser ? (
-                                    <button onClick={openModal} >
-                                        <Image src={editPhoto} alt="edit" className="cursor-pointer" />
-                                    </button>
-                                ) : (
-                                    <>
-                                    </>
-                                )}
-                            </div>
                     </div>
                 </div>
 
@@ -191,7 +166,7 @@ export const InicioProfile = ({ usuario }: { usuario: user }) => {
                     <div className="shadow-md w-[100%] h-1/2 rounded-lg p-2">
                     {usuario.isUser ? (
                         <button>
-                            Add Skills
+                            Adicione Skills em "Editar Perfil"
                         </button>
                     ) : (
                         <>
