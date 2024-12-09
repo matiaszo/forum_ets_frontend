@@ -15,7 +15,10 @@ export default {
         blue3: "var(--blue3)",
         blue4: "var(--blue4)",
         blue5: "var(--blue5)",
+        'scrollbar-thumb': '#888888', 
+        'scrollbar-track': '#f1f1f1',
       },
+      scrollbar: ['rounded'],
       fontSize:{
         large: "40px",
         medium: "24px",
@@ -24,7 +27,11 @@ export default {
       fontFamily:{
         robFont: "var(--roboto)"
       },
+      screens: {
+        'ml': '900px',
+      }
     },
   },
-  plugins: [],
+  plugins: [require('tailwind-scrollbar')],
 } satisfies Config;
+

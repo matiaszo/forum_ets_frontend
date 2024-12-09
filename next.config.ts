@@ -1,5 +1,6 @@
-const nextConfig = {
+import { hostname } from "os";
 
+const nextConfig = {
   rewrites: () =>{
 
       return[
@@ -32,7 +33,21 @@ const nextConfig = {
               destination: "/profile",
           },
       ]
-  }
+      
+  },
+  images: {
+      remotePatterns: [
+        {
+          protocol: 'http',
+          hostname: '**', // Permite qualquer domínio com protocolo HTTP
+        },
+        {
+          protocol: 'https',
+          hostname: '**', // Permite qualquer domínio com protocolo HTTPS
+        },
+      ],
+    },
+  
 };
 
 export default nextConfig;
