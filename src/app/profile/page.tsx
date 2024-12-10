@@ -23,7 +23,6 @@ interface areaOfInterest {
     text: string;
 }
 
-
 interface user {
     id: string;
     name: string;
@@ -61,45 +60,118 @@ interface interacao {
 }
 
 export default function Home() {
+
+    const getUserData = async (token: string | null, id: string | null) => {
+
+        if(!id){
+            return;
+        }
+        
+        const response = await fetch(`http://localhost:8080/profile/${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` 
+          }
+        });
+      
+        if (!response.ok) {
+          throw new Error('Erro ao buscar dados');
+        }
+      
+        const data = await response.json();
+        return data;
+    };
+      
+    // Exemplo de uso:
+    const token : string | null = localStorage.getItem("token");
+    const id : string | null = localStorage.getItem("id");
+    getUserData(token, id)
+        .then(data => {
+          console.log('Dados do usuário:', data);
+    })
+        .catch(error => {
+          console.error('Erro:', error);
+    });
+
+    const response = {
+        id: 1,
+        edv: "123456",
+        password: "******",
+        name: "John Doe",
+        email: "john.doe@example.com",
+        instructor: true,
+        github: "xmarimarquesh",
+        bio: "Software developer",
+        image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg",
+        isUser: true,
+        skills: [
+            {id: '1', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
+            {id: '2', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
+            {id: '3', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
+            {id: '4', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
+            {id: '5', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
+            {id: '6', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
+        ],
+        interests: [
+            { id: 1, name: "Frontend" },
+            { id: 2, name: "Backend" },
+            { id: 3, name: "Backend" },
+            { id: 4, name: "Backend" },
+            { id: 5, name: "Backend" },
+            { id: 6, name: "Backend" },
+        ],
+    };
+    
+    const mapUserData = (data: typeof response): user => {
+        return {
+            id: String(data.id),
+            name: data.name,
+            image: data.image,
+            bio: data.bio,
+            gitUseraname: data.github || null, 
+            instructor: data.instructor ? 1 : 0,
+            isUser: data.isUser, 
+        };
+    };
+    
+    const mapSkills = (skills: typeof response.skills): skillInterface[] => {
+        return skills.map(skill => ({
+            id: String(skill.id), 
+            title: skill.title,
+            image: skill.image,
+        }));
+    };
+    
+    const mapInterests = (interests: typeof response.interests): areaOfInterest[] => {
+        return interests.map(interest => ({
+            id: String(interest.id), 
+            text: interest.name,
+        }));
+    };
+    
+    const userData = mapUserData(response);
+    const skillData = mapSkills(response.skills);
+    const interests = mapInterests(response.interests);
+    
+    console.log('USER:',userData);
+    console.log('SKILL:',skillData);
+    console.log('INTEREST:',interests);
+
     const [activeTab, setActiveTab] = useState('inicio');
-    
-    const u : user = {id: "1", name: "Mariana", bio: "slaaa", image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg", gitUseraname: 'xmarimarquesh', instructor: 1, isUser: true}
-    
-    const [usuario, setUsuario] = useState(u);
     const [theme, setTheme] = useState('dark');
+    
+    const [usuario, setUsuario] = useState(userData);
+    const [areas, setAreas] = useState<areaOfInterest[]>(interests);
+    const [skills, setSkills] = useState<skillInterface[]>(skillData);
 
     // --- MODAL
-    const area : areaOfInterest[] = [
-        {id: "1", text: 'Python'},
-        {id: "2", text: 'Java'},
-        {id: "3", text: 'Front'},
-        {id: "4", text: 'Back'},
-        {id: "5", text: 'Tudo'},
-    ]
-
-    const skill : skillInterface[] = [
-        {id: '1', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '2', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '3', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '4', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '5', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '6', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '7', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '8', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '9', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}, 
-        {id: '10', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'},
-        {id: '11', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'},
-        {id: '12', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'},
-        {id: '13', title: 'python', image : 'https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png'}
-    ]
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [nameUserTemp, setNameUserTemp] = useState("");
     const [bio, setBio] = useState("");
-    const [areas, setAreas] = useState<areaOfInterest[]>(area);
     const [newArea, setNewArea] = useState("");
 
-    const [skills, setSkills] = useState<skillInterface[]>(skill);
     
     const [newSkill, setNewSkill] = useState("");
 
@@ -311,10 +383,10 @@ export default function Home() {
                             </>
                         )}
                         
-                            {area && area.length > 0 ? (
+                            {areas && areas.length > 0 ? (
                                 <div className="shadow-md rounded-lg p-5 mt-5 w-[100%]">
                                     <h1 className="text-[20px] font-robFont flex flex-col">Areas of interest</h1>
-                                    {area.map(area => (
+                                    {areas.map(area => (
                                         <div key={area.id}>
                                             <li className="font-robFont ml-3 marker:text-blue2">{area.text}</li>
                                         </div>
