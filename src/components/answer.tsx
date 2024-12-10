@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import Image, { StaticImageData } from "next/image";
+import arrow_ans from "@/assets/arrow_ans.png"
+import like_icon from "@/assets/like2.png"
+import liked_icon from "@/assets/liked2.png"
 
 interface AnswerProps {
   comment: Comment;
@@ -25,29 +28,37 @@ interface Comment {
   content: string;
   user: User;
   mention: Mention | null;
+  likes: number;
 }
 
 export const Answer: React.FC<AnswerProps> = ({
+  
   comment,
   onReply,
   addNewComment,
 }) => {
   const [isReplying, setIsReplying] = useState(false);
   const [replyContent, setReplyContent] = useState("");
+  const [liked, setLiked] = useState(false);
 
   const handleReplySubmit = () => {
     if (replyContent.trim() === "") return;
 
+
+    
     addNewComment(replyContent, {
       id: comment.id,
       username: comment.user.name,
       content: comment.content,
     });
-
+    
     setReplyContent("");
     setIsReplying(false);
   };
-
+  
+  const handleLikeToggle = () => {
+    setLiked((prevLiked) => !prevLiked);
+  };
   return (
     <div className="flex flex-col bg-blue5 rounded-md shadow-xl mb-3 p-4 font-robFont">
       {comment.mention && (
@@ -68,10 +79,16 @@ export const Answer: React.FC<AnswerProps> = ({
         <p className="font-bold text-blue1">{comment.user.name}</p>
       </div>
       <p className="mt-1 text-black">{comment.content}</p>
-      <div className="flex justify-center items-center">
-        <button className="mt-3 text-black text-sm bg-alice rounded-md w-[90%]" onClick={() => setIsReplying(true)}>
-          <p>Answer</p>
+      <div className="flex justify-around items-center">
+        <button className="flex justify-end rounded-md w-[90%]" onClick={() => setIsReplying(true)}>
+          <Image src={arrow_ans} height="30" width="30" alt="arrow"/>
         </button>
+        <div className="flex justify-between items-center w-16">
+          <button onClick={handleLikeToggle}>
+            <Image src={liked ? liked_icon : like_icon} height="20" width="20" alt="arrow"/>
+          </button>
+          <p className="flex p-2 rounded-[100%] border-[1px] border-black h-8 items-center justify-center">{comment.likes}</p>
+        </div>
       </div>
       {isReplying && (
         <div className="mt-3 border-t pt-3">

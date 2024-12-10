@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useState, ChangeEvent, KeyboardEvent } from "react";
 import ImageComponent from "@/components/image";
 import { Header } from "@/components/header";
+import Link from "next/link";
 
 // tipo de dado para os participantes
 type Person = {
@@ -33,12 +34,11 @@ interface user {
     isUser: boolean;
 }
 
-
 const Projects = () => {
 
-    const u : user = {id: "1", name: "Mariana", bio: "slaaa", image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg", gitUseraname: 'xmarimarquesh', instructor: 0, isUser: true}
+  const u : user = {id: "1", name: "Mariana", bio: "slaaa", image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg", gitUseraname: 'xmarimarquesh', instructor: 0, isUser: true}
     
-    const [usuario, setUsuario] = useState(u);
+  const [usuario, setUsuario] = useState(u);
 
   const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
   const [openModalAddPeople, setOpenModalAddPeople] = useState<boolean>(false);
@@ -257,9 +257,6 @@ const Projects = () => {
    // IMAGEMMMMMMMMMM
 
  
-
-    
-
   return (
     <div className="flex flex-col mt-20">
         <Header/>
@@ -487,8 +484,10 @@ const Projects = () => {
 
             {/* Cards view */}
             <div className={styles.container}>
-                {project.map((item, index) => (
-                    <Card key={index} title={item.name} mainQuestion={item.description} image={item.image} />
+                {dataTests.map((item, index) => (
+                    <Link key={index} href={'/projectSelected'} >
+                      <Card  title={item.title} mainQuestion={item.description} image={item.image} />
+                    </Link>
                 ))}
             </div>
 

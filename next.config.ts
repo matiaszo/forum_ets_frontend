@@ -40,6 +40,10 @@ const nextConfig = {
             source: "/session",
             destination: "/session",
         },
+        {
+            source : '/projectSelected',
+            destination: '/projectSelected'
+        },
       ]
       
   },

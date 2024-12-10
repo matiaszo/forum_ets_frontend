@@ -6,6 +6,7 @@ import { Answer } from "@/components/answer";
 import { Header } from "@/components/header";
 import { StaticImageData } from "next/image";
 
+
 export default function Topic() {
   interface User {
     id: string;
@@ -25,6 +26,7 @@ export default function Topic() {
     content: string;
     user: User;
     mention: Mention | null;
+    likes: number;
   }
 
   interface Topic {
@@ -34,6 +36,7 @@ export default function Topic() {
     mainComment: {
       user: User;
       content: string;
+      likes: number;
     };
     comments: Comment[];
   }
@@ -45,6 +48,7 @@ export default function Topic() {
     mainComment: {
       user: { id: "1", name: "Instrutor", instructor: true, image: blueColor },
       content: "Esta é a pergunta principal do tópico.",
+      likes: 1
     },
     comments: [
       {
@@ -52,6 +56,7 @@ export default function Topic() {
         content: "Esta é uma resposta de exemplo ao tópico principal.",
         user: { id: "2", name: "Usuário", instructor: false, image: blueColor },
         mention: null,
+        likes: 3
       },
     ],
   });
@@ -65,6 +70,7 @@ export default function Topic() {
       content,
       user: { id: "2", name: "Usuário", instructor: false, image: blueColor },
       mention,
+      likes: 2
     };
 
     setTopic((prev) => ({
@@ -80,7 +86,7 @@ export default function Topic() {
       <Header />
       <div className="flex m-10 flex-col">
         <div className="flex flex-col items-center rounded-xl p-3 font-robFont mb-3 text-black">
-          <div className="flex flex-col ml-10 min-w-[90%]">
+          <div className="flex flex-col ml-10 min-w-[95%]">
             <h1 className="text-blue1 text-3xl mb-3 text-center">{topic.title}</h1>
             <h3 className="ml-1 text-center">{topic.mainComment.content}</h3>
             <div className="flex justify-end text-blue1">

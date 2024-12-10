@@ -12,3 +12,6 @@
     --alice: #f0f8ff;
     --black: #0c0c0c;
 }
+.scrollbar-hidden::-webkit-scrollbar {
+    display: none; 
+}
