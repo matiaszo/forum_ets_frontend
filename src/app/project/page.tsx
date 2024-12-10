@@ -34,12 +34,11 @@ interface user {
     isUser: boolean;
 }
 
-
 const Projects = () => {
 
-    const u : user = {id: "1", name: "Mariana", bio: "slaaa", image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg", gitUseraname: 'xmarimarquesh', instructor: 0, isUser: true}
+  const u : user = {id: "1", name: "Mariana", bio: "slaaa", image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg", gitUseraname: 'xmarimarquesh', instructor: 0, isUser: true}
     
-    const [usuario, setUsuario] = useState(u);
+  const [usuario, setUsuario] = useState(u);
 
   const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
   const [openModalAddPeople, setOpenModalAddPeople] = useState<boolean>(false);
@@ -258,9 +257,6 @@ const Projects = () => {
    // IMAGEMMMMMMMMMM
 
  
-
-    
-
   return (
     <div className="flex flex-col mt-20">
         <Header/>

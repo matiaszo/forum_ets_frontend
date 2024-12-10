@@ -3,6 +3,7 @@
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import { useState } from "react";
+import ImageComponent from "./image";
 
 type CardData = {
     title: string;
@@ -21,7 +22,7 @@ const Card = ( {title, image, mainQuestion} : CardData) => {
         <>
             <div className={styles.container}> 
                 <div className="h-">
-                    <img src={image} alt={title} width={250} height={250} className={styles.img} />
+                    <ImageComponent src={image} alt={title} width={250} height={250} className={styles.img} />
                     <h1 className={styles.title} >{title}</h1>
                     <p className={styles.question}> {mainQuestion.substring(0, limit)}{mainQuestion.length > limit ? "..." : ""}
                     </p>
