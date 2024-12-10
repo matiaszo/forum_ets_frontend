@@ -1,0 +1,38 @@
+[
+    {
+      "id": 1,
+      "name": "Projeto Alpha",
+      "messages": [
+        {
+          "id": 1,
+          "text": "Olá, equipe! Como estão as atualizações?",
+          "user": {
+            "id": 1,
+            "image": "Mari.jpg",
+            "name": "João Silva",
+            "instructor": true
+          }
+        },
+        {
+          "id": 2,
+          "text": "Estou finalizando a parte de testes, deve estar pronto amanhã.",
+          "user": {
+            "id": 2,
+            "image": "Nicole.jpg",
+            "name": "Maria Oliveira",
+            "instructor": false
+          }
+        },
+        {
+          "id": 3,
+          "text": "Ótimo! Me avise se precisar de ajuda.",
+          "user": {
+            "id": 1,
+            "image": "Mari.jpg",
+            "name": "João Silva",
+            "instructor": true
+          }
+        }
+      ]
+    }
+]

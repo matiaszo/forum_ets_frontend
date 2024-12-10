@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useState, ChangeEvent, KeyboardEvent } from "react";
 import ImageComponent from "@/components/image";
 import { Header } from "@/components/header";
+import Link from "next/link";
 
 // tipo de dado para os participantes
 type Person = {
@@ -487,8 +488,10 @@ const Projects = () => {
 
             {/* Cards view */}
             <div className={styles.container}>
-                {project.map((item, index) => (
-                    <Card key={index} title={item.name} mainQuestion={item.description} image={item.image} />
+                {dataTests.map((item, index) => (
+                    <Link key={index} href={'/projectSelected'} >
+                      <Card  title={item.title} mainQuestion={item.description} image={item.image} />
+                    </Link>
                 ))}
             </div>
 
