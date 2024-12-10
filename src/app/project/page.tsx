@@ -269,39 +269,36 @@ const Projects = () => {
                 <div className={styles.modalContainer}>
                 <form action={"POST"} id="modal" className={styles.modalBox}>
                     <h1 className={styles.title}>Crie um novo projeto</h1>
-                    <p className="mt-5">Selecione a imagem de seu projeto</p>
                     <div className="flex flex-col items-center space-y-4">
                         <input type="file" accept="image/*" capture="environment" id="cameraInput" onChange={handleImageChange} className="hidden"/>
                         <label htmlFor="cameraInput" className="cursor-pointer">
                         {newImage ? (
                             <img src={newImage} alt="Nova Imagem" className="w-96 h-64 object-cover rounded-lg"/>
                             ) : (
-                                <div className="w-96 h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">Sem Foto</div>
+                                <div className="w-96 h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">Adicione uma imagem</div>
                             )}
                         </label>
                     </div>
                     <div className={styles.content}>
-                    <p>Digite um nome para o seu projeto</p>
 
                     <input
                         className={styles.input + 'capitalize'}
                         onChange={setNameOfProject}
                         value={nameProject}
                         type="text"
+                        placeholder="Digite o nome de seu projeto"
                         required
                     />
-
-                    <p>Digite uma descrição para o seu projeto</p>
 
                     <input
                         className={styles.input}
                         onChange={setDescriptionOfProject}
                         value={description}
                         type="text"
+                        placeholder="Digite uma descrição para o seu projeto"
                         required
                     />
 
-                    <p>Adicione os objetivos do seu projeto</p>
                     <div className="flex gap-10">
                         <input
                         className={styles.inputObj}
@@ -309,6 +306,7 @@ const Projects = () => {
                         value={goalValue} 
                         onChange={(e) => setGoalValue(e.target.value)} // atualiza o valor do objetivo
                         onKeyDown={handleGoalKeyDown} // chama addGoal quando pressionar Enter
+                        placeholder="Adicione objetivos ao seu projeto"
                         required
                         />
                         <div className="self-center " onClick={addGoal}>
@@ -346,7 +344,7 @@ const Projects = () => {
                     )}
 
 
-                    <div className="flex justify-center gap-3">
+                    <div className="flex justify-end gap-3">
                     <button
                         className={styles.btnNext}
                         onClick={() => {
@@ -504,12 +502,12 @@ export default Projects;
 
 const styles = {
   title: "text-blue1 text-3xl",
-  input: " w-full p-4 my-4 border-b-2 border-blue3 outline-none ease-in-out hover:border-blue1 ",
-  inputObj: "capitalize w-[500px] p-4 my-4 border-b-2 border-blue3 outline-none ease-in-out hover:border-blue1",
+  input: " w-full p-2 my-4 border-b border-blue3 outline-none ease-in-out hover:border-blue1 ",
+  inputObj: "capitalize w-[500px] p-2 my-4 border-b border-blue3 outline-none ease-in-out hover:border-blue1",
   content: "m-4",
   header: "",
   container: "flex justify-center items-center flex-wrap m-10 mx-35 gap-8",
-  icon: "cursor-pointer h-16 w-auto self-center",
+  icon: "cursor-pointer h-12 w-auto self-center",
   iconAdd: "cursor-pointer h-8 w-auto self-end",
   modalContainer:
     "h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]",
@@ -517,8 +515,8 @@ const styles = {
     "bg-white w-[600px] p-4 w-auto flex-wrap rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)]",
   modalNext:
     "bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[90%]",
-  btnNext: "bg-blue3 p-2 text-white rounded px-6 py-4 hover:bg-blue2",
-  btnCancel: "bg-red-700 p-2 text-white rounded px-6 py-4 hover:bg-red-800",
+  btnNext: "bg-blue-500 text-white rounded-md px-3 py-3 hover:bg-blue-800",
+  btnCancel: "bg-red-500 text-white rounded-md px-3 py-3 hover:bg-red-800",
   peopleSelect: "flex flex-col mt-2 overflow-y-scroll h-60 bg-gray-100 p-4 rounded ",
   people: "flex max-h-60 flex-col mt-2 overflow-y-scroll bg-gray-100 rounded",
   person: "flex gap-2 items-center cursor-pointer m-2",
