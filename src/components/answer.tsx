@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Image, { StaticImageData } from "next/image";
-import arrow_down from "@/assets/arrow_down.png"
+import arrow_ans from "@/assets/arrow_ans.png"
 import like_icon from "@/assets/like2.png"
 import liked_icon from "@/assets/liked2.png"
 
@@ -80,8 +80,8 @@ export const Answer: React.FC<AnswerProps> = ({
       </div>
       <p className="mt-1 text-black">{comment.content}</p>
       <div className="flex justify-around items-center">
-        <button className="flex items-center justify-end mt-3 text-black text-sm  rounded-md w-[90%] " onClick={() => setIsReplying(true)}>
-          <Image src={arrow_down} height="30" width="30" alt="arrow"/>
+        <button className="flex justify-end rounded-md w-[90%]" onClick={() => setIsReplying(true)}>
+          <Image src={arrow_ans} height="30" width="30" alt="arrow"/>
         </button>
         <div className="flex justify-between items-center w-16">
           <button onClick={handleLikeToggle}>
