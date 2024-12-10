@@ -20,9 +20,26 @@ type IProject = {
   goals: string[];
   description: string;
   users: Person[];
+  image: string;
 };
 
+interface user {
+    id: string;
+    name: string;
+    image: string;
+    bio: string;
+    gitUseraname: string | null;
+    instructor: number;
+    isUser: boolean;
+}
+
+
 const Projects = () => {
+
+    const u : user = {id: "1", name: "Mariana", bio: "slaaa", image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg", gitUseraname: 'xmarimarquesh', instructor: 0, isUser: true}
+    
+    const [usuario, setUsuario] = useState(u);
+
   const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
   const [openModalAddPeople, setOpenModalAddPeople] = useState<boolean>(false);
 
@@ -77,6 +94,128 @@ const Projects = () => {
     }
   };
 
+  const teste : IProject[] = [
+    {
+        name: "Título do Card",
+        image: "py_image.webp",
+        description: "discussões sobre javaruim",
+        goals: [
+            "seila", "nsei"
+        ],
+        users: [
+            {
+                id: 1,
+                name: "Mariana",
+                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
+            }
+        ]
+      },
+      {
+        name: "Outro Título",
+        image: "py_image.webp",
+        description: "forum para discutir sobre javaruim",
+        goals: [
+            "seila", "nsei"
+        ],
+        users: [
+            {
+                id: 1,
+                name: "Mariana",
+                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
+            }
+        ]
+      },
+      {
+        name: "Outro Título",
+        image: "py_image.webp",
+        description: "forum para discutir sobre algo",
+        goals: [
+            "seila", "nsei"
+        ],
+        users: [
+            {
+                id: 1,
+                name: "Mariana",
+                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
+            }
+        ]
+      },
+      {
+        name: "Outro Título",
+        image: "py_image.webp",
+        description: "forum para discutir sobre algo",
+        goals: [
+            "seila", "nsei"
+        ],
+        users: [
+            {
+                id: 1,
+                name: "Mariana",
+                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
+            }
+        ]
+      },
+      {
+        name: "Outro Título",
+        image: "py_image.webp",
+        description: "forum para discutir sobre algo",
+        goals: [
+            "seila", "nsei"
+        ],
+        users: [
+            {
+                id: 1,
+                name: "Mariana",
+                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
+            }
+        ]
+      },
+      {
+        name: "Outro Título",
+        image: "py_image.webp",
+        description: "forum para discutir sobre algo",
+        goals: [
+            "seila", "nsei"
+        ],
+        users: [
+            {
+                id: 1,
+                name: "Mariana",
+                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
+            }
+        ]
+      },
+      {
+        name: "Outro Título",
+        image: "py_image.webp",
+        description: "forum para discutir sobre algo",
+        goals: [
+            "seila", "nsei"
+        ],
+        users: [
+            {
+                id: 1,
+                name: "Mariana",
+                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
+            }
+        ]
+      }
+   ]
+
+    const [project, setProject] = useState<IProject[]>(teste);
+    const [newImage, setNewImage] = useState<string>("");
+
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            setNewImage(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+        }
+    };
+
   // função para finalizar o projeto e salvar os dados
   const setInfos = () => {
 
@@ -85,10 +224,13 @@ const Projects = () => {
       goals: goals,
       description: description,
       users: listContributors,
+      image: newImage
     };
 
     // adiciona o novo projeto à lista de projetos
     setInfoProject(newProject);
+
+    setProject((prevProjects) => [...prevProjects, newProject]);
 
     // reseta os campos para o próximo projeto
     setNameProject("");
@@ -112,6 +254,12 @@ const Projects = () => {
         setListContributors((prevList) => prevList.filter(person => person !== personToRemove))
    }
 
+   // IMAGEMMMMMMMMMM
+
+ 
+
+    
+
   return (
     <div className="flex flex-col mt-20">
         <Header/>
@@ -121,28 +269,36 @@ const Projects = () => {
                 <div className={styles.modalContainer}>
                 <form action={"POST"} id="modal" className={styles.modalBox}>
                     <h1 className={styles.title}>Crie um novo projeto</h1>
+                    <div className="flex flex-col items-center space-y-4">
+                        <input type="file" accept="image/*" capture="environment" id="cameraInput" onChange={handleImageChange} className="hidden"/>
+                        <label htmlFor="cameraInput" className="cursor-pointer">
+                        {newImage ? (
+                            <img src={newImage} alt="Nova Imagem" className="w-96 h-64 object-cover rounded-lg"/>
+                            ) : (
+                                <div className="w-96 h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">Adicione uma imagem</div>
+                            )}
+                        </label>
+                    </div>
                     <div className={styles.content}>
-                    <p>Digite um nome para o seu projeto</p>
 
                     <input
                         className={styles.input + 'capitalize'}
                         onChange={setNameOfProject}
                         value={nameProject}
                         type="text"
+                        placeholder="Digite o nome de seu projeto"
                         required
                     />
-
-                    <p>Digite uma descrição para o seu projeto</p>
 
                     <input
                         className={styles.input}
                         onChange={setDescriptionOfProject}
                         value={description}
                         type="text"
+                        placeholder="Digite uma descrição para o seu projeto"
                         required
                     />
 
-                    <p>Adicione os objetivos do seu projeto</p>
                     <div className="flex gap-10">
                         <input
                         className={styles.inputObj}
@@ -150,6 +306,7 @@ const Projects = () => {
                         value={goalValue} 
                         onChange={(e) => setGoalValue(e.target.value)} // atualiza o valor do objetivo
                         onKeyDown={handleGoalKeyDown} // chama addGoal quando pressionar Enter
+                        placeholder="Adicione objetivos ao seu projeto"
                         required
                         />
                         <div className="self-center " onClick={addGoal}>
@@ -187,7 +344,7 @@ const Projects = () => {
                     )}
 
 
-                    <div className="flex justify-center gap-3">
+                    <div className="flex justify-end gap-3">
                     <button
                         className={styles.btnNext}
                         onClick={() => {
@@ -219,14 +376,13 @@ const Projects = () => {
                 <form action={"POST"} id="modal" className={styles.modalNext}>
                     <h1 className={styles.title}>Adicione pessoas ao seu projeto</h1>
                     <div className={`${styles.content} mb-8`}>
-                    <p>Busque por nome</p>
                     <div className="flex gap-10">
                         <input
                         id="person"
                         className={styles.input}
                         onChange={setValuePerson}
                         type="text"
-                        placeholder="ex: Eduardo Henrique Ribeiro"
+                        placeholder="Pesquise por participantes..."
                         value={personValue}
                         />
                     </div>
@@ -322,17 +478,17 @@ const Projects = () => {
                 <p>Seus projetos aparecem aqui</p>
 
                 {/* Add projects */}
-                <div className="flex justify-end">
-                    <div  className="w-auto" onClick={() => setOpenModalInfo(true)}>
-                        <ImageComponent src={'icons8-adicionar-100.png'} width={50} height={50} alt="" className={styles.icon} />
+                    <div className="flex justify-end">
+                        <div  className="w-auto" onClick={() => setOpenModalInfo(true)}>
+                            <ImageComponent src={'icons8-adicionar-100.png'} width={50} height={50} alt="" className={styles.icon} />
+                        </div>
                     </div>
-                </div>
             </div>
 
             {/* Cards view */}
             <div className={styles.container}>
-                {dataTests.map((item, index) => (
-                    <Card key={index} title={item.title} mainQuestion={item.description} image={item.image} />
+                {project.map((item, index) => (
+                    <Card key={index} title={item.name} mainQuestion={item.description} image={item.image} />
                 ))}
             </div>
 
@@ -346,24 +502,24 @@ export default Projects;
 
 const styles = {
   title: "text-blue1 text-3xl",
-  input: "bg-gray-100 w-full p-4 my-4 border-b-2 border-blue3 outline-none ease-in-out hover:border-blue1 ",
-  inputObj: "capitalize bg-gray-100 w-[500px] p-4 my-4 border-b-2 border-blue3 outline-none ease-in-out hover:border-blue1",
+  input: " w-full p-2 my-4 border-b border-blue3 outline-none ease-in-out hover:border-blue1 ",
+  inputObj: "capitalize w-[500px] p-2 my-4 border-b border-blue3 outline-none ease-in-out hover:border-blue1",
   content: "m-4",
   header: "",
   container: "flex justify-center items-center flex-wrap m-10 mx-35 gap-8",
-  icon: "cursor-pointer h-16 w-auto self-center",
+  icon: "cursor-pointer h-12 w-auto self-center",
   iconAdd: "cursor-pointer h-8 w-auto self-end",
   modalContainer:
     "h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]",
   modalBox:
     "bg-white w-[600px] p-4 w-auto flex-wrap rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)]",
   modalNext:
-    "bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[620px]",
-  btnNext: "bg-blue3 p-2 text-white rounded px-6 py-4 hover:bg-blue2",
-  btnCancel: "bg-red-700 p-2 text-white rounded px-6 py-4 hover:bg-red-800",
-  peopleSelect: "flex flex-col mt-2 overflow-y-scroll h-40 bg-gray-100 p-4 rounded scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100 ",
-  people: "flex max-h-28 flex-col mt-2 overflow-y-scroll bg-gray-100 rounded scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100",
+    "bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[90%]",
+  btnNext: "bg-blue-500 text-white rounded-md px-3 py-3 hover:bg-blue-800",
+  btnCancel: "bg-red-500 text-white rounded-md px-3 py-3 hover:bg-red-800",
+  peopleSelect: "flex flex-col mt-2 overflow-y-scroll h-60 bg-gray-100 p-4 rounded ",
+  people: "flex max-h-60 flex-col mt-2 overflow-y-scroll bg-gray-100 rounded",
   person: "flex gap-2 items-center cursor-pointer m-2",
-  imgProfile: "object-cover rounded-full w-10 h-10",
+  imgProfile: "object-cover rounded-full w-10 h-10 flex flex-row items-end justify-end",
 };
 
