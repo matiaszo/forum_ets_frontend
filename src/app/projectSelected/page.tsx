@@ -8,6 +8,7 @@ import ImageComponent from "@/components/image";
 const idProjectExemple = 1;
 const limit = 350;
 const dataItems = data.find(project => project.id == idProjectExemple);
+const curUserLoggedExemple = 1
 
 interface User{
     id : number
@@ -15,21 +16,34 @@ interface User{
     name : string
     //instructor : boolean
 }
+interface Feedback {
+    idSender : number
+    idReceptor : number
+    idProject : number
+    visibility : boolean
+    text : string
+    stars : number
+}
 
 const projectPage = () => {
-
     const [isExpanded, setIsExpanded] = useState(false);
-    const [newMessage, setNewMessage] = useState(""); // Estado para armazenar a mensagem
+    const [newMessage, setNewMessage] = useState(""); // estado para armazenar a mensagem
     const [messages, setMessages] = useState(dataItems?.messages || []); // estado para armazenar as mensagens
     const [open, setOpen] = useState<boolean>(false);
     const [rating, setRating] = useState<number>(0); // estado para armazenar a avaliação com estrelas
 
-    // Função para alternar a descrição expandida
+    // Estados para controlar o feedback
+    const [feedbackText, setFeedbackText] = useState(""); // texto do feedback
+    const [projectFeedbacks, setProjectFeedbacks] = useState<Feedback[]>([]); // estado para armazenar os feedbacks
+    const [receiverUser, setReceiverUser] = useState<number | null>(null); // usuário que vai receber o feedback
+    const [publicFeedback, setPublicFeedback] = useState<boolean>(true); // se o feedback é público ou não
+
+    // função para alternar a descrição expandida
     const toggleDescription = () => {
         setIsExpanded(prevState => !prevState);
     };
 
-    // Função para enviar a mensagem
+    // função para enviar a mensagem
     const send = () => {
         if (newMessage.trim()) {
             const newMessageObject = {
@@ -38,113 +52,135 @@ const projectPage = () => {
                 id_user: 1
             };
 
-            setMessages(prevMessages => [...prevMessages, newMessageObject]); // adiciona a nova mensagem na lista
+            // adiciona a nova mensagem na lista
+            setMessages(prevMessages => [...prevMessages, newMessageObject]); 
             setNewMessage(""); // limpa o campo de texto
         }
     };
 
     // função para lidar com a mudança da avaliação
     const handleRating = (index: number) => {
-        setRating(index + 1); // definir o valor da avaliação com base no índice da estrela clicada
+        // definir o valor da avaliação com base no índice da estrela clicada
+        setRating(index + 1); 
+    };
+
+    // função para abrir o modal e configurar os dados do receptor
+    const openFeedbackModal = (user: User) => {
+        setReceiverUser(user.id); 
+        setOpen(true);
+    };
+
+    // função para fechar o modal
+    const closeFeedbackModal = () => {
+        setOpen(false); 
+        setReceiverUser(null); // Reseta o receptor
+        setFeedbackText(""); // limpa o texto do feedback
+        setRating(0); // reseta a avaliação
+    };
+
+    // função para enviar o feedback
+    const sendFeedback = () => {
+        if (feedbackText.trim() && receiverUser) {
+            const feedback: Feedback = {
+                idProject: dataItems?.id || -1,
+                idSender: curUserLoggedExemple,
+                idReceptor : receiverUser,
+                stars: rating,
+                text: feedbackText,
+                visibility : publicFeedback,
+            };
+            // adiciona o feedback à lista
+            setProjectFeedbacks(prevFeedbacks => [...prevFeedbacks, feedback]); 
+            console.log(feedback)
+            closeFeedbackModal(); 
+        }
     };
 
     return (
         <>
             <Header />
 
-            {/* Modal de feedback */}
-            {open && (
-                <div className="flex bg-[#000000A0] w-full h-full absolute items-center justify-center self-center justify-center">
-                    <form className="flex-col shadow p-2 rounded bg-white-100 bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[90%]" action="">
-                        <p className="text-blue1 text-3xl mb-4 my-6">Feedback</p>
+                {/* Modal de feedback */}
+                {open && (
+                    <div className="flex bg-[#000000A0] w-full h-full absolute items-center justify-center self-center justify-center">
+                        <form className="flex-col shadow p-2 rounded bg-white-100 bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[90%]" action="">
+                            <p className="text-blue1 text-3xl mb-4 my-6">Feedback</p>
 
-                        <textarea
-                            className="bg-slate-100 w-full h-[200px] outline-none p-2"
-                            placeholder="Comente um pouco sobre a contribuição do seu colega"
-                        ></textarea>
+                            <textarea
+                                className="bg-slate-100 w-full h-[200px] outline-none p-2"
+                                placeholder="Comente um pouco sobre a contribuição do seu colega"
+                                value={feedbackText}
+                                onChange={(e) => setFeedbackText(e.target.value)} // Atualiza o texto do feedback
+                            ></textarea>
 
-                        {/* sistema de avaliação com estrelas */}
-                        <div className="flex gap-2 mt-4">
-                            {[...Array(5)].map((_, index) => (
-                                <span
-                                    key={index}
-                                    className={`cursor-pointer ${rating > index ? 'text-yellow-400' : 'text-gray-400'}`}
-                                    onClick={() => handleRating(index)}
+                            {/* sistema de avaliação com estrelas */}
+                            <div className="flex gap-2 mt-4">
+                                {[...Array(5)].map((_, index) => (
+                                    <span
+                                        key={index}
+                                        className={`cursor-pointer ${rating > index ? 'text-yellow-400' : 'text-gray-400'}`}
+                                        onClick={() => handleRating(index)}
+                                    >
+                                        ★
+                                    </span>
+                                ))}
+                            </div>
+
+                            <div className="flex gap-3 mt-4">
+                                <button
+                                    className="bg-red-500 p-2 rounded text-white"
+                                    onClick={closeFeedbackModal} // Fecha o modal
                                 >
-                                    ★
+                                    Cancelar
+                                </button>
+                                <button
+                                    className="bg-blue-500 p-2 rounded text-white"
+                                    onClick={sendFeedback} // Envia o feedback
+                                >
+                                    Enviar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                )}
+
+                {/* Mostrando título e descrição do projeto */}
+                <div className="h-[480px] overflow-y-auto scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100 p-6">
+                    <div className="mt-24 ml-8">
+                        <h1 className="text-blue1 text-3xl mb-4">
+                            {dataItems?.name}
+                        </h1>
+                        <p className="flex flex-wrap max-w-[750px]">
+                            {isExpanded || (dataItems?.description && dataItems.description.length <= limit)
+                                ? dataItems?.description
+                                : dataItems?.description.substring(0, limit) + "..."}
+                            {dataItems?.description && dataItems.description.length > limit && (
+                                <span
+                                    className="text-blue-500 cursor-pointer"
+                                    onClick={toggleDescription}>
+                                    {isExpanded ? "Ler menos" : "Ler mais"}
                                 </span>
-                            ))}
-                        </div>
+                            )}
+                        </p>
+                    </div>
 
-                        <div className="flex gap-3 mt-4">
-                            <button
-                                className="bg-red-500 p-2 rounded text-white"
-                                onClick={() => { setOpen(false) }}
-                            >
-                                Cancelar
-                            </button>
-                            <button
-                                className="bg-blue-500 p-2 rounded text-white"
-                                onClick={() => { setOpen(false) }}
-                            >
-                                Enviar
-                            </button>
-                        </div>
-                    </form>
+                    {/* Mostrando contribuidores do projeto */}
+                    <div className="flex flex-col ml-8 mt-6 w-[300px]">
+                        <h1 className="text-blue1 text-3xl mb-4">Contribuidores</h1>
+                        {dataItems?.users?.map((contributor, index) => (
+                            <div key={index} className="flex gap-3 items-center mt-6">
+                                <ImageComponent src={contributor.image} alt="" width={30} height={30} className="rounded-full object-cover aspect-square" />
+                                <h1>{contributor.name}</h1>
+                                <button
+                                    className="flex bg-blue2 text-white self-end justify-self-end rounded p-2 hover:shadow hover:bg-blue1"
+                                    onClick={() => openFeedbackModal(contributor)} // Abre o modal para o contribuidor
+                                >
+                                    Feedback
+                                </button>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            )}
-
-            {/* Mostrando título e descrição do projeto */}
-            <div className="h-[480px] overflow-y-auto scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100 p-6">
-                <div className="mt-24 ml-8">
-                    <h1 className={styles.title}>
-                        {dataItems?.name}
-                    </h1>
-                    <p className="flex flex-wrap max-w-[750px]">
-                        {isExpanded || (dataItems?.description && dataItems.description.length <= limit)
-                            ? dataItems?.description
-                            : dataItems?.description.substring(0, limit) + "..."}
-                        {/* botão "Ler mais" ou "Ler menos" */}
-                        {dataItems?.description && dataItems.description.length > limit && (
-                            <span
-                                className="text-blue-500 cursor-pointer"
-                                onClick={toggleDescription}>
-                                {isExpanded ? "Ler menos" : "Ler mais"}
-                            </span>
-                        )}
-                    </p>
-                </div>
-
-                {/* Mostrando objetivos do projeto */}
-                <div className="mt-6 ml-8">
-                    <h1 className={styles.title}>Objetivos</h1>
-                    {dataItems?.goals?.map((goal, index) => (
-                        <h2 key={index}>
-                            <input type="checkbox" id="objetivo1" className={styles.checkbox} />
-                            <label className="ml-2">{goal}</label>
-                        </h2>
-                    ))}
-                </div>
-
-                {/* Mostrando contribuidores do projeto */}
-                <div className="flex flex-col ml-8 mt-6 w-[300px]">
-                    <h1 className={styles.title}>Contribuidores</h1>
-                    {dataItems?.users?.map((contributor, index) => (
-                        <div key={index} className="flex gap-3 items-center mt-6">
-                            <ImageComponent src="topic1.png" width={20} height={20} alt="" />
-
-                            <ImageComponent src={contributor.image} alt="" width={30} height={30} className="rounded-full object-cover aspect-square" />
-                            <h1>{contributor.name}</h1>
-                            <button
-                                className="flex bg-blue2 text-white self-end justify-self-end rounded p-2 hover:shadow hover:bg-blue1"
-                                onClick={() => { setOpen(true) }}
-                            >
-                                Feedback
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            </div>
 
                 {/* cards de mensagens */}
                 <hr className="shadow" />

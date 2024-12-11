@@ -839,7 +839,7 @@ baixar: npm install tailwind-scrollbar
         idSender : number
         idReceptor : number
         idProject : number
-        public : boolean
+        visibility : boolean
         text : string
         stars : number
     }
