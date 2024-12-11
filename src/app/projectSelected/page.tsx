@@ -196,7 +196,7 @@ const projectPage = () => {
                 </div>
 
                 {/* enviar mensagens */}
-                <div className="flex gap-3 items-center">
+                <div className="flex w-11/12 mb-6 self-center justify-self-center gap-3 items-center">
                     <input
                         className="outline-none mt-4 rounded-full p-2 bg-slate-100 w-11/12"
                         type="text"
