@@ -9,6 +9,13 @@ const idProjectExemple = 1;
 const limit = 350;
 const dataItems = data.find(project => project.id == idProjectExemple);
 
+interface User{
+    id : number
+    image : string
+    name : string
+    //instructor : boolean
+}
+
 const projectPage = () => {
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -28,12 +35,7 @@ const projectPage = () => {
             const newMessageObject = {
                 id: messages.length + 1,
                 text: newMessage,
-                user: {
-                    id: 1,
-                    name: "Matias Zuniga",
-                    image: "Matias3.jpg",
-                    instructor: false
-                }
+                id_user: 1
             };
 
             setMessages(prevMessages => [...prevMessages, newMessageObject]); // adiciona a nova mensagem na lista
@@ -125,14 +127,16 @@ const projectPage = () => {
                 </div>
 
                 {/* Mostrando contribuidores do projeto */}
-                <div className="ml-8 mt-6">
+                <div className="flex flex-col ml-8 mt-6 w-[300px]">
                     <h1 className={styles.title}>Contribuidores</h1>
                     {dataItems?.users?.map((contributor, index) => (
                         <div key={index} className="flex gap-3 items-center mt-6">
                             <ImageComponent src="topic1.png" width={20} height={20} alt="" />
-                            <h1>{contributor.image}</h1>
+
+                            <ImageComponent src={contributor.image} alt="" width={30} height={30} className="rounded-full object-cover aspect-square" />
+                            <h1>{contributor.name}</h1>
                             <button
-                                className="bg-blue2 text-white rounded p-2 hover:shadow hover:bg-blue1"
+                                className="flex bg-blue2 text-white self-end justify-self-end rounded p-2 hover:shadow hover:bg-blue1"
                                 onClick={() => { setOpen(true) }}
                             >
                                 Feedback
@@ -142,15 +146,53 @@ const projectPage = () => {
                 </div>
             </div>
 
-            {/* cards de mensagens */}
-            <hr className="shadow" />
-            <div className="flex flex-col w-11/12 p-4 justify-self-center">
+                {/* cards de mensagens */}
+                <hr className="shadow" />
+                <div className="flex flex-col w-11/12 p-4 justify-self-center">
                 <div className="flex flex-col h-[300px] overflow-y-auto gap-3 scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100">
-                    {messages.map((msg) => (
+                    {messages.map((msg) => {
+                    const exempleIdUserLogged = 1;  // id do usuário logado exemplo, vamos pegar do local stored
+
+                    let MsgOwner =
+                    {
+                        name: "<Deletado>",
+                        image: "",
+                        id: -1
+                    }; // default
+
+                    let CurrentUser : boolean = false; // inicia como false
+
+                    if(dataItems != undefined)
+                    {
+                        let users = dataItems.users;
+                        for(let i = 0; i < users.length; ++i)
+                        {
+                            // itera sobre os usuários e envia quem enviou a msg
+                            if(users[i].id === msg.id_user) 
+                            {
+                                MsgOwner = users[i];
+                                if(users[i].id === exempleIdUserLogged)
+                                {
+                                    CurrentUser = true; // se for o user atual mandando mensagem
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                    return (
                         <div key={msg.id}>
-                            <CardMessage user={msg.user.name} text={msg.text} image={msg.user.image} />
+                        <CardMessage
+                            user={MsgOwner.name}
+                            curUser={CurrentUser}  
+                            text={msg.text}
+                            image={MsgOwner.image}
+                        />
                         </div>
-                    ))}
+                    );
+                    })}
+
+                </div>
                 </div>
 
                 {/* enviar mensagens */}
@@ -171,7 +213,6 @@ const projectPage = () => {
                         />
                     </div>
                 </div>
-            </div>
         </>
     );
 };
