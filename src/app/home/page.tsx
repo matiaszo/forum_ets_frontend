@@ -9,6 +9,8 @@ import plus from "@/assets/icons8-adicionar-100.png";
 import Image from "next/image";
 import { useState } from "react";
 
+import { CldImage, CldUploadButton } from 'next-cloudinary';
+
 interface noticia {
   image: string;
   title: string;
@@ -24,6 +26,8 @@ interface user {
     instructor: number;
     isUser: boolean;
 }
+
+const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
 
 const Home = () => {
@@ -78,9 +82,37 @@ const Home = () => {
     }
   };
 
+  const handleUpload = (result: any) => {
+    // Check if result is an object and contains the necessary information
+    if (result?.info?.public_id) {
+      const publicId = result.info.public_id;
+      console.log('Uploaded file public_id:', publicId);
+      // You can store the publicId in the state or use it however you need
+    } else {
+      console.error('Upload failed or result does not contain public_id');
+    }
+  };
+
   return (
     <div className="flex flex-col mt-20">
       <Header />
+      <CldImage
+      src="cld-sample-5" // Use this sample image or upload your own via the Media Explorer
+      width="500" // Transform the image: auto-crop to square aspect_ratio
+      height="500"
+      crop={{
+        type: 'auto',
+        source: true
+      }}
+      alt="teste"
+    />
+    <CldUploadButton
+      options={{multiple: true}}
+      uploadPreset={cloudPresetName}
+      onUploadAdded={handleUpload}
+    >
+      <span>oi</span>
+    </CldUploadButton>
       <div className="mr-10 ml-10 mb-10">
         {modalAdd && (
             <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
