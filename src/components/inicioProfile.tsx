@@ -17,7 +17,7 @@ interface user {
 
 interface skillInterface {
     id: string;
-    title: string;
+    name: string;
     image: string;
 }
 
@@ -77,8 +77,8 @@ export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skil
                         <div className="shadow-md w-[100%] rounded-lg p-2">
                             <h1 className="text-[22px] font-robFont mb-2">GitHub Status</h1>
                             <div className="flex flex-row w-[100%] items-center justify-center sm:flex-wrap">
-                                <img src={`https://github-readme-stats.vercel.app/api?username=${usuario.gitUseraname}&hide_title=false&hide_rank=false&show_icons=true&include_all_commits=false&count_private=false&disable_animations=false&theme=${gitTheme}&locale=en&hide_border=true`} className="h-[250px]" alt="stats graph" />
-                                <img src={`https://github-readme-stats.vercel.app/api/top-langs?username=${usuario.gitUseraname}&locale=en&hide_title=false&layout=compact&card_width=320&langs_count=12&theme=${gitTheme}&hide_border=true`} className="h-[250px]" alt="languages graph" />
+                                <img src={`https://github-readme-stats.vercel.app/api?username=${usuario.gitUseraname}&hide_name=false&hide_rank=false&show_icons=true&include_all_commits=false&count_private=false&disable_animations=false&theme=${gitTheme}&locale=en&hide_border=true`} className="h-[250px]" alt="stats graph" />
+                                <img src={`https://github-readme-stats.vercel.app/api/top-langs?username=${usuario.gitUseraname}&locale=en&hide_name=false&layout=compact&card_width=320&langs_count=12&theme=${gitTheme}&hide_border=true`} className="h-[250px]" alt="languages graph" />
                             </div>
                             {usuario.isUser ? (
                                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -149,12 +149,12 @@ export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skil
                                 <div key={skill.id} className="flex flex-col items-center">
                                     <img
                                         src={skill.image}
-                                        alt={skill.title}
+                                        alt={skill.name}
                                         width={100}
                                         height={100}
                                         className="rounded-lg"    
                                     />
-                                    <h3>{skill.title}</h3>
+                                    <h3>{skill.name}</h3>
                                 </div>
                             ))}
                         </div>
