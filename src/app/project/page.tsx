@@ -142,6 +142,16 @@ const Projects = () => {
         image: newImage,
     };
 
+    try {
+        const response = await fetch('http://localhost:8080', {
+            method: 'POST',
+            headers:{
+                `Baerer ${token}`
+            } 
+        })
+
+    }
+
     // adiciona o novo projeto à lista de projetos
     setInfoProject(newProject);
 
@@ -158,6 +168,49 @@ const Projects = () => {
     // fecha o modal
     setOpenModalAddPeople(false)
   };
+
+//   const setInfos = async () => {
+//     const newProject: IProject = {
+//       name: nameProject,
+//       goals: goals,
+//       description: description,
+//       users: listContributors,
+//       image: newImage,
+//     };
+  
+//     try {
+//       // Envia o projeto para a API via POST
+//       const response = await fetch('/api/projects', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Authorization': `Bearer ${jwtToken}`, // se você precisar enviar o JWT no header
+//         },
+//         body: JSON.stringify(newProject),
+//       });
+  
+//       // Verifica se a resposta foi bem-sucedida
+//       if (response.ok) {
+//         const data = await response.json(); // Resposta da API (caso haja)
+//         setProjects((prevProjects) => [...prevProjects, data]); // Adiciona o projeto ao estado local
+//         alert('Projeto criado com sucesso!');
+//       } else {
+//         const errorData = await response.json();
+//         console.error('Erro ao criar o projeto:', errorData.message);
+//         alert(`Erro ao criar o projeto: ${errorData.message}`);
+//       }
+//     } catch (error) {
+//       console.error('Erro na requisição:', error);
+//       alert('Houve um erro na criação do projeto.');
+//     }
+  
+//     // Reseta o formulário
+//     setNameProject('');
+//     setDescription('');
+//     setGoals([]);
+//     setListContributors([]);
+//     setPersonValue('');
+//     setGoalValue('');
 
   const deleteGoal = (goalToRemove : string) => {
     setGoals((prevGoals) => prevGoals.filter(goal => goal !== goalToRemove));
