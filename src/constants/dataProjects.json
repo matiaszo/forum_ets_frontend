@@ -4,6 +4,29 @@
       "name": "Projeto Alpha",
       "goals": ["Desenvolver um novo produto", "Expandir para o mercado internacional", "Melhorar a experiência do usuário"],
       "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit officiis fugit culpa in. Rem sunt magnam consequuntur facere, quos nulla distinctio, sit fugiat voluptatum in autem minima, repellat cupiditate quod.Vitae illo commodi cupiditate officia corporis, culpa pariatur. Quasi explicabo aut quidem, iure a, optio odit aperiam corporis animi cumque adipisci porro incidunt tempore consectetur saepe illum error velit accusamus.Neque ea molestias minima voluptatibus! Reprehenderit quo ad, eos odio natus architecto quam, quisquam aspernatur voluptatum facilis, nobis reiciendis. Quas animi officiis mollitia iste illum magnam omnis eius, nostrum autem!Veniam velit aliquid ipsam, ex nam necessitatibus doloribus quia dignissimos, rerum tempora harum voluptate cum provident et esse soluta molestias itaque? Natus illo deleniti reprehenderit cupiditate asperiores praesentium fugit eum?Numquam aspernatur et beatae alias excepturi nemo laudantium cupiditate nisi quia nobis explicabo esse nostrum recusandae, placeat vero eos, odio in facere officia est accusamus sapiente similique mollitia? Odio, iure!",
+      "users" : [
+        {
+          "id": 2,
+          "name": "Nicolle",
+          "email": "maria@example.com",
+          "intructor": false,
+          "image": "Nicole.jpg"
+        },
+        {
+          "id": 3,
+          "name": "Kau",
+          "email": "carlos@example.com",
+          "intructor": true,
+          "image": "Kau.jpg"
+        },
+        {
+          "id": 4,
+          "name": "Mariana Marques",
+          "email": "ana@example.com",
+          "intructor": false,
+          "image": "Mari.jpg"
+        }
+      ],
       "messages": [
         {
           "id": 1,
