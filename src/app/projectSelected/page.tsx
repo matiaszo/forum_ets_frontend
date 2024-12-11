@@ -13,9 +13,9 @@ const projectPage = () => {
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [newMessage, setNewMessage] = useState(""); // Estado para armazenar a mensagem
-    const [messages, setMessages] = useState(dataItems?.messages || []); // Estado para armazenar as mensagens
-    const [open, setOpen] = useState<boolean>(true);
-    const [rating, setRating] = useState<number>(0); // Estado para armazenar a avaliação com estrelas
+    const [messages, setMessages] = useState(dataItems?.messages || []); // estado para armazenar as mensagens
+    const [open, setOpen] = useState<boolean>(false);
+    const [rating, setRating] = useState<number>(0); // estado para armazenar a avaliação com estrelas
 
     // Função para alternar a descrição expandida
     const toggleDescription = () => {
@@ -36,14 +36,14 @@ const projectPage = () => {
                 }
             };
 
-            setMessages(prevMessages => [...prevMessages, newMessageObject]); // Adiciona a nova mensagem na lista
-            setNewMessage(""); // Limpa o campo de texto
+            setMessages(prevMessages => [...prevMessages, newMessageObject]); // adiciona a nova mensagem na lista
+            setNewMessage(""); // limpa o campo de texto
         }
     };
 
-    // Função para lidar com a mudança da avaliação
+    // função para lidar com a mudança da avaliação
     const handleRating = (index: number) => {
-        setRating(index + 1); // Definir o valor da avaliação com base no índice da estrela clicada
+        setRating(index + 1); // definir o valor da avaliação com base no índice da estrela clicada
     };
 
     return (
@@ -61,7 +61,7 @@ const projectPage = () => {
                             placeholder="Comente um pouco sobre a contribuição do seu colega"
                         ></textarea>
 
-                        {/* Sistema de avaliação com estrelas */}
+                        {/* sistema de avaliação com estrelas */}
                         <div className="flex gap-2 mt-4">
                             {[...Array(5)].map((_, index) => (
                                 <span
@@ -142,7 +142,7 @@ const projectPage = () => {
                 </div>
             </div>
 
-            {/* Cards de mensagens */}
+            {/* cards de mensagens */}
             <hr className="shadow" />
             <div className="flex flex-col w-11/12 p-4 justify-self-center">
                 <div className="flex flex-col h-[300px] overflow-y-auto gap-3 scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100">
@@ -153,13 +153,13 @@ const projectPage = () => {
                     ))}
                 </div>
 
-                {/* Enviar mensagens */}
+                {/* enviar mensagens */}
                 <div className="flex gap-3 items-center">
                     <input
                         className="outline-none mt-4 rounded-full p-2 bg-slate-100 w-11/12"
                         type="text"
                         value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)} // Atualiza o estado com o valor digitado
+                        onChange={(e) => setNewMessage(e.target.value)} // atualiza o estado com o valor digitado
                     />
                     <div onClick={send}>
                         <ImageComponent
@@ -167,7 +167,7 @@ const projectPage = () => {
                             width={50}
                             height={50}
                             alt="Enviar"
-                            className="rounded-full self-center justify-self-center bg-slate-100 p-2 cursor-pointer hover:shadow hover:bg-slate-300 ease-in-out duration-300"
+                            className="rounded-full self-center justify-self-center bg-slate-100 p-2 cursor-pointer hover:shadow hover:bg-blue1 ease-in-out duration-300"
                         />
                     </div>
                 </div>
