@@ -4,10 +4,11 @@ import Card from "@/components/card";
 import dataTests from "@/constants/dataTests.json";
 import dataUser from "@/constants/dataUserTests.json";
 import Image from "next/image";
-import { useState, ChangeEvent, KeyboardEvent } from "react";
+import { useState, ChangeEvent, KeyboardEvent, useEffect } from "react";
 import ImageComponent from "@/components/image";
 import { Header } from "@/components/header";
 import Link from "next/link";
+import axios from "axios";
 
 // tipo de dado para os participantes
 type Person = {
@@ -17,6 +18,7 @@ type Person = {
 };
 // dados enviados dos projetos
 type IProject = {
+  id?: number,
   name: string;
   goals: string[];
   description: string;
@@ -48,6 +50,10 @@ const Projects = () => {
   const [description, setDescription] = useState<string>("");
   const [personValue, setPersonValue] = useState<string>("");
   const [goalValue, setGoalValue] = useState<string>("");
+
+  const [project, setProject] = useState<IProject[]>([]);
+  const [newImage, setNewImage] = useState<string>("");
+  const token = localStorage.getItem('token')
 
  // listas que armazenam informaç~çoes inputadas
   const [goals, setGoals] = useState<string[]>([]);
@@ -94,116 +100,25 @@ const Projects = () => {
     }
   };
 
-  const teste : IProject[] = [
-    {
-        name: "Título do Card",
-        image: "py_image.webp",
-        description: "discussões sobre javaruim",
-        goals: [
-            "seila", "nsei"
-        ],
-        users: [
-            {
-                id: 1,
-                name: "Mariana",
-                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
-            }
-        ]
-      },
-      {
-        name: "Outro Título",
-        image: "py_image.webp",
-        description: "forum para discutir sobre javaruim",
-        goals: [
-            "seila", "nsei"
-        ],
-        users: [
-            {
-                id: 1,
-                name: "Mariana",
-                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
-            }
-        ]
-      },
-      {
-        name: "Outro Título",
-        image: "py_image.webp",
-        description: "forum para discutir sobre algo",
-        goals: [
-            "seila", "nsei"
-        ],
-        users: [
-            {
-                id: 1,
-                name: "Mariana",
-                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
-            }
-        ]
-      },
-      {
-        name: "Outro Título",
-        image: "py_image.webp",
-        description: "forum para discutir sobre algo",
-        goals: [
-            "seila", "nsei"
-        ],
-        users: [
-            {
-                id: 1,
-                name: "Mariana",
-                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
-            }
-        ]
-      },
-      {
-        name: "Outro Título",
-        image: "py_image.webp",
-        description: "forum para discutir sobre algo",
-        goals: [
-            "seila", "nsei"
-        ],
-        users: [
-            {
-                id: 1,
-                name: "Mariana",
-                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
-            }
-        ]
-      },
-      {
-        name: "Outro Título",
-        image: "py_image.webp",
-        description: "forum para discutir sobre algo",
-        goals: [
-            "seila", "nsei"
-        ],
-        users: [
-            {
-                id: 1,
-                name: "Mariana",
-                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
-            }
-        ]
-      },
-      {
-        name: "Outro Título",
-        image: "py_image.webp",
-        description: "forum para discutir sobre algo",
-        goals: [
-            "seila", "nsei"
-        ],
-        users: [
-            {
-                id: 1,
-                name: "Mariana",
-                image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg"
-            }
-        ]
-      }
-   ]
-
-    const [project, setProject] = useState<IProject[]>(teste);
-    const [newImage, setNewImage] = useState<string>("");
+    useEffect(() => {
+       
+        const fetchProjects = async () => {
+          try {
+            const response = await axios.get("http://localhost:8080/project", {
+              headers: {
+                Authorization: `Bearer ${token}`, 
+              },
+            });
+    
+            setProject(response.data);
+          } catch (err) {
+                console.error(err);
+          }
+        };
+    
+        // chama a função para buscar os dados
+        fetchProjects();
+      }, []); // O array vazio [] faz com que o efeito seja executado apenas uma vez (quando o componente monta)
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -220,11 +135,11 @@ const Projects = () => {
   const setInfos = () => {
 
     const newProject: IProject = {
-      name: nameProject,
-      goals: goals,
-      description: description,
-      users: listContributors,
-      image: newImage
+        name: nameProject,
+        goals: goals,
+        description: description,
+        users: listContributors,
+        image: newImage,
     };
 
     // adiciona o novo projeto à lista de projetos
@@ -483,13 +398,19 @@ const Projects = () => {
             </div>
 
             {/* Cards view */}
-            <div className={styles.container}>
-                {dataTests.map((item, index) => (
-                    <Link key={index} href={'/projectSelected'} >
-                      <Card  title={item.title} mainQuestion={item.description} image={item.image} />
+    
+                <div className={styles.container}>
+
+                {project?.length === 0 ? (
+                    <p className="text-slate-400" >Você ainda não tem projetos</p> 
+                ) : (
+                    project?.map((item, index) => (
+                    <Link key={index} href={`/projectSelected?id=${item.id}`}>
+                        <Card title={item.name} mainQuestion={item.description} image={item.image} />
                     </Link>
-                ))}
-            </div>
+                    ))
+                )}
+                </div>
 
             </div>
         </div>
@@ -521,4 +442,3 @@ const styles = {
   person: "flex gap-2 items-center cursor-pointer m-2",
   imgProfile: "object-cover rounded-full w-10 h-10 flex flex-row items-end justify-end",
 };
-
