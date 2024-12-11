@@ -1,3 +1,4 @@
+import { prototype } from "events";
 import { hostname } from "os";
 
 const nextConfig = {
@@ -57,6 +58,10 @@ const nextConfig = {
           protocol: 'https',
           hostname: '**', // Permite qualquer domínio com protocolo HTTPS
         },
+        {
+            protocol: 'https',
+            hostname: 'res.cloudinary.com'
+        }
       ],
     },
   
