@@ -41,7 +41,7 @@ const Forum = () => {
     };
 
     const styles = {
-        h1: "text-blue1 text-3xl",
+        h1: "text-blue1 text-3xl font-robCondensed",
         box: "flex w-[100%] gap-4 items-end justify-end", 
         search: "border-b-2 border-blue1 w-[100%] p-2 outline-none", 
     };
@@ -101,7 +101,7 @@ const Forum = () => {
     };
 
     return (
-        <div className="flex flex-col mt-20 font-robFont">
+        <div className="flex flex-col mt-20">
             <Header/>
             {modalAdd && (
                 <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
@@ -130,8 +130,8 @@ const Forum = () => {
             )}
             <div className="pr-20 pl-20 pt-10 flex flex-col items-center">
                     <div className="flex flex-col flex-wrap w-[100%]">
-                        <h1 className={styles.h1}>Acesse o fórum do setor aqui</h1>
-                        <p>Converse com seus colegas sobre os mais diversos tópicos.</p>
+                        <h1 className={styles.h1} >Explore as conversas do setor aqui</h1>
+                        <p className="font-robCondensed">Envolva-se nas discussões e expanda suas perspectivas.</p>
                     </div>
 
                 <div className="w-[100%] flex flex-row justify-end items-end">

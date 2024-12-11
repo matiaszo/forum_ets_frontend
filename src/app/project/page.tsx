@@ -472,7 +472,7 @@ const Projects = () => {
 
             <div className={styles.header}>
                 <h1 className={styles.title}>Seus projetos</h1>
-                <p>Seus projetos aparecem aqui</p>
+                <p>Colabore com seus colegas em grupos exclusivos sobre projetos</p>
 
                 {/* Add projects */}
                     <div className="flex justify-end">
@@ -500,7 +500,7 @@ export default Projects;
 
 
 const styles = {
-  title: "text-blue1 text-3xl",
+  title: "text-blue1 text-3xl font-robCondensed",
   input: " w-full p-2 my-4 border-b border-blue3 outline-none ease-in-out hover:border-blue1 ",
   inputObj: "capitalize w-[500px] p-2 my-4 border-b border-blue3 outline-none ease-in-out hover:border-blue1",
   content: "m-4",

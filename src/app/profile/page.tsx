@@ -371,11 +371,11 @@ export default function Home() {
                 <div className="w-[30%] min-h-[80%] shadow-lg flex-col rounded-lg flex items-center p-12 justify-between">
                     <div className="flex flex-col items-center w-[100%]">
                         <img src={image} alt="profile photo" className="w-64 h-64 object-cover rounded-full" />
-                        <h1 className="text-[26px] font-robFont mt-2" >{usuario.name}</h1>
+                        <h1 className="text-[26px] font-robCondensed text-blue1 mt-2 font-medium" >{usuario.name}</h1>
                         <h1 className="text-[18px] font-robFont" >{usuario.instructor == 1 ? 'Instructor' : 'Aprendice'}</h1>
                         {usuario.bio ? (
                             <div className="shadow-md p-4 rounded-lg w-[100%] mt-1">
-                                <h1 className="text-[20px] font-robFont flex flex-col">About me</h1>
+                                <h1 className="text-[20px] font-robCondensed text-blue1 mb-2 flex flex-col">About me</h1>
                                 <h1 className="font-robFont ml-3">{usuario.bio}</h1>
                             </div> 
                         ) : (
@@ -385,7 +385,7 @@ export default function Home() {
                         
                             {areas && areas.length > 0 ? (
                                 <div className="shadow-md rounded-lg p-5 mt-5 w-[100%]">
-                                    <h1 className="text-[20px] font-robFont flex flex-col">Areas of interest</h1>
+                                    <h1 className="text-[20px] font-robCondensed text-blue1 mb-2 flex flex-col">Areas of interest</h1>
                                     {areas.map(area => (
                                         <div key={area.id}>
                                             <li className="font-robFont ml-3 marker:text-blue2">{area.text}</li>
