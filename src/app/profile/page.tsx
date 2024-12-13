@@ -21,7 +21,7 @@ interface skillInterface {
 
 interface areaOfInterest {
     id: string;
-    text: string;
+    name: string;
 }
 
 interface user {
@@ -29,7 +29,9 @@ interface user {
     name: string;
     image: string;
     bio: string;
-    gitUseraname: string;
+    email: string;
+    edv: string;
+    gituser: string;
     instructor: number;
     isUser: boolean;
 }
@@ -66,7 +68,9 @@ export default function Home() {
         name: '',
         image: '',
         bio: '',
-        gitUseraname: '',
+        gituser: '',
+        email: '',
+        edv: '',
         instructor: 0,
         isUser: false,
     });
@@ -98,7 +102,9 @@ export default function Home() {
                 name: data.name,
                 image: data.image,
                 bio: data.bio,
-                gitUseraname: data.github || null, 
+                email: data.email,
+                edv: data.edv,
+                gituser: data.github || null, 
                 instructor: data.instructor ? 1 : 0,
                 isUser: data.isUser, 
             };
@@ -115,7 +121,7 @@ export default function Home() {
         const mapInterests = (interests: typeof dataUser.interests): areaOfInterest[] => {
             return interests.map((interest : areaOfInterest) => ({
                 id: String(interest.id), 
-                text: interest.text,
+                name: interest.name,
             }));
         };
         
@@ -133,7 +139,8 @@ export default function Home() {
 
         setNameTemp(userData?.name || '');
         setBioTemp(userData?.bio || '');
-        setGithubTemp(userData?.gitUseraname || '');
+        setGithubTemp(userData?.gituser || '');
+        setEmailTemp(userData?.email || '');
 
 
         const responseSkill = await fetch(`http://localhost:8080/skills`, {
@@ -170,15 +177,7 @@ export default function Home() {
     const retorno = getAuthData();
 
     useEffect(() => {
-        
-        getUserData(retorno.token, retorno.id)
-            .then(data => {
-              console.log('Dados do usuário:', data);
-        })
-            .catch(error => {
-              console.error('Erro:', error);
-        });  
-
+        getUserData(retorno.token, retorno.id);
     }, [])
 
     const [activeTab, setActiveTab] = useState('inicio');
@@ -189,6 +188,7 @@ export default function Home() {
     const [nameTemp, setNameTemp] = useState('');
     const [githubTemp, setGithubTemp] = useState('');
     const [bioTemp, setBioTemp] = useState('');
+    const [emailTemp, setEmailTemp] = useState('');
 
     const [newArea, setNewArea] = useState("");
     const [newSkillId, setNewSkillId] = useState("");
@@ -205,27 +205,93 @@ export default function Home() {
         setIsModalOpen(false);
     };
 
-    const closeModalAndSave = () => {
-        console.log("Nome:", nameTemp);
-        console.log("Bio:", bioTemp);
-        console.log("Áreas:", areas);
-        console.log("Skills:", skills);
-        closeModal();
-    };
+    const closeModalAndSave = async () => {
+        try {
+            const dataToSend = {
+                bio: bioTemp.trim(),
+                name: nameTemp.trim(),
+                email: emailTemp.trim(),
+                image: nameTemp.trim(),
+                gituser: githubTemp.trim(),
+            };
 
-    const handleAddArea = () => {
-        if (newArea.trim() !== "") {
-        setAreas([
-            ...areas,
-            { id: String(areas.length + 1), text: newArea.trim() },
-        ]);
-        setNewArea("");
+            console.log(dataToSend);
+            
+            const response = await fetch(`http://localhost:8080/profile/${retorno.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${retorno.token}`
+                },
+                body: JSON.stringify(dataToSend),
+            });
+            
+            if (!response.ok) {
+                throw new Error("Erro ao salvar os dados response");
+            }
+            
+            const result = await response.text(); 
+            console.log("Dados salvos com sucesso:", result);
+            
+            closeModal();
+        } catch (err) {
+            console.error("Erro ao salvar os dados:", err);
         }
     };
+    
 
-    const handleRemoveArea = (id: string) => {
-        setAreas(areas.filter((area) => area.id !== id));
+    const handleAddArea = async () => {
+        if (newArea.trim() !== "") {
+            try {
+                const response = await fetch(`http://localhost:8080/profile/interest/${retorno.id}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        'Authorization': `Bearer ${retorno.token}` 
+                    },
+                    body: JSON.stringify({ name: newArea.trim() }),
+                });
+    
+                if (!response.ok) {
+                    throw new Error("Erro ao salvar a área");
+                }
+    
+                const newAreaData = await response.json();
+    
+                setAreas([...areas, { id: newAreaData.id, name: newAreaData.name }]);
+                setNewArea("");
+            } catch (error) {
+                console.error("Erro ao adicionar área:", error);
+            }
+        }
     };
+    
+
+    const handleRemoveArea = async (id: string) => {
+        try {
+            const removeAreaData = {
+                id: Number(id),
+            };
+
+            const response = await fetch(`http://localhost:8080/profile/interest/${retorno.id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${retorno.token}` 
+                },
+                body: JSON.stringify(removeAreaData),
+            });
+    
+            if (!response.ok) {
+                throw new Error("Erro ao remover a área");
+            }
+    
+            setAreas(areas.filter((area) => area.id !== id));
+        } catch (error) {
+            console.error("Erro ao remover a área:", error);
+        }
+    };
+    
     
     const handleAddSkill = async () => {
         console.log("ADICIONANDO SKILL");
@@ -298,8 +364,6 @@ export default function Home() {
             alert("Erro ao conectar com o servidor!");
         }
     };
-    
-    
     
     const feed : feedback[] = [
         {id: "1", stars: 2, text: "mais ou menos boa", public: true, projectName: "Projeto JAVA FINAL", user: {id: '1', name: 'Kau Menendez', image: "https://borboletariodesaopaulo.com.br/wp-content/uploads/2024/03/borboleta-monarca-foto-macro.jpg", isUser: true}},
@@ -418,7 +482,10 @@ export default function Home() {
     };
 
 
-
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        await closeModalAndSave();
+    };
     
 
     return (
@@ -445,7 +512,7 @@ export default function Home() {
                                     <h1 className="text-[20px] font-robFont flex flex-col">Areas of interest</h1>
                                     {areas.map(area => (
                                         <div key={area.id}>
-                                            <li className="font-robFont ml-3 marker:text-blue2">{area.text}</li>
+                                            <li className="font-robFont ml-3 marker:text-blue2">{area.name}</li>
                                         </div>
                                     ))}
                                 </div>
@@ -487,8 +554,11 @@ export default function Home() {
                             )}
                             </label>
                         </div>
+
                         <label htmlFor="name" className="mt-3 text-[18px] w-[100%]">Nome</label>
-                        <input type="text" value={nameTemp} onChange={(e) => setNameTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu nome..."/>
+                        <input type="text" value={nameTemp} onChange={(e) => setNameTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu nome..." required/>
+                        <label htmlFor="email" className="mt-3 text-[18px] w-[100%]">Email</label>
+                        <input type="text" value={emailTemp} onChange={(e) => setEmailTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu email..." required/>
                         <label htmlFor="name" className="mt-3 text-[18px] w-[100%]">GitHub Username</label>
                         <input type="text" value={githubTemp} onChange={(e) => setGithubTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu username do github..."/>
                         <label htmlFor="bio" className="mt-3 text-[18px] w-[100%]">Biografia</label>
@@ -498,7 +568,7 @@ export default function Home() {
                             <div className="max-h-32 overflow-y-auto mb-4 scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100">
                                 {areas.map((area) => (
                                     <div key={area.id} className="flex items-center mb-2">
-                                        <h2 className="w-[80%] border-b border-blue3 outline-none p-2">{area.text}</h2>
+                                        <h2 className="w-[80%] border-b border-blue3 outline-none p-2">{area.name}</h2>
                                         <button onClick={() => handleRemoveArea(area.id)}className="ml-2 text-red-500"><Image src={trash} width={24} height={24} alt=""/></button>
                                     </div>
                                 ))}
