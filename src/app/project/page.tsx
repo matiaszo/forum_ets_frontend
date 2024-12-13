@@ -3,10 +3,11 @@
 import Card from "@/components/card";
 // import dataUser from "@/constants/dataUserTests.json";
 import { useState, ChangeEvent, KeyboardEvent, useEffect } from "react";
-import ImageComponent from "@/components/image";
 import { Header } from "@/components/header";
 import Link from "next/link";
 import axios from "axios";
+import Image from "next/image";
+import ImageComponent from "@/components/image";
 
 // tipo de dado para os participantes
 type Person = {
@@ -20,7 +21,7 @@ type IProject = {
   name: string;
   goals: string[];
   description: string;
-  users: Person[];
+  users: number[];
   image?: string;
 };
 
@@ -30,9 +31,9 @@ type IAllUsers = {
   image : string
 }
 
-
 const Projects = () => {
 
+  // variáveis para controlar os modais
   const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
   const [openModalAddPeople, setOpenModalAddPeople] = useState<boolean>(false);
 
@@ -41,17 +42,18 @@ const Projects = () => {
   const [description, setDescription] = useState<string>("");
   const [personValue, setPersonValue] = useState<string>("");
   const [goalValue, setGoalValue] = useState<string>("");
-
-  const [dataUser, setDataUser] = useState<IAllUsers[]>([])
-
   const [project, setProject] = useState<IProject[]>([]);
   const [newImage, setNewImage] = useState<string>("");
 
- // listas que armazenam informaç~çoes inputadas
+  // variável que contém todos os usuários
+  const [dataUser, setDataUser] = useState<IAllUsers[]>([])
+
+ // listas que armazenam informaçoes inputadas
   const [goals, setGoals] = useState<string[]>([]);
   const [listContributors, setListContributors] = useState<Person[]>([]);
+  const [listIdContributors, setIdListContributors] = useState<number[]>([])
 
-  // estado para armazenar o projeto criado
+  // estado para armazenar o projeto criado localmente
   const [infoProject, setInfoProject] = useState<IProject>();
 
   // atualiza o nome do projeto
@@ -88,76 +90,70 @@ const Projects = () => {
   // função para adicionar uma pessoa à lista de participantes
   const addPeopleToList = (person: Person) => {
     if (!listContributors.find((p) => p.id === person.id)) {
-      setListContributors((prevList) => [...prevList, person]); // Adiciona o participante
+      console.log(`Adicionando pessoa: ${person.name}`);
+      setListContributors((prevList) => [...prevList, person]); // Adiciona o participante com todas as informações
+      setIdListContributors((prev) => [... prev, person.id]) // adicoina apenas com id para enviar à requisão
     }
   };
 
   let token: string | null;
 
+  // tudo dentro dele carrega antes da página carregar na primeira vez
   useEffect(() => {
       
     // get para pegar os projetos
     token = localStorage.getItem('token')
+    // get para pegar o id do user
     let idUser = localStorage.getItem('id')
+    
+    if (idUser !== null) {
+      const parsedId = parseInt(idUser, 10);
+      if (!isNaN(parsedId)) {
+        setIdListContributors(prevList => [...prevList, parsedId]);
+      } else {
+        console.error('ID inválido no localStorage');
+      }
+    }
+    
+    const fetchProjects = async () => {
+      try {
+        const responseProject = await axios.get("http://localhost:8080/project", {
+          headers: {
+            // method : 'GET',
+            Authorization: `Bearer ${token}`, 
+          },
+        });
 
-    if (!token) {
+        setProject(responseProject.data);
+
+      } catch (err) {
+          console.log(err)
+      }
+    };
+
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/user', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("Usuários recebidos:", response.data); // Adicionando log para conferir os dados recebidos
+        setDataUser(response.data);
+      } catch (err) {
+        console.error('Erro ao carregar usuários:', err);
+  }}
+
+      // chama a função para buscar os dados
+    if (token) {
+        fetchUsers();
+        fetchProjects();
+    } else {
       alert("Você precisa estar logado para acessar os projetos.");
       return;
     }
-      const fetchProjects = async () => {
-        try {
-          const responseProject = await axios.get("http://localhost:8080/project", {
-            headers: {
-              // method : 'GET',
-              Authorization: `Bearer ${token}`, 
-            },
-          });
-  
-          setProject(responseProject.data);
-
-        } catch (err) {
-            console.log(err)
-        }
-      };
-
-      // pegar o usuário atual
-
-      const currentUser = async () => {
-        try {
-          const responseUser = await axios.get(`http://localhost:8080/user/${idUser}`, {
-            headers: {
-              // method : 'GET',
-              Authorization: `Bearer ${token}`, 
-            },
-          });
-  
-          addPeopleToList(responseUser.data)
-
-        } catch (err) {
-            console.log(err)
-        }
-      };
-
-      const allusers = async () => {
-        try {
-          const responseUser = await axios.get(`http://localhost:8080/user`, {
-            headers: {
-              // method : 'GET',
-              Authorization: `Bearer ${token}`, 
-            },
-          });
-  
-          setDataUser(responseUser.data)
-
-        } catch (err) {
-            console.log(err)
-        }
-      };
-  
-      // chama a função para buscar os dados
-      fetchProjects();
-      currentUser();
-    }, []); // O array vazio [] faz com que o efeito seja executado apenas uma vez (quando o componente monta)
+ 
+  }, []); // O array vazio [] faz com que o efeito seja executado apenas uma vez (quando o componente monta)
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
@@ -182,7 +178,7 @@ const Projects = () => {
         name: nameProject,
         goals: goals,
         description: description,
-        users: listContributors,
+        users: listIdContributors,
         // image: newImage,
     };
 
@@ -219,6 +215,7 @@ const Projects = () => {
     setDescription("");
     setGoals([]);
     setListContributors([]);
+    setIdListContributors([])
     setPersonValue("");
     setGoalValue("");
 
@@ -232,6 +229,7 @@ const Projects = () => {
 
   function deletePerson(personToRemove: Person) {
         setListContributors((prevList) => prevList.filter(person => person !== personToRemove))
+        setListContributors((prev) => prev.filter(person => person.id !== personToRemove.id))
   }
  
   return (
@@ -247,7 +245,7 @@ const Projects = () => {
                         <input type="file" accept="image/*" capture="environment" id="cameraInput" onChange={handleImageChange} className="hidden"/>
                         <label htmlFor="cameraInput" className="cursor-pointer">
                         {newImage ? (
-                            <img src={newImage} alt="Nova Imagem" className="w-96 h-64 object-cover rounded-lg"/>
+                            <Image src={newImage} alt="Nova Imagem" className="w-96 h-64 object-cover rounded-lg"/>
                             ) : (
                                 <div className="w-96 h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">Adicione uma imagem</div>
                             )}
@@ -363,36 +361,38 @@ const Projects = () => {
 
                     {/* exibição das pessoas encontradas */}
                     <div className={styles.peopleSelect}>
-                        {dataUser
-                        .filter((person) =>
-                            person.name.toLowerCase().includes(personValue.toLowerCase())
-                        )
-                        .map((person) => (
-                            <div
-                            key={person.id}
-                            className={styles.person}
-                            onClick={() => addPeopleToList(person)}
-                            >
+                    {dataUser
+                      .filter((person) => {
+                        const matches = person.name.toLowerCase().includes(personValue.toLowerCase());
+                        console.log(`Pesquisando por: ${personValue}, Encontrado: ${matches} para ${person.name}`);
+                        return matches;
+                      })
+                      .map((person) => (
+                        <div
+                          key={person.id}
+                          className={styles.person}
+                          onClick={() => addPeopleToList(person)}
+                        >
+                          <Image
+                            src={person.image}
+                            width={40}
+                            height={40}
+                            alt={person.name}
+                            className={styles.ImageProfile}
+                          />
+                          <p className="self-center">{person.name}</p>
+                          <div className="ml-auto">
                             <ImageComponent
-                                src={person.image}
-                                width={40}
-                                height={40}
-                                alt={person.name}
-                                className={styles.imgProfile}
+                              src={"icons8-adicionar-100.png"}
+                              width={30}
+                              height={30}
+                              alt=""
+                              className={styles.iconAdd}
                             />
-                            <p className="self-center ">{person.name}</p>
-                            <div className="ml-auto" >
-                                <ImageComponent
-                                    src={"icons8-adicionar-100.png"}
-                                    width={30}
-                                    height={30}
-                                    alt=""
-                                    className={styles.iconAdd}
-                                />
-                            </div>
-                            </div>
-                        ))}
-                    </div>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
 
                     <p className="my-4 ">Abaixo irão aparecer as pessoas adicionadas</p>
 
@@ -401,12 +401,12 @@ const Projects = () => {
                         <div className={styles.people}>
                         {listContributors.map((person) => (
                             <div key={person.id} className={styles.person}>
-                            <ImageComponent
+                            <Image
                                 src={person.image? person.image : ''}
                                 width={40}
                                 height={40}
                                 alt={person.name}
-                                className={styles.imgProfile}
+                                className={styles.ImageProfile}
                             />
                             <p className="self-center">{person.name}</p>
                             <div className="ml-auto" onClick={() => {deletePerson(person)}} >
@@ -501,5 +501,5 @@ const styles = {
   peopleSelect: "flex flex-col mt-2 overflow-y-scroll h-60 bg-gray-100 p-4 rounded ",
   people: "flex max-h-60 flex-col mt-2 overflow-y-scroll bg-gray-100 rounded",
   person: "flex gap-2 items-center cursor-pointer m-2",
-  imgProfile: "object-cover rounded-full w-10 h-10 flex flex-row items-end justify-end",
+  ImageProfile: "object-cover rounded-full w-10 h-10 flex flex-row items-end justify-end",
 };
