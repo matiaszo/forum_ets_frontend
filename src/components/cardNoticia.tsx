@@ -19,7 +19,7 @@ const CardNoticia = ( {title, image, content} : CardData) => {
         <div className={styles.container}> 
             <div className="flex flex-row gap-5">
             <CldImage
-            src={content}
+            src={image}
             width="400" 
             height="250"
             crop={{
