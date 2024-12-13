@@ -20,7 +20,7 @@ const projectPage = () => {
 
     return (
         <>
-            <Header />
+            <Header instructor={false} />
             <div className="h-[480px] overflow-y-auto scrollbar-hidden p-6" >
 
                 <div className="mt-24 ml-8" >

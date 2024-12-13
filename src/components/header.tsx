@@ -4,7 +4,7 @@ import Image from "next/image";
 import ets_logo from "@/assets/ets_logo.png"
 import user_logo from "@/assets/user_logo.png"
 
-export const Header = () => {
+export const Header = ( {instructor} : {instructor : Boolean}) => {
 
     const style= {
         option: "font-robFont text-blue5 text-xl"
@@ -18,6 +18,11 @@ export const Header = () => {
             </h1>
 
             <div className="flex flex-grow gap-28 justify-end items-center mr-6">
+                {instructor ? (
+                    <Link className={style.option} href={ROUTES.admin}>Admin</Link>
+                ) : (
+                    <></>
+                )}
                 <Link className={style.option} href={ROUTES.home}>Home</Link>
                 <Link className={style.option} href={ROUTES.forum}>Fórum</Link>
                 <Link className={style.option} href={ROUTES.chat}>Chats</Link>

@@ -83,7 +83,7 @@ export default function Topic() {
 
   return (
     <div className="h-screen mt-20 font-robFont">
-      <Header />
+      <Header instructor={false} />
       <div className="flex m-10 flex-col">
         <div className="flex flex-col items-center rounded-xl p-3 font-robFont mb-3 text-black">
           <div className="flex flex-col ml-10 min-w-[95%]">

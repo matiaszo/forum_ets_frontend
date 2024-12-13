@@ -44,6 +44,10 @@ const nextConfig = {
             source : '/projectSelected',
             destination: '/projectSelected'
         },
+        {
+            source : '/admin',
+            destination: '/admin'
+        },
       ]
       
   },
