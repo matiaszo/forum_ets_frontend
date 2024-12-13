@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^1.7.9",
+    "cors": "^2.8.5",
     "ets_forum": "file:",
     "next": "15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",

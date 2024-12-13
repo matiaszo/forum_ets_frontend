@@ -1,9 +1,7 @@
 "use client";
 
 import Card from "@/components/card";
-import dataTests from "@/constants/dataTests.json";
-import dataUser from "@/constants/dataUserTests.json";
-import Image from "next/image";
+// import dataUser from "@/constants/dataUserTests.json";
 import { useState, ChangeEvent, KeyboardEvent, useEffect } from "react";
 import ImageComponent from "@/components/image";
 import { Header } from "@/components/header";
@@ -14,7 +12,7 @@ import axios from "axios";
 type Person = {
   id: number;
   name: string;
-  image: string;
+  image?: string;
 };
 // dados enviados dos projetos
 type IProject = {
@@ -23,24 +21,17 @@ type IProject = {
   goals: string[];
   description: string;
   users: Person[];
-  image: string;
+  image?: string;
 };
 
-interface user {
-    id: string;
-    name: string;
-    image: string;
-    bio: string;
-    gitUseraname: string | null;
-    instructor: number;
-    isUser: boolean;
+type IAllUsers = {
+  id: number,
+  name : string,
+  image : string
 }
 
-const Projects = () => {
 
-  const u : user = {id: "1", name: "Mariana", bio: "slaaa", image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg", gitUseraname: 'xmarimarquesh', instructor: 0, isUser: true}
-    
-  const [usuario, setUsuario] = useState(u);
+const Projects = () => {
 
   const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
   const [openModalAddPeople, setOpenModalAddPeople] = useState<boolean>(false);
@@ -51,9 +42,10 @@ const Projects = () => {
   const [personValue, setPersonValue] = useState<string>("");
   const [goalValue, setGoalValue] = useState<string>("");
 
+  const [dataUser, setDataUser] = useState<IAllUsers[]>([])
+
   const [project, setProject] = useState<IProject[]>([]);
   const [newImage, setNewImage] = useState<string>("");
-  const token = localStorage.getItem('token')
 
  // listas que armazenam informaç~çoes inputadas
   const [goals, setGoals] = useState<string[]>([]);
@@ -100,56 +92,121 @@ const Projects = () => {
     }
   };
 
-    useEffect(() => {
-       
-        const fetchProjects = async () => {
-          try {
-            const response = await axios.get("http://localhost:8080/project", {
-              headers: {
-                Authorization: `Bearer ${token}`, 
-              },
-            });
-    
-            setProject(response.data);
-          } catch (err) {
-                console.error(err);
-          }
-        };
-    
-        // chama a função para buscar os dados
-        fetchProjects();
-      }, []); // O array vazio [] faz com que o efeito seja executado apenas uma vez (quando o componente monta)
+  let token: string | null;
 
-    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
+  useEffect(() => {
+      
+    // get para pegar os projetos
+    token = localStorage.getItem('token')
+    let idUser = localStorage.getItem('id')
+
+    if (!token) {
+      alert("Você precisa estar logado para acessar os projetos.");
+      return;
+    }
+      const fetchProjects = async () => {
+        try {
+          const responseProject = await axios.get("http://localhost:8080/project", {
+            headers: {
+              // method : 'GET',
+              Authorization: `Bearer ${token}`, 
+            },
+          });
+  
+          setProject(responseProject.data);
+
+        } catch (err) {
+            console.log(err)
+        }
+      };
+
+      // pegar o usuário atual
+
+      const currentUser = async () => {
+        try {
+          const responseUser = await axios.get(`http://localhost:8080/user/${idUser}`, {
+            headers: {
+              // method : 'GET',
+              Authorization: `Bearer ${token}`, 
+            },
+          });
+  
+          addPeopleToList(responseUser.data)
+
+        } catch (err) {
+            console.log(err)
+        }
+      };
+
+      const allusers = async () => {
+        try {
+          const responseUser = await axios.get(`http://localhost:8080/user`, {
+            headers: {
+              // method : 'GET',
+              Authorization: `Bearer ${token}`, 
+            },
+          });
+  
+          setDataUser(responseUser.data)
+
+        } catch (err) {
+            console.log(err)
+        }
+      };
+  
+      // chama a função para buscar os dados
+      fetchProjects();
+      currentUser();
+    }, []); // O array vazio [] faz com que o efeito seja executado apenas uma vez (quando o componente monta)
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file) {
+        if (!file.type.startsWith("image/")) {
+          alert("Por favor, selecione uma imagem.");
+          return;
+        }
         const reader = new FileReader();
         reader.onload = () => {
-            setNewImage(reader.result as string);
+          setNewImage(reader.result as string);
         };
         reader.readAsDataURL(file);
-        }
+      }
     };
+    
 
-  // função para finalizar o projeto e salvar os dados
-  const setInfos = () => {
+  // função para criar um projeto e salvar dados
+  const setInfos = async () => {
 
     const newProject: IProject = {
         name: nameProject,
         goals: goals,
         description: description,
         users: listContributors,
-        image: newImage,
+        // image: newImage,
     };
 
     try {
-        const response = await fetch('http://localhost:8080', {
-            method: 'POST',
-            headers:{
-                `Baerer ${token}`
-            } 
+        console.log(newProject)
+        const response = await fetch('http://localhost:8080/project', {
+          method: 'POST',
+            headers: {
+                "Authorization" : `Bearer ${token}`
+            },
+            body: JSON.stringify(newProject)
         })
 
+        if(response.ok) {
+          alert('criado com sucesso')
+          setOpenModalAddPeople(false)
+          console.log(response)
+        } else {
+
+          console.log("erro: ", response)
+        }
+
+    } catch (error) {
+        console.log(error)
     }
 
     // adiciona o novo projeto à lista de projetos
@@ -169,61 +226,13 @@ const Projects = () => {
     setOpenModalAddPeople(false)
   };
 
-//   const setInfos = async () => {
-//     const newProject: IProject = {
-//       name: nameProject,
-//       goals: goals,
-//       description: description,
-//       users: listContributors,
-//       image: newImage,
-//     };
-  
-//     try {
-//       // Envia o projeto para a API via POST
-//       const response = await fetch('/api/projects', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           'Authorization': `Bearer ${jwtToken}`, // se você precisar enviar o JWT no header
-//         },
-//         body: JSON.stringify(newProject),
-//       });
-  
-//       // Verifica se a resposta foi bem-sucedida
-//       if (response.ok) {
-//         const data = await response.json(); // Resposta da API (caso haja)
-//         setProjects((prevProjects) => [...prevProjects, data]); // Adiciona o projeto ao estado local
-//         alert('Projeto criado com sucesso!');
-//       } else {
-//         const errorData = await response.json();
-//         console.error('Erro ao criar o projeto:', errorData.message);
-//         alert(`Erro ao criar o projeto: ${errorData.message}`);
-//       }
-//     } catch (error) {
-//       console.error('Erro na requisição:', error);
-//       alert('Houve um erro na criação do projeto.');
-//     }
-  
-//     // Reseta o formulário
-//     setNameProject('');
-//     setDescription('');
-//     setGoals([]);
-//     setListContributors([]);
-//     setPersonValue('');
-//     setGoalValue('');
-
   const deleteGoal = (goalToRemove : string) => {
     setGoals((prevGoals) => prevGoals.filter(goal => goal !== goalToRemove));
   }
 
-  console.log(infoProject)
-
-   function deletePerson(personToRemove: Person) {
+  function deletePerson(personToRemove: Person) {
         setListContributors((prevList) => prevList.filter(person => person !== personToRemove))
-   }
-
-   // IMAGEMMMMMMMMMM
-
+  }
  
   return (
     <div className="flex flex-col mt-20">
@@ -232,7 +241,7 @@ const Projects = () => {
             {/* Modal de criação do projeto */}
             {openModalInfo && (
                 <div className={styles.modalContainer}>
-                <form action={"POST"} id="modal" className={styles.modalBox}>
+                <form  id="modal" className={styles.modalBox}>
                     <h1 className={styles.title}>Crie um novo projeto</h1>
                     <div className="flex flex-col items-center space-y-4">
                         <input type="file" accept="image/*" capture="environment" id="cameraInput" onChange={handleImageChange} className="hidden"/>
@@ -338,7 +347,7 @@ const Projects = () => {
             {/* Modal para adicionar pessoas ao projeto */}
             {openModalAddPeople && (
                 <div className={styles.modalContainer}>
-                <form action={"POST"} id="modal" className={styles.modalNext}>
+                <form id="modal" className={styles.modalNext}>
                     <h1 className={styles.title}>Adicione pessoas ao seu projeto</h1>
                     <div className={`${styles.content} mb-8`}>
                     <div className="flex gap-10">
@@ -393,7 +402,7 @@ const Projects = () => {
                         {listContributors.map((person) => (
                             <div key={person.id} className={styles.person}>
                             <ImageComponent
-                                src={person.image}
+                                src={person.image? person.image : ''}
                                 width={40}
                                 height={40}
                                 alt={person.name}
@@ -459,7 +468,7 @@ const Projects = () => {
                 ) : (
                     project?.map((item, index) => (
                     <Link key={index} href={`/projectSelected?id=${item.id}`}>
-                        <Card title={item.name} mainQuestion={item.description} image={item.image} />
+                        <Card title={item.name} mainQuestion={item.description} image={item.image ? item.image : ''}/>
                     </Link>
                     ))
                 )}
@@ -471,7 +480,6 @@ const Projects = () => {
 };
 
 export default Projects;
-
 
 const styles = {
   title: "text-blue1 text-3xl",
