@@ -365,10 +365,10 @@ export default function Home() {
         }
     };
     
-    const feed : feedback[] = [
-        {id: "1", stars: 2, text: "mais ou menos boa", public: true, projectName: "Projeto JAVA FINAL", user: {id: '1', name: 'Kau Menendez', image: "https://borboletariodesaopaulo.com.br/wp-content/uploads/2024/03/borboleta-monarca-foto-macro.jpg", isUser: true}},
-        {id: "2", stars: 4, text: "Muito n sei o que n sei o que lá", public: false, projectName: "Projeto de IoT", user: {id: '1', name: 'Matias Zoniga', image: "https://s2.glbimg.com/RFnG4EgIzgmpejlSjWA8K3apZ5M=/e.glbimg.com/og/ed/f/original/2016/04/15/tiger-02.jpg", isUser: true}}
-    ];
+    // const feed : feedback[] = [
+    //     {id: "1", stars: 2, text: "mais ou menos boa", public: true, projectName: "Projeto JAVA FINAL", user: {id: '1', name: 'Kau Menendez', image: "https://borboletariodesaopaulo.com.br/wp-content/uploads/2024/03/borboleta-monarca-foto-macro.jpg", isUser: true}},
+    //     {id: "2", stars: 4, text: "Muito n sei o que n sei o que lá", public: false, projectName: "Projeto de IoT", user: {id: '1', name: 'Matias Zoniga', image: "https://s2.glbimg.com/RFnG4EgIzgmpejlSjWA8K3apZ5M=/e.glbimg.com/og/ed/f/original/2016/04/15/tiger-02.jpg", isUser: true}}
+    // ];
 
     const inte : interacao[] = [
         {   
@@ -451,11 +451,11 @@ export default function Home() {
             )
           case 'feedback':
             return (
-                <FeedbackProfile feedbacks={feed}/>
+                <FeedbackProfile isUser={usuario.isUser} />
             );
           case 'interacoes':
             return (
-                <InteracaoProfile interacoes={inte}/>
+                <InteracaoProfile/>
             );
           default:
             return null;
