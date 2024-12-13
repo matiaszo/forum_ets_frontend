@@ -9,7 +9,7 @@ import plus from "@/assets/icons8-adicionar-100.png";
 import Image from "next/image";
 import { useState } from "react";
 
-import { CldImage, CldUploadButton } from 'next-cloudinary';
+import { CldImage, CldUploadButton, CldUploadWidget  } from 'next-cloudinary';
 
 interface noticia {
   image: string;
@@ -82,14 +82,12 @@ const Home = () => {
     }
   };
 
-  const handleUpload = (result: any) => {
-    // Check if result is an object and contains the necessary information
+  const handleUploadComplete = (result: any) => {
     if (result?.info?.public_id) {
       const publicId = result.info.public_id;
       console.log('Uploaded file public_id:', publicId);
-      // You can store the publicId in the state or use it however you need
     } else {
-      console.error('Upload failed or result does not contain public_id');
+      console.error('Upload failed or public_id is not present in the result');
     }
   };
 
@@ -97,7 +95,7 @@ const Home = () => {
     <div className="flex flex-col mt-20">
       <Header />
       <CldImage
-      src="cld-sample-5" // Use this sample image or upload your own via the Media Explorer
+      src="kmhakyq32sm9meybbsmy" // Use this sample image or upload your own via the Media Explorer
       width="500" // Transform the image: auto-crop to square aspect_ratio
       height="500"
       crop={{
@@ -106,13 +104,17 @@ const Home = () => {
       }}
       alt="teste"
     />
-    <CldUploadButton
-      options={{multiple: true}}
-      uploadPreset={cloudPresetName}
-      onUploadAdded={handleUpload}
-    >
-      <span>oi</span>
-    </CldUploadButton>
+    <CldUploadWidget
+        uploadPreset="se0jsxlx" // Your Cloudinary upload preset
+        onSuccess={handleUploadComplete} // Handler to get the uploaded file information
+        onUploadAdded={handleUploadComplete} // Handler to get the uploaded file information
+      >
+        {({ open }) => (
+          <button onClick={() => open()}>
+            Upload an Image
+          </button>
+        )}
+      </CldUploadWidget>
       <div className="mr-10 ml-10 mb-10">
         {modalAdd && (
             <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
