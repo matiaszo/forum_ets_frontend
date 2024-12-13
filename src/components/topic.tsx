@@ -8,8 +8,6 @@ const Topic = ({ title, description }: { title: string; description: string }) =
     image: "h-[70px] w-[30px]",
   };
 
-  
-
   return (
     <Link href={ROUTES.topic}>
       <div className="flex items-center shadow-md rounded-xl p-3 mb-3 text-black">
