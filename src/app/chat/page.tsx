@@ -24,72 +24,43 @@ export default function Chat() {
     messages: Message[];
   }
 
-  const mockGroupMessages: Group[] = [
-    {
-      id: 1,
-      name: "Grupo1",
-      messages: [
-        {
-          id: 101,
-          text: "E aí, pessoal?",
-          user: {
-            id: 1,
-            image: "bike",
-            name: "João",
-            instructor: false,
-          },
-        },
-        {
-          id: 102,
-          text: "Vamos sair amanhã?",
-          user: {
-            id: 2,
-            image: "ilgr0bt3ksnowtmh4kvl",
-            name: "Maria",
-            instructor: true,
-          },
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Grupo2",
-      messages: [
-        {
-          id: 201,
-          text: "Bom dia, família!",
-          user: {
-            id: 3,
-            image: "samples/man-portrait",
-            name: "Carlos",
-            instructor: false,
-          },
-        },
-        {
-          id: 202,
-          text: "Alguém já falou com a avó hoje?",
-          user: {
-            id: 4,
-            image: "cld-sample",
-            name: "Ana",
-            instructor: true,
-          },
-        },
-      ],
-    },
-  ];
-
-  const [groups, setGroups] = useState<Group[]>(mockGroupMessages);
+  const [groups, setGroups] = useState<Group[]>([]); 
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const [newMessage, setNewMessage] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);  
+  const [error, setError] = useState<string | null>(null);  
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  const messagesEndRef = useRef<HTMLDivElement | null>(null); // Ref for scrolling to the end
+  useEffect(() => {
+    const fetchGroups = async () => {
+      setLoading(true);  
+      try {
+        const response = await fetch("http://localhost:8080/chat", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+          }
+        });  
+        if (!response.ok) {
+          throw new Error("Failed to fetch groups");
+        }
+        const data = await response.json();  
+        setGroups(data);  
+      } catch (err) {
+        setError("Erro ao carregar os grupos"); 
+      } finally {
+        setLoading(false); 
+      }
+    };
+
+    fetchGroups();  // Call the fetch function when the component mounts
+  }, []);
 
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [selectedGroup?.messages]); 
+  }, [selectedGroup?.messages]);
 
   const sendMessage = () => {
     if (!selectedGroup || newMessage.trim() === "") return;
@@ -118,6 +89,14 @@ export default function Chat() {
     );
     setSelectedGroup(updatedSelectedGroup || null);
   };
+
+  if (loading) {
+    return <div>Carregando...</div>;  // Display a loading message while the data is being fetched
+  }
+
+  if (error) {
+    return <div>{error}</div>;  // Display any error that occurred during the fetch
+  }
 
   return (
     <div className="flex flex-row mt-20 justify-between min-h-[90vh]">
@@ -160,7 +139,7 @@ export default function Chat() {
 
               <div
                 className="flex flex-col bg-alice rounded-md w-[100%] p-4 h-[85%] overflow-y-auto"
-                style={{ maxHeight: "70vh" }} // Fixed height for the messages container
+                style={{ maxHeight: "70vh" }}
               >
                 {selectedGroup.messages.map((msg) => (
                   <div
@@ -171,16 +150,15 @@ export default function Chat() {
                   >
                     {msg.user.id !== Number(localStorage.getItem("id")) && (
                       <CldImage
-                      src={msg.user.image}
-                      alt={msg.user.name}
-                      width={40}
-                      height={40}
-                      radius={40}
-                      crop={{
-                        type: 'auto',
-                        source: true
-                      }}
-                    
+                        src={msg.user.image}
+                        alt={msg.user.name}
+                        width={40}
+                        height={40}
+                        radius={40}
+                        crop={{
+                          type: 'auto',
+                          source: true
+                        }}
                       />
                     )}
 
@@ -208,12 +186,11 @@ export default function Chat() {
                           type: 'auto',
                           source: true
                         }}
-                      
                       />
                     )}
                   </div>
                 ))}
-                <div ref={messagesEndRef} /> {/* This element is used to trigger scroll */}
+                <div ref={messagesEndRef} />
               </div>
 
               <div className="flex w-[90%] mt-4 mb-5">
