@@ -10,6 +10,9 @@ import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 
 import plus from "@/assets/icons8-adicionar-100.png";
+import { CldImage, CldUploadWidget } from "next-cloudinary";
+
+const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
 interface user {
     id: string;
@@ -48,13 +51,13 @@ const Forum = () => {
 
     const initialforums: forum[] = [
         {
-          image: "https://www.autoindustria.com.br/wp-content/uploads/2017/07/f%C3%A1brica-bosch.jpg",
+          image: "deqroecwubhy0olevakk",
           title: "Fábrica e tals",
           mainQuestion: "novidade nao sei o que lá",
           nameInstructor: "Fulano de Tal",
         },
         {
-          image: "https://www.bosch-press.com.br/pressportal/br/media/dam_images_br/bosch-xc-ki-studie-06-2.jpg",
+          image: "deqroecwubhy0olevakk",
           title: "Braço e tals",
           mainQuestion: "muitos braços vindos ai",
           nameInstructor: "Fulaninho de Talinho",
@@ -68,16 +71,16 @@ const Forum = () => {
     const [newInstructor, setNewInstructor] = useState<string>("");
     const [newMainQuestion, setNewMainQuestion] = useState<string>("");
 
-    const handleImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-        if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-            setNewImage(reader.result as string);
-        };
-        reader.readAsDataURL(file);
+
+    const handleUploadComplete = (result: any) => {
+        if (result?.info?.public_id) {
+          const publicId = result.info.public_id;
+          console.log('Uploaded file public_id:', publicId);
+          setNewImage(publicId); 
+        } else {
+          console.error('Upload failed or public_id is not present in the result');
         }
-    };
+      };
 
     const handleAddForum = () => {
         if (newTitle && newMainQuestion && newImage) {
@@ -107,16 +110,38 @@ const Forum = () => {
                 <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
                 <div className="bg-white p-12 rounded-lg w-[600px] ">
                     <form id="modal" className="">
-                    <h1 className="text-blue1 text-3xl">Adicionar Sessão ao Fórum</h1>
+                    <h1 className="text-blue1 text-3xl mb-3">Adicionar Sessão ao Fórum</h1>
                     <div className="flex flex-col items-center space-y-4">
-                        <input type="file" accept="image/*" capture="environment" id="cameraInput" onChange={handleImage} className="hidden"/>
-                        <label htmlFor="cameraInput" className="cursor-pointer">
-                        {newImage ? (
-                            <img src={newImage} alt="Nova Imagem" className="w-96 h-64 object-cover rounded-lg"/>
-                            ) : (
-                                <div className="w-96 h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">Adicione uma imagem</div>
-                            )}
-                        </label>
+                    {
+                    newImage ? 
+                      <CldImage
+                        src={newImage}
+                        width="300"
+                        height="300"
+                        radius={8}
+                        crop={{
+                          type: 'auto',
+                          source: true
+                        }}
+                        alt="teste"
+                      /> 
+                      : 
+                      ""
+                  }
+                  <CldUploadWidget
+                    uploadPreset={cloudPresetName}
+                    onSuccess={handleUploadComplete} 
+                  >
+                    {({ open }) => (
+                      <button 
+                        type="button" 
+                        onClick={() => open()} 
+                        className="w-96 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500"
+                      >
+                        Upload an Image
+                      </button>
+                    )}
+                  </CldUploadWidget>
                     </div>
                     <input type="text" placeholder="Digite o título da sessão" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} className="w-full p-4 my-4 border-b border-blue3 outline-none ease-in-out hover:border-blue1 "/>
                     <textarea placeholder="Digite uma descrição á sessão" value={newMainQuestion} onChange={(e) => setNewMainQuestion(e.target.value)} className="w-full p-4 my-4 border-b border-blue3 outline-none ease-in-out hover:border-blue1 "/>

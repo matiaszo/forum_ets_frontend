@@ -104,6 +104,7 @@ const Home = () => {
                         src={newImage}
                         width="300"
                         height="300"
+                        radius={8}
                         crop={{
                           type: 'auto',
                           source: true
