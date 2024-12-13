@@ -96,8 +96,8 @@ const Home = () => {
       <Header />
       <CldImage
       src="kmhakyq32sm9meybbsmy" // Use this sample image or upload your own via the Media Explorer
-      width="500" // Transform the image: auto-crop to square aspect_ratio
-      height="500"
+      width="400" // Transform the image: auto-crop to square aspect_ratio
+      height="400"
       crop={{
         type: 'auto',
         source: true
