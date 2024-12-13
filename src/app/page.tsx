@@ -45,6 +45,7 @@ export default function Home() {
 
       // Redirecionar ou salvar o token
       localStorage.setItem("token", data.token); // Exemplo de salvamento
+      localStorage.setItem("id", data.id.toString()); // Exemplo de salvamento
       alert("Login bem-sucedido!");
       window.location.href = ROUTES.home;
     } catch (error) {

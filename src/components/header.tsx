@@ -22,7 +22,7 @@ export const Header = () => {
                 <Link className={style.option} href={ROUTES.forum}>Fórum</Link>
                 <Link className={style.option} href={ROUTES.chat}>Chats</Link>
                 <Link className={style.option} href={ROUTES.project}>Projetos</Link>
-                <Link  href={ROUTES.profile}><Image src={user_logo} width={50} height={50} alt="ets logo"/></Link>
+                <Link href={ROUTES.profile}><Image src={user_logo} width={50} height={50} alt="ets logo"/></Link>
             </div>
         </div>
     )
