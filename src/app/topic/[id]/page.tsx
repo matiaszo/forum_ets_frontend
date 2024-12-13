@@ -1,85 +1,144 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import blueColor from "@/assets/blueColor.jpg";
 import { Answer } from "@/components/answer";
 import { Header } from "@/components/header";
+import { use } from "react";
 import { StaticImageData } from "next/image";
+import imagem from "@/assets/Mari.jpg";
 
+interface User {
+  id: string;
+  name: string;
+  instructor: boolean;
+  image: StaticImageData; 
+}
 
-export default function Topic() {
-  interface User {
-    id: string;
-    name: string;
-    instructor: boolean;
-    image: StaticImageData;
-  }
+interface Mention {
+  id: number;
+  username: string;
+  content: string;
+}
 
-  interface Mention {
-    id: number;
-    username: string;
-    content: string;
-  }
+interface Comment {
+  id: number;
+  content: string;
+  user: User;
+  mention: Mention | null;
+  likes: number;
+}
 
-  interface Comment {
-    id: number;
-    content: string;
+interface Topic {
+  id: number;
+  title: string;
+  idSection: number;
+  mainComment: {
     user: User;
-    mention: Mention | null;
+    content: string;
     likes: number;
-  }
+  };
+  comments: Comment[];
+}
 
-  interface Topic {
-    id: number;
-    title: string;
-    idSection: number;
-    mainComment: {
-      user: User;
-      content: string;
-      likes: number;
-    };
-    comments: Comment[];
-  }
-
-  const [topic, setTopic] = useState<Topic>({
-    id: 1,
-    title: "Título do Tópico",
-    idSection: 1,
-    mainComment: {
-      user: { id: "1", name: "Instrutor", instructor: true, image: blueColor },
-      content: "Esta é a pergunta principal do tópico.",
-      likes: 1
-    },
-    comments: [
-      {
-        id: 1,
-        content: "Esta é uma resposta de exemplo ao tópico principal.",
-        user: { id: "2", name: "Usuário", instructor: false, image: blueColor },
-        mention: null,
-        likes: 3
-      },
-    ],
-  });
-
+const TopicPage = ({ params }: { params: Promise<{ id: string }> }) => {
+  const router = useRouter();
+  const [topic, setTopic] = useState<Topic | null>(null);
   const [newReply, setNewReply] = useState("");
   const [replyingTo, setReplyingTo] = useState<Comment | null>(null);
 
-  const handleAddAnswer = (content: string, mention: Mention | null) => {
-    const newComment: Comment = {
-      id: topic.comments.length + 1,
-      content,
-      user: { id: "2", name: "Usuário", instructor: false, image: blueColor },
-      mention,
-      likes: 2
-    };
+  const { id } = use(params);
 
-    setTopic((prev) => ({
-      ...prev,
-      comments: [...prev.comments, newComment],
-    }));
-    setReplyingTo(null);
-    setNewReply("");
+  const fetchTopic = async (topicId: string) => {
+    const token = localStorage.getItem("token");
+    try {
+      if (!token) {
+        throw new Error("Token não encontrado. Faça login novamente.");
+      }
+
+      const response = await fetch(`http://localhost:8080/topic/${topicId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao buscar os dados do tópico.");
+      }
+
+      const data: Topic = await response.json(); 
+      setTopic(data);
+    } catch (error) {
+      console.error("Erro ao buscar dados do tópico:", error);
+    }
   };
+
+  useEffect(() => {
+    if (id) {
+      fetchTopic(id); 
+    }
+  }, [id]);
+
+  const handlePostAnswer = async (content: string, mention: Mention | null) => {
+    if (!topic) return;
+  
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Token não encontrado.");
+      return;
+    }
+  
+    const idMention = mention ? mention.id : 0;
+  
+    const body = JSON.stringify({
+      content,
+      idMention,
+    });
+  
+    try {
+      const response = await fetch("http://localhost:8080/comment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body,
+      });
+  
+      if (!response.ok) {
+        throw new Error("Erro ao enviar a resposta.");
+      }
+  
+      const newComment: Comment = {
+        id: topic.comments.length + 1,
+        content,
+        user: { id: "2", name: "Usuário", instructor: false, image: imagem },
+        mention,
+        likes: 0,
+      };
+  
+      setTopic((prev) =>
+        prev
+          ? {
+              ...prev,
+              comments: [...prev.comments, newComment],
+            }
+          : null
+      );
+      setReplyingTo(null);
+      setNewReply("");
+    } catch (error) {
+      console.error("Erro ao postar a resposta:", error);
+    }
+  };
+  
+
+  if (!topic) {
+    return <p>Carregando...</p>; 
+  }
 
   return (
     <div className="h-screen mt-20 font-robFont">
@@ -107,7 +166,7 @@ export default function Topic() {
           />
           <button
             className="bg-blue5 w-20 rounded-md p-2 ml-auto m-1"
-            onClick={() => handleAddAnswer(newReply, null)}
+            onClick={() => handlePostAnswer(newReply, null)}
           >
             Enviar
           </button>
@@ -118,7 +177,7 @@ export default function Topic() {
             <Answer
               comment={comment}
               onReply={() => setReplyingTo(comment)}
-              addNewComment={handleAddAnswer}
+              addNewComment={handlePostAnswer}
             />
           </div>
         ))}
@@ -140,7 +199,7 @@ export default function Topic() {
                 <button
                   className="bg-blue5 w-20 rounded-md p-2"
                   onClick={() =>
-                    handleAddAnswer(newReply, {
+                    handlePostAnswer(newReply, {
                       id: replyingTo.id,
                       username: replyingTo.user.name,
                       content: replyingTo.content,
@@ -163,3 +222,5 @@ export default function Topic() {
     </div>
   );
 }
+
+export default TopicPage;

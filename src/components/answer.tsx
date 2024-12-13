@@ -3,12 +3,8 @@ import Image, { StaticImageData } from "next/image";
 import arrow_ans from "@/assets/arrow_ans.png"
 import like_icon from "@/assets/like2.png"
 import liked_icon from "@/assets/liked2.png"
+import user_img from "@/assets/Helena.jpg";
 
-interface AnswerProps {
-  comment: Comment;
-  onReply: (comment: Comment) => void;
-  addNewComment: (content: string, mention: Mention | null) => void;
-}
 
 interface User {
   id: string;
@@ -31,6 +27,11 @@ interface Comment {
   likes: number;
 }
 
+interface AnswerProps {
+  comment: Comment;
+  onReply: (comment: Comment) => void;
+  addNewComment: (content: string, mention: Mention | null) => void;
+}
 export const Answer: React.FC<AnswerProps> = ({
   
   comment,
@@ -70,7 +71,7 @@ export const Answer: React.FC<AnswerProps> = ({
 
       <div className="flex items-center mb-2">
         <Image
-          src={comment.user.image}
+          src={user_img}
           alt={comment.user.name}
           className="h-8 w-8 rounded-full mr-3"
           width={32}

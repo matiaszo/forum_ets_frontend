@@ -87,7 +87,7 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
   }, [id]);
 
 
-  const handleAddTopic = async () => {
+  const handlePostTopic = async () => {
     const token = localStorage.getItem("token");
   
     if (!token) {
@@ -168,7 +168,7 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
             </form>
             <div className="w-[100%] flex items-end justify-end mt-5">
               <button
-                onClick={handleAddTopic}
+                onClick={handlePostTopic}
                 className="mt-4 mr-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-800"
               >
                 Salvar
@@ -198,7 +198,7 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
         </div>
         {sessionData.topics && sessionData.topics.length > 0 ? (
           sessionData.topics.map((topic: any, index: number) => (
-            <Topic key={topic.id || index} title={topic.title} description={topic.mainComment} />
+            <Topic key={topic.id || index} id={topic.id} title={topic.title} description={topic.mainComment} />
           ))
         ) : (
           <p className="text-gray-500 text-center mt-5">Nenhum tópico disponível.</p>
