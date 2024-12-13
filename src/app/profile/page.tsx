@@ -212,13 +212,13 @@ export default function Home() {
                 name: nameTemp.trim(),
                 email: emailTemp.trim(),
                 image: nameTemp.trim(),
-                gituser: githubTemp.trim(),
+                gitUsername: githubTemp.trim(),
             };
 
             console.log(dataToSend);
             
             const response = await fetch(`http://localhost:8080/profile/${retorno.id}`, {
-                method: "PUT",
+                method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
                     'Authorization': `Bearer ${retorno.token}`
