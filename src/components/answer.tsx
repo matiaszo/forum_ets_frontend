@@ -105,7 +105,6 @@ export const Answer: React.FC<AnswerProps> = ({
           <Image src={arrow_ans} height="30" width="30" alt="Responder" />
         </button>
 
-        {/* Botão de Like */}
         <div className="flex justify-between items-center w-16">
           <button onClick={handleLikeClick}>
             <Image
@@ -116,7 +115,7 @@ export const Answer: React.FC<AnswerProps> = ({
             />
           </button>
           <p className="flex p-2 rounded-[100%] border-[1px] border-black h-8 items-center justify-center">
-            {comment.likes + (liked ? 1 : 0)}
+            {comment.likes}
           </p>
         </div>
       </div>
