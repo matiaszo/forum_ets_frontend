@@ -4,6 +4,8 @@ import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import { useState } from "react";
 
+import { CldImage  } from 'next-cloudinary';
+
 type CardData = {
     title: string;
     image: string;
@@ -16,7 +18,16 @@ const CardNoticia = ( {title, image, content} : CardData) => {
     return (
         <div className={styles.container}> 
             <div className="flex flex-row gap-5">
-                <img src={image} alt={title} width={400} height={400} className={styles.img} />
+            <CldImage
+            src={image}
+            width="400" 
+            height="250"
+            crop={{
+                type: 'auto',
+                source: true
+            }}
+            alt="teste"
+            />
                 <div>
                     <h1 className={styles.title} >{title}</h1>
                     <p className={styles.question}> {content.substring(0, limit)}{content.length > limit ? "..." : ""}</p>

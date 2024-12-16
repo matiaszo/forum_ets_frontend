@@ -10,16 +10,21 @@ import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 import imagem from "@/assets/Matias3.jpg";
 import plus from "@/assets/icons8-adicionar-100.png";
+import { CldImage, CldUploadWidget } from "next-cloudinary";
+
+const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
 interface user {
     id: string;
     name: string;
     image: string;
     bio: string;
-    gitUseraname: string | null;
+    email: string;
+    edv: string;
+    gitUsername: string;
     instructor: number;
     isUser: boolean;
-}
+  }
 
 interface forum {
     id: number;
@@ -34,6 +39,18 @@ const Forum = () => {
     const instructor = localStorage.getItem("instructor");
     const userId = localStorage.getItem("id");
 
+   
+    const [usuario, setUsuario] = useState<user>({
+        id: '',
+        name: '',
+        image: '',
+        bio: '',
+        gitUsername: '',
+        email: '',
+        edv: '',
+        instructor: 0,
+        isUser: false,
+    });
     const [searchValue, setSearchValue] = useState("");
     const [modalAdd, setModalAdd] = useState<boolean>(false);
     const [newForum, setNewForum] = useState<forum[]>([]);
@@ -60,7 +77,17 @@ const Forum = () => {
             };
             reader.readAsDataURL(file);
         }
-    };
+    }
+
+    const handleUploadComplete = (result: any) => {
+        if (result?.info?.public_id) {
+          const publicId = result.info.public_id;
+          console.log('Uploaded file public_id:', publicId);
+          setNewImage(publicId); 
+        } else {
+          console.error('Upload failed or public_id is not present in the result');
+        }
+      };
 
     const handleGetSession = async () => {
         const token = localStorage.getItem("token");
@@ -145,11 +172,17 @@ const Forum = () => {
 
     useEffect(() => {
         handleGetSession();
+        
+        let user = localStorage.getItem("user");
+        if(user != null)
+        {
+            setUsuario(JSON.parse(user))
+        }
     }, []); 
 
     return (
         <div className="flex flex-col mt-20 font-robFont">
-            <Header />
+            <Header instructor={usuario.instructor ? true : false} />
             {modalAdd && (
                 <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
                     <div className="bg-white p-12 rounded-lg w-[600px] ">
@@ -262,7 +295,7 @@ const Forum = () => {
                             <Card
                                 title={item.title || "Título Indisponível"}
                                 mainQuestion={item.description || "Descrição Indisponível"}
-                                image={imagem}
+                                image={imagem.src}
                             />
                         </Link>
                     ))}

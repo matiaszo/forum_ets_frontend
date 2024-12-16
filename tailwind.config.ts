@@ -26,6 +26,7 @@ export default {
         blue5: "var(--blue5)",
         alice: "var(--alice)",
         black: "var(--black)",
+        lessWhite: "#D4D4D4",
         'scrollbar-thumb': '#888888', 
         'scrollbar-track': '#f1f1f1',
       },
@@ -36,7 +37,8 @@ export default {
         small: "16px"
       },
       fontFamily:{
-        robFont: "var(--roboto)"
+        robFont: "var(--roboto)",
+        robCondensed: "var(--robotoCondensed)"
       },
       screens: {
         'ml': '900px',

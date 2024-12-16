@@ -32,6 +32,16 @@
             "name": "João Silva",
             "instructor": true
           }
+        },
+        {
+          "id": 3,
+          "text": "Ótimo! Me avise se precisar de ajuda.",
+          "user": {
+            "id": 1,
+            "image": "Mari.jpg",
+            "name": "João Silva",
+            "instructor": true
+          }
         }
       ]
     }

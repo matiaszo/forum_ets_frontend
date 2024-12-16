@@ -3,12 +3,14 @@
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import { useState } from "react";
+import ImageComponent from "./image";
+import { CldImage } from "next-cloudinary";
 import { StaticImageData } from "next/image";;
 import imagem from "@/assets/Matias3.jpg"
 
 type CardData = {
     title: string;
-    image: StaticImageData;
+    image: string;
     mainQuestion: string;
 }
 
@@ -24,8 +26,17 @@ const Card = ( {title, image, mainQuestion} : CardData) => {
     return (
         <>
             <div className={styles.container}> 
-                <div className="">
-                    <Image src={imagem} alt={"title"} width={250} height={250} className={styles.img} />
+                <div className="h-">
+                    <CldImage
+                    src={image}
+                    width="300" 
+                    height="200"
+                    crop={{
+                        type: 'auto',
+                        source: true
+                    }}
+                    alt="teste"
+                    />
                     <h1 className={styles.title} >{title}</h1>
                     <p className={styles.question}> {safeMainQuestion.substring(0, limit)} {safeMainQuestion.length > limit ? '...' : ''}
                     </p>

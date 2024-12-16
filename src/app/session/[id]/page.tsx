@@ -28,7 +28,7 @@ interface User {
   name: string;
   image: string;
   bio: string;
-  gitUseraname: string | null;
+  gitUsername: string;
   instructor: number;
   isUser: boolean;
 }
@@ -42,7 +42,6 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const [modalAdd, setModalAdd] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState<string>("");
   const [newMainQuestion, setNewMainQuestion] = useState<string>("");
-
   const { id } = use(params);
 
   const handleGetSingleSession = async (sessionId: string) => {
@@ -72,6 +71,12 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
   };
 
   useEffect(() => {
+    let user = localStorage.getItem("user");
+    if(user != null)
+    {
+        setUsuario(JSON.parse(user))
+    }
+  
     if (id) {
       handleGetSingleSession(id);
       console.log("deu fetch")
@@ -139,7 +144,7 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <div className="flex flex-col border-black rounded-md mt-20 font-robFont">
-      <Header />
+      <Header instructor={usuario?.instructor ? true : false}/>
       {modalAdd && (
         <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
           <div className="bg-white p-12 rounded-lg w-[600px]">

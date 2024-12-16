@@ -40,6 +40,18 @@ interface Topic {
   comments: Comment[];
 }
 
+interface user {
+    id: string;
+    name: string;
+    image: string;
+    bio: string;
+    email: string;
+    edv: string;
+    gitUsername: string;
+    instructor: number;
+    isUser: boolean;
+  }
+
 const TopicPage = () => {
   const instructor = localStorage.getItem("instructor");
   const userId = localStorage.getItem("id");
@@ -47,6 +59,18 @@ const TopicPage = () => {
   const [topic, setTopic] = useState<Topic | null>(null);
   const [newReply, setNewReply] = useState("");
   const [replyingTo, setReplyingTo] = useState<Comment | null>(null);
+  
+  const [usuario, setUsuario] = useState<user>({
+    id: '',
+    name: '',
+    image: '',
+    bio: '',
+    gitUsername: '',
+    email: '',
+    edv: '',
+    instructor: 0,
+    isUser: false,
+});
 
   const params = useParams();
   const id = parseInt(params.id as string || "0", 10);
@@ -149,13 +173,22 @@ const TopicPage = () => {
 
   useEffect(() => {
     if (!isNaN(id)) fetchTopic(id);
+    let user = localStorage.getItem("user");
+    if(user != null)
+    {
+        setUsuario(JSON.parse(user))
+    }
+
+    if (id && !isNaN(id)) {
+      fetchTopic(id);
+    }
   }, [id]);
 
   if (!topic) return <p>Carregando...</p>;
 
   return (
     <div className="h-screen mt-20 font-robFont">
-      <Header />
+      <Header instructor={usuario.instructor ? true : false}/>
       <div className="flex m-10 flex-col">
         <div className="flex flex-col items-center rounded-xl p-3 font-robFont mb-3 text-black">
           <div className="flex flex-col ml-10 min-w-[95%]">
