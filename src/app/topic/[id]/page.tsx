@@ -1,20 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import blueColor from "@/assets/blueColor.jpg";
 import { Answer } from "@/components/answer";
 import { Header } from "@/components/header";
-import { use } from "react";
 import { StaticImageData } from "next/image";
-import imagem from "@/assets/Mari.jpg";
 
 interface User {
   id: string;
   name: string;
   instructor: boolean;
-  image: StaticImageData; 
+  image: StaticImageData;
 }
 
 interface Mention {
@@ -36,6 +33,7 @@ interface Topic {
   title: string;
   idSection: number;
   mainComment: {
+    id: number;
     user: User;
     content: string;
     likes: number;
@@ -43,15 +41,17 @@ interface Topic {
   comments: Comment[];
 }
 
-const TopicPage = ({ params }: { params: Promise<{ id: string }> }) => {
-  const router = useRouter();
+const TopicPage = () => {
   const [topic, setTopic] = useState<Topic | null>(null);
   const [newReply, setNewReply] = useState("");
   const [replyingTo, setReplyingTo] = useState<Comment | null>(null);
 
-  const { id } = use(params);
+  const params = useParams();
+  const id = typeof params.id === "string" ? parseInt(params.id) : parseInt(params.id?.[0] || "0"); 
 
-  const fetchTopic = async (topicId: string) => {
+  const userId = "1";
+
+  const fetchTopic = async (topicId: number) => {
     const token = localStorage.getItem("token");
     try {
       if (!token) {
@@ -69,37 +69,36 @@ const TopicPage = ({ params }: { params: Promise<{ id: string }> }) => {
         throw new Error("Erro ao buscar os dados do tópico.");
       }
 
-      const data: Topic = await response.json(); 
+      const data: Topic = await response.json();
       setTopic(data);
     } catch (error) {
       console.error("Erro ao buscar dados do tópico:", error);
     }
   };
 
-  useEffect(() => {
-    if (id) {
-      fetchTopic(id); 
-    }
-  }, [id]);
-
   const handlePostAnswer = async (content: string, mention: Mention | null) => {
-    if (!topic) return;
-  
     const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("Token não encontrado.");
+    if (!token || !topic) {
+      console.error("Token ou tópico não encontrado.");
       return;
     }
-  
-    const idMention = mention ? mention.id : 0;
-  
+
+    const mentionId = mention ? mention.id : null;
+
+    console.log("Content "+ content)
+    console.log("mentionId "+ mentionId)
+    console.log("userId "+ userId)
+    console.log("topicId "+ topic.id)
+
     const body = JSON.stringify({
       content,
-      idMention,
+      mentionId,
+      userId,
+      topicId: topic.id,
     });
-  
+
     try {
-      const response = await fetch("http://localhost:8080/comment", {
+      const response = await fetch("http://localhost:8080/comment/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -107,37 +106,59 @@ const TopicPage = ({ params }: { params: Promise<{ id: string }> }) => {
         },
         body,
       });
-  
+
       if (!response.ok) {
         throw new Error("Erro ao enviar a resposta.");
       }
-  
-      const newComment: Comment = {
-        id: topic.comments.length + 1,
-        content,
-        user: { id: "2", name: "Usuário", instructor: false, image: imagem },
-        mention,
-        likes: 0,
-      };
-  
-      setTopic((prev) =>
-        prev
-          ? {
-              ...prev,
-              comments: [...prev.comments, newComment],
-            }
-          : null
-      );
+
+      fetchTopic(topic.id);
       setReplyingTo(null);
       setNewReply("");
     } catch (error) {
       console.error("Erro ao postar a resposta:", error);
     }
   };
-  
+
+  const handleLike = async (commentId: number) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Token não encontrado.");
+      return;
+    }
+
+    const body = JSON.stringify({
+      userId: parseInt(userId), 
+      commentId,
+    });
+
+    try {
+      const response = await fetch("http://localhost:8080/comment/like", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body,
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao enviar o like.");
+      }
+
+      if (topic) fetchTopic(topic.id);
+    } catch (error) {
+      console.error("Erro ao enviar o like:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (id && !isNaN(id)) {
+      fetchTopic(id);
+    }
+  }, [id]);
 
   if (!topic) {
-    return <p>Carregando...</p>; 
+    return <p>Carregando...</p>;
   }
 
   return (
@@ -178,6 +199,7 @@ const TopicPage = ({ params }: { params: Promise<{ id: string }> }) => {
               comment={comment}
               onReply={() => setReplyingTo(comment)}
               addNewComment={handlePostAnswer}
+              onLike={() => handleLike(comment.id)} 
             />
           </div>
         ))}
@@ -221,6 +243,6 @@ const TopicPage = ({ params }: { params: Promise<{ id: string }> }) => {
       </div>
     </div>
   );
-}
+};
 
 export default TopicPage;
