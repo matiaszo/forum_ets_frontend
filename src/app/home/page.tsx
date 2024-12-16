@@ -7,7 +7,7 @@ import { ROUTES } from "@/constants/routes";
 import Link from "next/link";
 import plus from "@/assets/icons8-adicionar-100.png";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { CldImage, CldUploadWidget } from 'next-cloudinary';
 
@@ -22,7 +22,9 @@ interface user {
   name: string;
   image: string;
   bio: string;
-  gitUseraname: string | null;
+  email: string;
+  edv: string;
+  gitUsername: string;
   instructor: number;
   isUser: boolean;
 }
@@ -30,17 +32,18 @@ interface user {
 const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
 const Home = () => {
-  const u: user = {
-    id: "1",
-    name: "Mariana",
-    bio: "slaaa",
-    image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg",
-    gitUseraname: 'xmarimarquesh',
-    instructor: 1,
-    isUser: true
-  };
-
-  const [usuario, setUsuario] = useState(u);
+  
+    const [usuario, setUsuario] = useState<user>({
+        id: '',
+        name: '',
+        image: '',
+        bio: '',
+        gitUsername: '',
+        email: '',
+        edv: '',
+        instructor: 0,
+        isUser: false,
+    });
 
   const initialNoticias: noticia[] = [
     {
@@ -60,6 +63,15 @@ const Home = () => {
   const [newImage, setNewImage] = useState<string>("");
   const [newTitle, setNewTitle] = useState<string>("");
   const [newContent, setNewContent] = useState<string>("");
+
+  useEffect(() =>
+  {
+    let user = localStorage.getItem("user");
+    if(user != null)
+    {
+      setUsuario(JSON.parse(user))
+    }
+  },[])
 
   const handleAddNotice = () => {
     if (newTitle && newContent && newImage) {

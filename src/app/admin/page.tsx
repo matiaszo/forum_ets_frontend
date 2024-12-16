@@ -1,7 +1,7 @@
 "use client";
 
 import { Header } from "@/components/header";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import arrouUp from '@/assets/arrow-up-blue.png';
 import arrouDown from '@/assets/arrow-down-blue.png';
@@ -10,10 +10,21 @@ import crown from '@/assets/crown.png';
 import edit from '@/assets/edit.png';
 import trash from '@/assets/trash-bin.png';
 import plus from '@/assets/icons8-adicionar-100.png';
+import { get } from "http";
 
-export default function Chat() {
+interface usuario {
+    id: string;
+    name: string;
+    image: string;
+    instructor: boolean;
+}
+
+export default function Admin() {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenSkills, setIsOpenSkills] = useState(false);
+
+    const [skills, setSkills] = useState([]);
+    const [users, setUsers] = useState<usuario[]>([]);
 
     const toggleDetails = () => {
       setIsOpen(!isOpen);
@@ -22,6 +33,59 @@ export default function Chat() {
     const toggleDetailsSkills = () => {
         setIsOpenSkills(!isOpenSkills);
     };
+
+    const getUserData = async () => {
+        const name = "mariana";
+        const response = await fetch(`http://localhost:8080/user`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}` 
+            },
+
+        });
+        
+        if (!response.ok) {
+            throw new Error('Erro ao buscar dados');
+        }
+  
+        const dataUser = await response.json();
+
+        setUsers(dataUser);
+    }
+
+    const getSkillData = async () => {
+        const response = await fetch(`http://localhost:8080/skills`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem("token")}`
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error('Erro ao buscar dados');
+        }
+        
+        const dataSkills = await response.json();
+        
+        setSkills(dataSkills);
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                getSkillData();
+                getUserData();
+            } catch (error) {
+                console.error("Erro ao carregar dados:", error);
+            }
+        };
+        
+        fetchData();
+    }, []); 
+    
+    console.log("USERS:",users);
+    console.log("SKILLS:",skills);
+
     
     return (
         <div className="flex flex-row mt-20 justify-between min-h-[90vh] font-robFont">
@@ -59,21 +123,24 @@ export default function Chat() {
                         <Image src={plus} alt="" className="w-12 h-12" />
                     </button>
                     </div>
-                    <div className="mt-4 mb-4">
+                    <div className="mt-4 mb-4 flex flex-row gap-6">
 
-                        {/* EXEMPLO CARD: (COLOCAR MAP) */}
-                        <div className="flex flex-row gap-3 shadow-md p-4 rounded-md w-60 items-center justify-center">
-                            <h1>Queila</h1>
-                            {true ? (
-                                <div className="flex flex-row text-blue1 font-bold">
-                                    <h1>Instructor</h1>
-                                    <Image src={crown} alt=""/>
-                                </div>
-                            ) : (
-                                <></>
-                            )}
-                            <Image src={trash} alt=""/>
-                        </div>
+                        {users.map((user, i) => {
+                            return (
+                                <div key={i} className="flex flex-row gap-3 shadow-md p-4 rounded-md w-60 items-center justify-between">
+                                    <h1 className="capitalize">{user.name}</h1>
+                                    {user.instructor ? (
+                                        <div className="flex flex-row text-blue1 font-bold">
+                                            <h1>Instructor</h1>
+                                            <Image src={crown} alt=""/>
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )}
+                                    <Image src={trash} alt=""/>
+                                </div> 
+                            )
+                        })}
                     </div>
                 </div>
             )}

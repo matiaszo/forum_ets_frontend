@@ -31,6 +31,18 @@ type IAllUsers = {
   image : string
 }
 
+interface user {
+  id: string;
+  name: string;
+  image: string;
+  bio: string;
+  email: string;
+  edv: string;
+  gitUsername: string;
+  instructor: number;
+  isUser: boolean;
+}
+
 const Projects = () => {
 
   // variáveis para controlar os modais
@@ -52,6 +64,18 @@ const Projects = () => {
   const [goals, setGoals] = useState<string[]>([]);
   const [listContributors, setListContributors] = useState<Person[]>([]);
   const [listIdContributors, setIdListContributors] = useState<number[]>([])
+
+  const [usuario, setUsuario] = useState<user>({
+      id: '',
+      name: '',
+      image: '',
+      bio: '',
+      gitUsername: '',
+      email: '',
+      edv: '',
+      instructor: 0,
+      isUser: false,
+  });
 
   // estado para armazenar o projeto criado localmente
   const [infoProject, setInfoProject] = useState<IProject>();
@@ -100,6 +124,12 @@ const Projects = () => {
 
   // tudo dentro dele carrega antes da página carregar na primeira vez
   useEffect(() => {
+
+    let user = localStorage.getItem("user");
+    if(user != null)
+    {
+      setUsuario(JSON.parse(user))
+    }
       
     // get para pegar os projetos
     token = localStorage.getItem('token')

@@ -46,6 +46,18 @@ export default function Home() {
       // Redirecionar ou salvar o token
       localStorage.setItem("token", data.token); // Exemplo de salvamento
       localStorage.setItem("id", data.id.toString()); // Exemplo de salvamento
+
+
+      fetch(`http://localhost:8080/profile/${data.id}`,
+        {
+          headers: {"Authorization": `Bearer ${data.token}`}
+        }
+      ).then(response => (response.json())).then((user) =>
+      {
+        localStorage.setItem("user", JSON.stringify(user))
+      })
+
+
       alert("Login bem-sucedido!");
       window.location.href = ROUTES.home;
     } catch (error) {

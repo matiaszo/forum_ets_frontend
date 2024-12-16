@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import blueColor from "@/assets/blueColor.jpg";
 import { Answer } from "@/components/answer";
 import { Header } from "@/components/header";
@@ -40,6 +40,18 @@ export default function Topic() {
     comments: Comment[];
   }
 
+  interface user {
+    id: string;
+    name: string;
+    image: string;
+    bio: string;
+    email: string;
+    edv: string;
+    gitUsername: string;
+    instructor: number;
+    isUser: boolean;
+  }
+
   const [topic, setTopic] = useState<Topic>({
     id: 1,
     title: "Título do Tópico",
@@ -59,9 +71,30 @@ export default function Topic() {
       },
     ],
   });
+  
+  const [usuario, setUsuario] = useState<user>({
+      id: '',
+      name: '',
+      image: '',
+      bio: '',
+      gitUsername: '',
+      email: '',
+      edv: '',
+      instructor: 0,
+      isUser: false,
+  });
 
   const [newReply, setNewReply] = useState("");
   const [replyingTo, setReplyingTo] = useState<Comment | null>(null);
+
+  useEffect(() =>
+  {
+    let user = localStorage.getItem("user");
+    if(user != null)
+    {
+        setUsuario(JSON.parse(user))
+    }
+  }, [])
 
   const handleAddAnswer = (content: string, mention: Mention | null) => {
     const newComment: Comment = {
@@ -83,7 +116,7 @@ export default function Topic() {
 
   return (
     <div className="h-screen mt-20 font-robFont">
-      <Header instructor={false} />
+      <Header instructor={usuario.instructor ? true : false} />
       <div className="flex m-10 flex-col">
         <div className="flex flex-col items-center rounded-xl p-3 font-robFont mb-3 text-black">
           <div className="flex flex-col ml-10 min-w-[95%]">

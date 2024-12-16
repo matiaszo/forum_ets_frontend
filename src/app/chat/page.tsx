@@ -24,6 +24,18 @@ export default function Chat() {
     messages: Message[];
   }
 
+  interface user {
+    id: string;
+    name: string;
+    image: string;
+    bio: string;
+    email: string;
+    edv: string;
+    gitUsername: string;
+    instructor: number;
+    isUser: boolean;
+  }
+
   const [groups, setGroups] = useState<Group[]>([]); 
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const [newMessage, setNewMessage] = useState<string>("");
@@ -31,7 +43,24 @@ export default function Chat() {
   const [error, setError] = useState<string | null>(null);  
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
+  const [usuario, setUsuario] = useState<user>({
+      id: '',
+      name: '',
+      image: '',
+      bio: '',
+      gitUsername: '',
+      email: '',
+      edv: '',
+      instructor: 0,
+      isUser: false,
+  });
+
   useEffect(() => {
+    let user = localStorage.getItem("user");
+    if(user != null)
+    {
+        setUsuario(JSON.parse(user))
+    }
     const fetchGroups = async () => {
       setLoading(true);  
       try {
@@ -100,7 +129,7 @@ export default function Chat() {
 
   return (
     <div className="flex flex-row mt-20 justify-between min-h-[90vh] font-robFont">
-      <Header instructor={false} />
+      <Header instructor={usuario.instructor ? true : false} />
       <div className="mr-20 ml-20 flex w-[100%] gap-3">
         <div className="flex flex-col gap-4 bg-white shadow-lg min-h-[100%] rounded-md p-3 items-center w-[30%]">
           <h1 className="flex items-center justify-start rounded-md w-full h-8 text-blue1 text-3xl">

@@ -24,7 +24,19 @@ interface user {
   name: string;
   image: string;
   bio: string;
-  gitUseraname: string | null;
+  gitUsername: string | null;
+  instructor: number;
+  isUser: boolean;
+}
+
+interface user2 {
+  id: string;
+  name: string;
+  image: string;
+  bio: string;
+  email: string;
+  edv: string;
+  gitUsername: string;
   instructor: number;
   isUser: boolean;
 }
@@ -55,10 +67,17 @@ interface newTopico {
 }
 
 const Session = () => {
-
-  const u: user = { id: "1", name: "Mariana", bio: "slaaa", image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg", gitUseraname: 'xmarimarquesh', instructor: 1, isUser: true }
-
-  const [usuario, setUsuario] = useState(u);
+    const [usuario, setUsuario] = useState<user2>({
+        id: '',
+        name: '',
+        image: '',
+        bio: '',
+        gitUsername: '',
+        email: '',
+        edv: '',
+        instructor: 0,
+        isUser: false,
+    });
 
   const [modalAdd, setModalAdd] = useState<boolean>(false);
   const [newForum, setNewForum] = useState<UserSession[]>(forums);

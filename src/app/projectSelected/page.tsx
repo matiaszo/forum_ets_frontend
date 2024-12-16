@@ -1,7 +1,7 @@
 "use client";
 import { Header } from "@/components/header";
 import data from '@/constants/dataProjects.json'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CardMessage from "@/components/cardMessage";
 import ImageComponent from "@/components/image";
 
@@ -25,6 +25,18 @@ interface Feedback {
     stars : number
 }
 
+interface user {
+    id: string;
+    name: string;
+    image: string;
+    bio: string;
+    email: string;
+    edv: string;
+    gitUsername: string;
+    instructor: number;
+    isUser: boolean;
+}
+
 const projectPage = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [newMessage, setNewMessage] = useState(""); // estado para armazenar a mensagem
@@ -37,6 +49,27 @@ const projectPage = () => {
     const [projectFeedbacks, setProjectFeedbacks] = useState<Feedback[]>([]); // estado para armazenar os feedbacks
     const [receiverUser, setReceiverUser] = useState<number | null>(null); // usuário que vai receber o feedback
     const [publicFeedback, setPublicFeedback] = useState<boolean>(true); // se o feedback é público ou não
+
+    const [usuario, setUsuario] = useState<user>({
+        id: '',
+        name: '',
+        image: '',
+        bio: '',
+        gitUsername: '',
+        email: '',
+        edv: '',
+        instructor: 0,
+        isUser: false,
+    });
+
+    useEffect(() =>
+    {
+        let user = localStorage.getItem("user");
+        if(user != null)
+        {
+            setUsuario(JSON.parse(user))
+        }
+    }, [])
 
     // função para alternar a descrição expandida
     const toggleDescription = () => {
@@ -98,7 +131,7 @@ const projectPage = () => {
 
     return (
         <>
-            <Header instructor={false} />
+            <Header instructor={usuario.instructor ? true : false} />
             <div className="h-[480px] overflow-y-auto scrollbar-hidden p-6" >
 
                 {/* Modal de feedback */}

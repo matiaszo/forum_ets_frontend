@@ -4,7 +4,7 @@ import Card from "@/components/card";
 import dataTests from "@/constants/dataTests.json";
 import search from "@/assets/search.png";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Header } from "@/components/header";
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
@@ -19,10 +19,12 @@ interface user {
     name: string;
     image: string;
     bio: string;
-    gitUseraname: string | null;
+    email: string;
+    edv: string;
+    gitUsername: string;
     instructor: number;
     isUser: boolean;
-}
+  }
 
 interface forum {
     image: string;
@@ -33,9 +35,18 @@ interface forum {
   
 
 const Forum = () => {
-    const u : user = {id: "1", name: "Mariana", bio: "slaaa", image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg", gitUseraname: 'xmarimarquesh', instructor: 1, isUser: true}
-    
-    const [usuario, setUsuario] = useState(u);
+   
+    const [usuario, setUsuario] = useState<user>({
+        id: '',
+        name: '',
+        image: '',
+        bio: '',
+        gitUsername: '',
+        email: '',
+        edv: '',
+        instructor: 0,
+        isUser: false,
+    });
 
     const [searchValue, setSearchValue] = useState('');
 
@@ -71,6 +82,14 @@ const Forum = () => {
     const [newInstructor, setNewInstructor] = useState<string>("");
     const [newMainQuestion, setNewMainQuestion] = useState<string>("");
 
+    useEffect(() =>
+    {
+        let user = localStorage.getItem("user");
+        if(user != null)
+        {
+            setUsuario(JSON.parse(user))
+        }
+    },[])
 
     const handleUploadComplete = (result: any) => {
         if (result?.info?.public_id) {
