@@ -30,17 +30,10 @@ interface forum {
 }
 
 const Forum = () => {
-    const u: user = {
-        id: "1",
-        name: "Mariana",
-        bio: "slaaa",
-        image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg",
-        gitUseraname: "xmarimarquesh",
-        instructor: 1,
-        isUser: true,
-    };
 
-    const [usuario, setUsuario] = useState(u);
+    const instructor = localStorage.getItem("instructor");
+    const userId = localStorage.getItem("id");
+
     const [searchValue, setSearchValue] = useState("");
     const [modalAdd, setModalAdd] = useState<boolean>(false);
     const [newForum, setNewForum] = useState<forum[]>([]);
@@ -241,7 +234,7 @@ const Forum = () => {
                             />
                         </div>
                         <div className="flex items-end justify-end w-[100%]">
-                            {usuario.instructor == 1 ? (
+                            {instructor == "1" ? (
                                 <div
                                     className="w-auto cursor-pointer"
                                     onClick={() => setModalAdd(true)}

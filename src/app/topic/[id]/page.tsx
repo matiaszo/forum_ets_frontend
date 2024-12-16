@@ -41,6 +41,9 @@ interface Topic {
 }
 
 const TopicPage = () => {
+  const instructor = localStorage.getItem("instructor");
+  const userId = localStorage.getItem("id");
+
   const [topic, setTopic] = useState<Topic | null>(null);
   const [newReply, setNewReply] = useState("");
   const [replyingTo, setReplyingTo] = useState<Comment | null>(null);
@@ -48,7 +51,6 @@ const TopicPage = () => {
   const params = useParams();
   const id = parseInt(params.id as string || "0", 10);
 
-  const userId = "1";
 
   const fetchTopic = async (topicId: number) => {
     const token = localStorage.getItem("token");
@@ -103,9 +105,25 @@ const TopicPage = () => {
   
 
   const handleLike = async (commentId: number) => {
+    // Recuperando o token do localStorage
     const token = localStorage.getItem("token");
-    if (!token) return console.error("Token não encontrado.");
-
+    if (!token) {
+      console.error("Token não encontrado.");
+      return;
+    }
+  
+    const userId = localStorage.getItem("id");
+    if (!userId) {
+      console.error("User ID não encontrado.");
+      return;
+    }
+  
+    const userIdInt = parseInt(userId, 10);
+    if (isNaN(userIdInt)) {
+      console.error("User ID inválido.");
+      return;
+    }
+  
     try {
       const response = await fetch("http://localhost:8080/comment/like", {
         method: "POST",
@@ -113,16 +131,21 @@ const TopicPage = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ userId: parseInt(userId), commentId }),
+        body: JSON.stringify({ userId: userIdInt, commentId }),
       });
-
-      if (!response.ok) throw new Error("Erro ao enviar o like.");
-
-      if (topic) fetchTopic(topic.id);
+  
+      if (!response.ok) {
+        throw new Error("Erro ao enviar o like.");
+      }
+  
+      if (topic) {
+        fetchTopic(topic.id);
+      }
     } catch (error) {
-      console.error("Erro ao enviar o like:", error);
+      console.error("Erro ao processar o like:", error);
     }
   };
+  
 
   useEffect(() => {
     if (!isNaN(id)) fetchTopic(id);

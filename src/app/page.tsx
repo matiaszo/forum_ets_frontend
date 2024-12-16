@@ -45,6 +45,7 @@ export default function Home() {
 
       localStorage.setItem("token", data.token); 
       localStorage.setItem("id", data.id.toString()); 
+      localStorage.setItem("instructor", data.instructor.toString()); 
       alert("Login bem-sucedido!");
       window.location.href = ROUTES.home;
     } catch (error) {

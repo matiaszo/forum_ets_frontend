@@ -34,6 +34,9 @@ interface User {
 }
 
 const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
+  const instructor = localStorage.getItem("instructor");
+  const userId = localStorage.getItem("id");
+
   const [sessionData, setSessionData] = useState<any | null>(null);
   const [usuario, setUsuario] = useState<User | null>(null);
   const [modalAdd, setModalAdd] = useState<boolean>(false);
@@ -74,16 +77,6 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
       console.log("deu fetch")
     }
 
-    const loggedUser = {
-      id: "1",
-      name: "Mariana",
-      bio: "slaaa",
-      image: "https://img.freepik.com/fotos-premium/um-coala-com-rosto-preto-e-branco_900101-50964.jpg",
-      gitUseraname: "xmarimarquesh",
-      instructor: 1,
-      isUser: true,
-    };
-    setUsuario(loggedUser);
   }, [id]);
 
 
