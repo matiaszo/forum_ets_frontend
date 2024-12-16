@@ -58,6 +58,7 @@ export default function Home() {
       })
 
 
+      localStorage.setItem("instructor", data.instructor.toString()); // Exemplo de salvamento
       alert("Login bem-sucedido!");
       window.location.href = ROUTES.home;
     } catch (error) {
