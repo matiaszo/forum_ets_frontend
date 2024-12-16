@@ -19,8 +19,8 @@ export const Header = ( {instructor} : {instructor : Boolean}) => {
     return(
         <div className="flex items-center w-[100%] bg-white shadow-md fixed top-0">
 
-            <h1 className="ml-6 p-3">
-                <Image src={ets_logo} width={80} height={170} alt="ets logo"/>
+            <h1 className="ml-6">
+                <Image src={ets_logo} width={100} height={100} alt="ets logo"/>
             </h1>
 
             <div className="flex flex-grow gap-28 justify-end items-center mr-6">

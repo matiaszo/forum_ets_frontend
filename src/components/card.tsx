@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useState } from "react";
 import ImageComponent from "./image";
 import { CldImage } from "next-cloudinary";
+import { StaticImageData } from "next/image";;
+import imagem from "@/assets/Matias3.jpg"
 
 type CardData = {
     title: string;
@@ -19,22 +21,24 @@ const Card = ( {title, image, mainQuestion} : CardData) => {
     // const [img, setImg] = useState<StaticImport | string>('/img')
 
     // import(`@/assets/${image}`).then((data) => {setImg(data.default)})
+    const safeMainQuestion = typeof mainQuestion === 'string' ? mainQuestion : '';
+
     return (
         <>
             <div className={styles.container}> 
                 <div className="h-">
-                <CldImage
-                src={image}
-                width="300" 
-                height="200"
-                crop={{
-                    type: 'auto',
-                    source: true
-                }}
-                alt="teste"
-                />
+                    <CldImage
+                    src={image}
+                    width="300" 
+                    height="200"
+                    crop={{
+                        type: 'auto',
+                        source: true
+                    }}
+                    alt="teste"
+                    />
                     <h1 className={styles.title} >{title}</h1>
-                    <p className={styles.question}> {mainQuestion.substring(0, limit)}{mainQuestion.length > limit ? "..." : ""}
+                    <p className={styles.question}> {safeMainQuestion.substring(0, limit)} {safeMainQuestion.length > limit ? '...' : ''}
                     </p>
                 </div>
             </div>
