@@ -99,8 +99,8 @@ const Session = () => {
 
   const forum = newForum[0];
   return (
-    <div className="flex flex-col border-black rounded-md mt-20">
-      <Header />
+    <div className="flex flex-col border-black rounded-md mt-20 font-robFont">
+      <Header instructor={usuario.instructor ? true : false} />
       {modalAdd && (
         <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
           <div className="bg-white p-12 rounded-lg w-[600px] ">

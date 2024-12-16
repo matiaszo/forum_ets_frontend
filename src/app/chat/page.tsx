@@ -99,9 +99,9 @@ export default function Chat() {
   }
 
   return (
-    <div className="flex flex-row mt-20 justify-between min-h-[90vh]">
-      <Header />
-      <div className="pr-20 pl-20 pt-10 flex items-center w-[100%]">
+    <div className="flex flex-row mt-20 justify-between min-h-[90vh] font-robFont">
+      <Header instructor={false} />
+      <div className="mr-20 ml-20 flex w-[100%] gap-3">
         <div className="flex flex-col gap-4 bg-white shadow-lg min-h-[100%] rounded-md p-3 items-center w-[30%]">
           <h1 className="flex items-center justify-start rounded-md w-full h-8 text-blue1 text-3xl">
             Seus grupos

@@ -490,7 +490,7 @@ export default function Home() {
 
     return (
         <div className="w-[100%] mt-7">
-            <Header/>
+            <Header instructor={usuario.instructor ? true : false} />
             <div className="w-[100%] flex flex-row p-10 gap-10">
                 <div className="w-[30%] min-h-[80%] shadow-lg flex-col rounded-lg flex items-center p-12 justify-between">
                     <div className="flex flex-col items-center w-[100%]">

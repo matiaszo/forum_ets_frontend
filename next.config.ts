@@ -50,6 +50,10 @@ const nextConfig = {
         //     source: '/api/:path*',  // Defina o prefixo para as requisições
         //     destination: 'http://localhost:8080/:path*', // Redireciona para o backend
         //   },
+        {
+            source : '/admin',
+            destination: '/admin'
+        },
       ]
       
   },

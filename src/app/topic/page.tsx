@@ -82,13 +82,13 @@ export default function Topic() {
   };
 
   return (
-    <div className="h-screen mt-20">
-      <Header />
-      <div className="">
-        <div className="pr-20 pl-20 pt-10 flex flex-col items-center">
-          <div className="flex flex-col w-full">
-            <h1 className="text-blue1 text-3xl mb-3">{topic.title}</h1>
-            <h3 className="ml-1">{topic.mainComment.content}</h3>
+    <div className="h-screen mt-20 font-robFont">
+      <Header instructor={false} />
+      <div className="flex m-10 flex-col">
+        <div className="flex flex-col items-center rounded-xl p-3 font-robFont mb-3 text-black">
+          <div className="flex flex-col ml-10 min-w-[95%]">
+            <h1 className="text-blue1 text-3xl mb-3 text-center">{topic.title}</h1>
+            <h3 className="ml-1 text-center">{topic.mainComment.content}</h3>
             <div className="flex justify-end text-blue1">
               {topic.mainComment.user.name}
             </div>
