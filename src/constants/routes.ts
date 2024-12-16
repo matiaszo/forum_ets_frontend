@@ -8,5 +8,6 @@ export enum ROUTES{
     profile = "/profile",
     topic = "/topic",
     session = "/session",
-    projectSelected = "/projectSelected"
+    projectSelected = "/projectSelected",
+    admin = "/admin"
 }

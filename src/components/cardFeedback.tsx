@@ -7,7 +7,7 @@ import { useState } from "react";
 import view from "@/assets/view.png";
 import hide from "@/assets/hide.png";
 
-export const CardFeedback = ({id, stars, text, publico, projectName, user} : {id: string, stars : number, text: string, publico: boolean, projectName: string, user : {id : string, image: string, name: string, isUser: boolean}}) => {
+export const CardFeedback = ({id, stars, text, publico, projectName, isUser, user} : {id: number, stars : number, text: string, publico: boolean, projectName: string, user : {id : number, image: string, name: string}, isUser: Boolean}) => {
   
     const maxStars = 5; 
     const starDisplay = Array.from({length: maxStars}, (_, index) => index < stars ? star : stargray); 
@@ -25,7 +25,7 @@ export const CardFeedback = ({id, stars, text, publico, projectName, user} : {id
         <div className="flex flex-row justify-between">
             <div className="flex flex-row items-center gap-4">
                 <img className="w-14 h-14 object-cover rounded-full" src={user.image} alt="photo" />
-                <h1>{user.name} | {projectName}</h1>
+                <h1 className="capitalize">{user.name} | {projectName}</h1>
             </div>
             <div className="flex gap-1">
                 {starDisplay.map((char, index) => (
@@ -35,7 +35,7 @@ export const CardFeedback = ({id, stars, text, publico, projectName, user} : {id
         </div>
         <h1 className="font-robFont font-bold ml-8 text-[20px]">{text}</h1>
         <div className="w-[100%] justify-end flex">
-            {user.isUser ? (
+            {isUser ? (
                 <button onClick={openModal} >
                     <Image src={eye} alt="edit" className="cursor-pointer" />
                 </button>

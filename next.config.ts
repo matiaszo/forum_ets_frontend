@@ -2,6 +2,7 @@ import { prototype } from "events";
 import { hostname } from "os";
 
 const nextConfig = {
+    
   rewrites: () =>{
 
       return[
@@ -45,6 +46,14 @@ const nextConfig = {
             source : '/projectSelected',
             destination: '/projectSelected'
         },
+        // {
+        //     source: '/api/:path*',  // Defina o prefixo para as requisições
+        //     destination: 'http://localhost:8080/:path*', // Redireciona para o backend
+        //   },
+        {
+            source : '/admin',
+            destination: '/admin'
+        },
       ]
       
   },
@@ -64,6 +73,8 @@ const nextConfig = {
         }
       ],
     },
+
+    
   
 };
 

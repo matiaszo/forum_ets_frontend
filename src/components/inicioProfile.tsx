@@ -10,7 +10,7 @@ interface user {
     name: string;
     image: string;
     bio: string;
-    gitUseraname: string | null;
+    gitUsername: string | null;
     instructor: number;
     isUser: boolean;
 }
@@ -23,7 +23,7 @@ interface skillInterface {
 
 
 export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skillInterface[] }) => {
-    const [selectedColor, setSelectedColor] = useState<string | undefined>(localStorage.getItem("colorGit") || 'blue');
+    const [selectedColor, setSelectedColor] = useState<string>('blue');
     const [showColors, setShowColors] = useState(false); 
     
     const [bio, setBio] = useState("Oiê ME CHAMO MARI"); 
@@ -34,10 +34,19 @@ export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skil
 
     useEffect(() => {
         if (selectedColor) {
-          localStorage.setItem('colorGit', selectedColor);
           setGitTheme(themes[selectedColor]);
         }
+
     }, [selectedColor]);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const storedColor = localStorage.getItem("colorGit");
+            if (storedColor) {
+                setSelectedColor(storedColor);
+            }
+        }
+    }, []);
     
     const colors = ["red", "blue", "green", "black", "purple"];
     const themes: { [key: string]: string } =  theme == 'dark' ? {
@@ -59,7 +68,7 @@ export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skil
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const [gitHubName, setGitHubName] = useState(usuario.gitUseraname)
+    const [gitHubName, setGitHubName] = useState(usuario.gitUsername)
     
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -71,14 +80,14 @@ export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skil
 
     return (
         <div>
-            {usuario.gitUseraname ?
+            {usuario.gitUsername ?
                 (
                     <div className="w-[100%] mb-1">
                         <div className="shadow-md w-[100%] rounded-lg p-2">
                             <h1 className="text-[22px] font-robFont mb-2">GitHub Status</h1>
                             <div className="flex flex-row w-[100%] items-center justify-center sm:flex-wrap">
-                                <img src={`https://github-readme-stats.vercel.app/api?username=${usuario.gitUseraname}&hide_name=false&hide_rank=false&show_icons=true&include_all_commits=false&count_private=false&disable_animations=false&theme=${gitTheme}&locale=en&hide_border=true`} className="h-[250px]" alt="stats graph" />
-                                <img src={`https://github-readme-stats.vercel.app/api/top-langs?username=${usuario.gitUseraname}&locale=en&hide_name=false&layout=compact&card_width=320&langs_count=12&theme=${gitTheme}&hide_border=true`} className="h-[250px]" alt="languages graph" />
+                                <img src={`https://github-readme-stats.vercel.app/api?username=${usuario.gitUsername}&hide_name=false&hide_rank=false&show_icons=true&include_all_commits=false&count_private=false&disable_animations=false&theme=${gitTheme}&locale=en&hide_border=true`} className="h-[250px]" alt="stats graph" />
+                                <img src={`https://github-readme-stats.vercel.app/api/top-langs?username=${usuario.gitUsername}&locale=en&hide_name=false&layout=compact&card_width=320&langs_count=12&theme=${gitTheme}&hide_border=true`} className="h-[250px]" alt="languages graph" />
                             </div>
                             {usuario.isUser ? (
                                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -145,8 +154,8 @@ export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skil
                     <div className="shadow-md w-[100%] rounded-lg p-2">
                         <h1 className="text-[22px] font-robFont mb-2">Skills</h1>
                         <div className="flex flex-wrap gap-5 items-center justify-center p-2">
-                            {skills.map((skill) => (
-                                <div key={skill.id} className="flex flex-col items-center">
+                            {skills.map((skill, index) => (
+                                <div key={skill.id || index} className="flex flex-col items-center">
                                     <img
                                         src={skill.image}
                                         alt={skill.name}
