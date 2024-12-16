@@ -245,7 +245,7 @@ const Projects = () => {
                         <input type="file" accept="image/*" capture="environment" id="cameraInput" onChange={handleImageChange} className="hidden"/>
                         <label htmlFor="cameraInput" className="cursor-pointer">
                         {newImage ? (
-                            <Image src={newImage} alt="Nova Imagem" className="w-96 h-64 object-cover rounded-lg"/>
+                            <Image src={newImage} width={0} height={0} alt="Nova Imagem" priority className="w-96 h-64 object-cover rounded-lg"/>
                             ) : (
                                 <div className="w-96 h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">Adicione uma imagem</div>
                             )}
