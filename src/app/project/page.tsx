@@ -8,6 +8,7 @@ import Link from "next/link";
 import axios from "axios";
 import Image from "next/image";
 import ImageComponent from "@/components/image";
+import placeholder from '@/assets/placeholder.jpg'
 
 // tipo de dado para os participantes
 type Person = {
@@ -60,7 +61,7 @@ const Projects = () => {
   // variável que contém todos os usuários
   const [dataUser, setDataUser] = useState<IAllUsers[]>([])
 
- // listas que armazenam informaçoes inputadas
+  // listas que armazenam informaçoes inputadas
   const [goals, setGoals] = useState<string[]>([]);
   const [listContributors, setListContributors] = useState<Person[]>([]);
   const [listIdContributors, setIdListContributors] = useState<number[]>([])
@@ -97,7 +98,7 @@ const Projects = () => {
 
   // função para adicionar um objetivo quando clica no incone de mais
   const addGoal = () => {
-    let goal = goalValue.trim(); 
+    let goal = goalValue.trim();
     if (goal && !goals.includes(goal)) {
       setGoals((prevList) => [...prevList, goal]); // adiciona o objetivo ao array
       setGoalValue(""); // limpa o campo após adicionar para melhor ux
@@ -113,14 +114,15 @@ const Projects = () => {
 
   // função para adicionar uma pessoa à lista de participantes
   const addPeopleToList = (person: Person) => {
+
     if (!listContributors.find((p) => p.id === person.id)) {
       console.log(`Adicionando pessoa: ${person.name}`);
       setListContributors((prevList) => [...prevList, person]); // Adiciona o participante com todas as informações
-      setIdListContributors((prev) => [... prev, person.id]) // adicoina apenas com id para enviar à requisão
+      setIdListContributors((prev) => [...prev, person.id]) // adicoina apenas com id para enviar à requisão
     }
   };
 
-  let token: string | null;
+  let tokenToGet: string | null;
 
   // tudo dentro dele carrega antes da página carregar na primeira vez
   useEffect(() => {
@@ -132,10 +134,11 @@ const Projects = () => {
     }
       
     // get para pegar os projetos
-    token = localStorage.getItem('token')
+    tokenToGet = localStorage.getItem('token')
+
     // get para pegar o id do user
-    let idUser = localStorage.getItem('id')
-    
+    var idUser = localStorage.getItem('id')
+
     if (idUser !== null) {
       const parsedId = parseInt(idUser, 10);
       if (!isNaN(parsedId)) {
@@ -144,20 +147,20 @@ const Projects = () => {
         console.error('ID inválido no localStorage');
       }
     }
-    
+
     const fetchProjects = async () => {
       try {
         const responseProject = await axios.get("http://localhost:8080/project", {
           headers: {
             // method : 'GET',
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${tokenToGet}`,
           },
         });
 
         setProject(responseProject.data);
 
       } catch (err) {
-          console.log(err)
+        console.log(err)
       }
     };
 
@@ -165,103 +168,110 @@ const Projects = () => {
       try {
         const response = await axios.get('http://localhost:8080/user', {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${tokenToGet}`,
           },
         });
         console.log("Usuários recebidos:", response.data); // Adicionando log para conferir os dados recebidos
         setDataUser(response.data);
       } catch (err) {
         console.error('Erro ao carregar usuários:', err);
-  }}
+      }
+    }
 
-      // chama a função para buscar os dados
-    if (token) {
-        fetchUsers();
-        fetchProjects();
+    // chama a função para buscar os dados
+    if (tokenToGet) {
+      fetchUsers();
+      fetchProjects();
     } else {
       alert("Você precisa estar logado para acessar os projetos.");
       return;
     }
- 
+
   }, []); // O array vazio [] faz com que o efeito seja executado apenas uma vez (quando o componente monta)
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (file) {
-        if (!file.type.startsWith("image/")) {
-          alert("Por favor, selecione uma imagem.");
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = () => {
-          setNewImage(reader.result as string);
-        };
-        reader.readAsDataURL(file);
+    const file = event.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        alert("Por favor, selecione uma imagem.");
+        return;
       }
-    };
-    
+      const reader = new FileReader();
+      reader.onload = () => {
+        setNewImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
 
   // função para criar um projeto e salvar dados
   const setInfos = async () => {
-
     const newProject: IProject = {
-        name: nameProject,
-        goals: goals,
-        description: description,
-        users: listIdContributors,
-        // image: newImage,
+      name: nameProject,
+      goals: goals,
+      description: description,
+      users: listIdContributors,
+      // image: newImage, // Se for necessário enviar a imagem, descomente isso
     };
 
+    const tokenToPost = localStorage.getItem('token') 
+  
     try {
-        console.log(newProject)
-        const response = await fetch('http://localhost:8080/project', {
-          method: 'POST',
-            headers: {
-                "Authorization" : `Bearer ${token}`
-            },
-            body: JSON.stringify(newProject)
-        })
+      console.log("Enviando projeto:", newProject);
+      console.log(tokenToPost)
+      const response = await fetch('http://localhost:8080/project', {
+        method: 'POST',
+        headers: {
+          "Authorization": `Bearer ${tokenToPost}`,
+          "Content-Type": "application/json", 
+        },
+        body: JSON.stringify(newProject)
+      });
+  
+      if (response.ok) {
+        const projectData = await response.json(); // receber o projeto criado
+  
+        alert('Projeto criado com sucesso!');
+        console.log("Projeto criado:", projectData);
+  
+        // atualiza a lista de projetos localmente 
+        setProject((prevProjects) => [...prevProjects, projectData]);
+  
+        // resetar os campos para o próximo projeto
+        resetProjectForm();
 
-        if(response.ok) {
-          alert('criado com sucesso')
-          setOpenModalAddPeople(false)
-          console.log(response)
-        } else {
-
-          console.log("erro: ", response)
-        }
-
+      } else {
+        console.log("Erro ao criar o projeto:", response);
+        alert("Erro ao criar o projeto. Tente novamente.");
+      }
     } catch (error) {
-        console.log(error)
+      console.error("Erro no envio de dados:", error);
+      alert("Erro ao enviar os dados. Tente novamente.");
     }
-
-    // adiciona o novo projeto à lista de projetos
-    setInfoProject(newProject);
-
-    setProject((prevProjects) => [...prevProjects, newProject]);
-
-    // reseta os campos para o próximo projeto
+  };
+  
+  // Função para resetar os campos do formulário
+  const resetProjectForm = () => {
     setNameProject("");
     setDescription("");
     setGoals([]);
     setListContributors([]);
-    setIdListContributors([])
+    setIdListContributors([]);
     setPersonValue("");
     setGoalValue("");
-
-    // fecha o modal
-    setOpenModalAddPeople(false)
   };
+  
 
-  const deleteGoal = (goalToRemove : string) => {
+  const deleteGoal = (goalToRemove: string) => {
     setGoals((prevGoals) => prevGoals.filter(goal => goal !== goalToRemove));
   }
 
   function deletePerson(personToRemove: Person) {
-        setListContributors((prevList) => prevList.filter(person => person !== personToRemove))
-        setListContributors((prev) => prev.filter(person => person.id !== personToRemove.id))
+    setListContributors((prevList) => prevList.filter(person => person !== personToRemove))
+    setListContributors((prev) => prev.filter(person => person.id !== personToRemove.id))
   }
- 
+
   return (
     <div className="flex flex-col mt-20">
         <Header instructor={usuario.instructor ? true : false} />
@@ -283,229 +293,228 @@ const Projects = () => {
                     </div>
                     <div className={styles.content}>
 
-                    <input
-                        className={styles.input + 'capitalize'}
-                        onChange={setNameOfProject}
-                        value={nameProject}
-                        type="text"
-                        placeholder="Digite o nome de seu projeto"
-                        required
+                <input
+                  className={styles.input + 'capitalize'}
+                  onChange={setNameOfProject}
+                  value={nameProject}
+                  type="text"
+                  placeholder="Digite o nome de seu projeto"
+                  required
+                />
+
+                <input
+                  className={styles.input}
+                  onChange={setDescriptionOfProject}
+                  value={description}
+                  type="text"
+                  placeholder="Digite uma descrição para o seu projeto"
+                  required
+                />
+
+                <div className="flex gap-10">
+                  <input
+                    className={styles.inputObj}
+                    type="text"
+                    value={goalValue}
+                    onChange={(e) => setGoalValue(e.target.value)} // atualiza o valor do objetivo
+                    onKeyDown={handleGoalKeyDown} // chama addGoal quando pressionar Enter
+                    placeholder="Adicione objetivos ao seu projeto"
+                    required
+                  />
+                  <div className="self-center " onClick={addGoal}>
+                    <ImageComponent
+                      src={"icons8-adicionar-100.png"}
+                      width={50}
+                      height={50}
+                      alt="Adicionar objetivo"
+                      className={styles.icon}
                     />
-
-                    <input
-                        className={styles.input}
-                        onChange={setDescriptionOfProject}
-                        value={description}
-                        type="text"
-                        placeholder="Digite uma descrição para o seu projeto"
-                        required
-                    />
-
-                    <div className="flex gap-10">
-                        <input
-                        className={styles.inputObj}
-                        type="text"
-                        value={goalValue} 
-                        onChange={(e) => setGoalValue(e.target.value)} // atualiza o valor do objetivo
-                        onKeyDown={handleGoalKeyDown} // chama addGoal quando pressionar Enter
-                        placeholder="Adicione objetivos ao seu projeto"
-                        required
-                        />
-                        <div className="self-center " onClick={addGoal}>
-                        <ImageComponent
-                            src={"icons8-adicionar-100.png"}
-                            width={50}
-                            height={50}
-                            alt="Adicionar objetivo"
-                            className={styles.icon}
-                        />
-                        </div>
-                    </div>
-                    </div>
-
-                    {goals.length > 0 && (
-                    <div className="flex flex-col justify-items-stretch bg-gray-100 overflow-y-scroll max-h-[100px] rounded p-2 m-4 w-[79%] scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100">
-                        {goals.map((goal, index) => {
-                        return (
-                            <div key={index} className="flex items-center justify-between m-2">
-                            <ImageComponent src="topic3.png" width={25} height={25} alt="topic" />
-                            <h1 className="flex-wrap">{goal}</h1>
-                            <div className="ml-auto" onClick={() => {deleteGoal(goal)}} >
-                                <ImageComponent
-                                className="cursor-pointer"
-                                src="menos.png"
-                                width={30}
-                                height={30}
-                                alt="topic"
-                                />
-                            </div>
-                            </div>
-                        );
-                        })}
-                    </div>
-                    )}
-
-
-                    <div className="flex justify-end gap-3">
-                    <button
-                        className={styles.btnNext}
-                        onClick={() => {
-                        if((nameProject && description)) {
-
-                            setOpenModalInfo(false);
-                            setOpenModalAddPeople(true);
-                            //   setInfos(); // Salva o projeto ao clicar
-                        }
-                        }}>
-                        Próximo
-                    </button>
-                    <button
-                        className={styles.btnCancel}
-                        onClick={() => {
-                        setOpenModalInfo(false);
-                        }}
-                    >
-                        Cancelar
-                    </button>
-                    </div>
-                </form>
-                </div>
-            )}
-
-            {/* Modal para adicionar pessoas ao projeto */}
-            {openModalAddPeople && (
-                <div className={styles.modalContainer}>
-                <form id="modal" className={styles.modalNext}>
-                    <h1 className={styles.title}>Adicione pessoas ao seu projeto</h1>
-                    <div className={`${styles.content} mb-8`}>
-                    <div className="flex gap-10">
-                        <input
-                        id="person"
-                        className={styles.input}
-                        onChange={setValuePerson}
-                        type="text"
-                        placeholder="Pesquise por participantes..."
-                        value={personValue}
-                        />
-                    </div>
-
-                    {/* exibição das pessoas encontradas */}
-                    <div className={styles.peopleSelect}>
-                    {dataUser
-                      .filter((person) => {
-                        const matches = person.name.toLowerCase().includes(personValue.toLowerCase());
-                        console.log(`Pesquisando por: ${personValue}, Encontrado: ${matches} para ${person.name}`);
-                        return matches;
-                      })
-                      .map((person) => (
-                        <div
-                          key={person.id}
-                          className={styles.person}
-                          onClick={() => addPeopleToList(person)}
-                        >
-                          <Image
-                            src={person.image}
-                            width={40}
-                            height={40}
-                            alt={person.name}
-                            className={styles.ImageProfile}
-                          />
-                          <p className="self-center">{person.name}</p>
-                          <div className="ml-auto">
-                            <ImageComponent
-                              src={"icons8-adicionar-100.png"}
-                              width={30}
-                              height={30}
-                              alt=""
-                              className={styles.iconAdd}
-                            />
-                          </div>
-                        </div>
-                      ))}
                   </div>
-
-                    <p className="my-4 ">Abaixo irão aparecer as pessoas adicionadas</p>
-
-                    {/* exibe as pessoas que foram selecionadas */}
-                    {listContributors.length > 0 && (
-                        <div className={styles.people}>
-                        {listContributors.map((person) => (
-                            <div key={person.id} className={styles.person}>
-                            <Image
-                                src={person.image? person.image : ''}
-                                width={40}
-                                height={40}
-                                alt={person.name}
-                                className={styles.ImageProfile}
-                            />
-                            <p className="self-center">{person.name}</p>
-                            <div className="ml-auto" onClick={() => {deletePerson(person)}} >
-                                <ImageComponent
-                                className="cursor-pointer"
-                                src="menos.png"
-                                width={30}
-                                height={30}
-                                alt="topic"
-                                />
-                            </div>
-                            </div>
-                        ))}
-                        </div>
-                    )}
-                    </div>
-
-                    <div className="flex justify-center gap-3">
-                    <button
-                        className={styles.btnNext}
-                        onClick={() => {
-                        setInfos(); // finaliza o projeto e salva
-                        }}
-                    >
-                        Finalizar
-                    </button>
-
-                    <button
-                        className={styles.btnCancel}
-                        onClick={() => {
-                        setOpenModalAddPeople(false);
-                        }}
-                    >
-                        Cancelar
-                    </button>
-                    </div>
-                </form>
                 </div>
-            )}
+              </div>
+
+              {goals.length > 0 && (
+                <div className="flex flex-col justify-items-stretch bg-gray-100 overflow-y-scroll max-h-[100px] rounded p-2 m-4 w-[79%] scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100">
+                  {goals.map((goal, index) => {
+                    return (
+                      <div key={index} className="flex items-center justify-between m-2">
+                        <ImageComponent src="topic3.png" width={25} height={25} alt="topic" />
+                        <h1 className="flex-wrap">{goal}</h1>
+                        <div className="ml-auto" onClick={() => { deleteGoal(goal) }} >
+                          <ImageComponent
+                            className="cursor-pointer"
+                            src="menos.png"
+                            width={30}
+                            height={30}
+                            alt="topic"
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              <div className="flex justify-end gap-3">
+                <button
+                  className={styles.btnNext}
+                  onClick={() => {
+                    if ((nameProject && description)) {
+
+                      setOpenModalInfo(false);
+                      setOpenModalAddPeople(true);
+                      //   setInfos(); // Salva o projeto ao clicar
+                    }
+                  }}>
+                  Próximo
+                </button>
+                <button
+                  className={styles.btnCancel}
+                  onClick={() => {
+                    setOpenModalInfo(false);
+                  }}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {/* Modal para adicionar pessoas ao projeto */}
+        {openModalAddPeople && (
+          <div className={styles.modalContainer}>
+            <form id="modal" className={styles.modalNext}>
+              <h1 className={styles.title}>Adicione pessoas ao seu projeto</h1>
+              <div className={`${styles.content} mb-8`}>
+                <div className="flex gap-10">
+                  <input
+                    id="person"
+                    className={styles.input}
+                    onChange={setValuePerson}
+                    type="text"
+                    placeholder="Pesquise por participantes..."
+                    value={personValue}
+                  />
+                </div>
+
+                {/* exibição das pessoas encontradas */}
+                <div className={styles.peopleSelect}>
+                  {dataUser
+                    .filter((person) => {
+                      const matches = person.name.toLowerCase().includes(personValue.toLowerCase());
+                      console.log(`Pesquisando por: ${personValue}, Encontrado: ${matches} para ${person.name}`);
+                      return matches;
+                    })
+                    .map((person) => (
+                      <div
+                        key={person.id}
+                        className={styles.person}
+                        onClick={() => addPeopleToList(person)}
+                      >
+                        <ImageComponent
+                          src={person.image}
+                          width={40}
+                          height={40}
+                          alt={person.name}
+                          className={styles.ImageProfile}
+                        />
+                        <p className="self-center">{person.name}</p>
+                        <div className="ml-auto">
+                          <ImageComponent
+                            src={"icons8-adicionar-100.png"}
+                            width={30}
+                            height={30}
+                            alt=""
+                            className={styles.iconAdd}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                </div>
+
+                <p className="my-4 ">Abaixo irão aparecer as pessoas adicionadas</p>
+
+                {/* exibe as pessoas que foram selecionadas */}
+                {listContributors.length > 0 && (
+                  <div className={styles.people}>
+                    {listContributors.map((person) => (
+                      <div key={person.id} className={styles.person}>
+                        <ImageComponent
+                          src={person.image ? person.image : ''}
+                          width={40}
+                          height={40}
+                          alt={person.name}
+                          className={styles.ImageProfile}
+                        />
+                        <p className="self-center">{person.name}</p>
+                        <div className="ml-auto" onClick={() => { deletePerson(person) }} >
+                          <ImageComponent
+                            className="cursor-pointer"
+                            src="menos.png"
+                            width={30}
+                            height={30}
+                            alt="topic"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="flex justify-center gap-3">
+                <button
+                  className={styles.btnNext}
+                  onClick={() => {
+                    setInfos(); // finaliza o projeto e salva
+                  }}
+                >
+                  Finalizar
+                </button>
+
+                <button
+                  className={styles.btnCancel}
+                  onClick={() => {
+                    setOpenModalAddPeople(false);
+                  }}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
 
             <div className={styles.header}>
                 <h1 className={styles.title}>Seus projetos</h1>
                 <p>Colabore com seus colegas em grupos exclusivos sobre projetos</p>
 
-                {/* Add projects */}
-                    <div className="flex justify-end">
-                        <div  className="w-auto" onClick={() => setOpenModalInfo(true)}>
-                            <ImageComponent src={'icons8-adicionar-100.png'} width={50} height={50} alt="" className={styles.icon} />
-                        </div>
-                    </div>
+          {/* Add projects */}
+          <div className="flex justify-end">
+            <div className="w-auto" onClick={() => setOpenModalInfo(true)}>
+              <ImageComponent src={'icons8-adicionar-100.png'} width={50} height={50} alt="" className={styles.icon} />
             </div>
-
-            {/* Cards view */}
-    
-                <div className={styles.container}>
-
-                {project?.length === 0 ? (
-                    <p className="text-slate-400" >Você ainda não tem projetos</p> 
-                ) : (
-                    project?.map((item, index) => (
-                    <Link key={index} href={`/projectSelected?id=${item.id}`}>
-                        <Card title={item.name} mainQuestion={item.description} image={item.image ? item.image : ''}/>
-                    </Link>
-                    ))
-                )}
-                </div>
-
-            </div>
+          </div>
         </div>
+
+        {/* Cards view */}
+
+        <div className={styles.container}>
+
+          {project?.length === 0 ? (
+            <p className="text-slate-400" >Você ainda não tem projetos</p>
+          ) : (
+            project?.map((item, index) => (
+              <Link key={index} href={`/projectSelected?id=${item.id}`}>
+                <Card title={item.name} mainQuestion={item.description} image={item.image ? item.image : "placeholder.jpg"} />
+              </Link>
+            ))
+          )}
+        </div>
+
+      </div>
+    </div>
   );
 };
 
