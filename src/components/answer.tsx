@@ -3,6 +3,7 @@ import Image, { StaticImageData } from "next/image";
 import arrow_ans from "@/assets/arrow_ans.png"
 import like_icon from "@/assets/like2.png"
 import liked_icon from "@/assets/liked2.png"
+import { CldImage } from "next-cloudinary";
 
 interface AnswerProps {
   comment: Comment;
@@ -14,7 +15,7 @@ interface User {
   id: string;
   name: string;
   instructor: boolean;
-  image: StaticImageData;
+  image: string;
 }
 
 interface Mention {
@@ -69,14 +70,18 @@ export const Answer: React.FC<AnswerProps> = ({
       )}
 
       <div className="flex items-center mb-2">
-        <Image
-          src={comment.user.image}
-          alt={comment.user.name}
-          className="h-8 w-8 rounded-full mr-3"
-          width={32}
-          height={32}
-        />
-        <p className="font-bold text-blue1">{comment.user.name}</p>
+      <CldImage
+            src={comment.user.image}
+            width={40} 
+            height={40}
+            radius={40}
+            crop={{
+                type: 'auto',
+                source: true
+            }}
+            alt={comment.user.image}
+            />
+        <p className="font-bold text-blue1 ml-3">{comment.user.name}</p>
       </div>
       <p className="mt-1 text-black">{comment.content}</p>
       <div className="flex justify-around items-center">

@@ -1,5 +1,3 @@
-baixar: npm install tailwind-scrollbar
-
 > para abrir use ctrl + shift + v
 
 ### LoginResponse:
@@ -10,7 +8,7 @@ baixar: npm install tailwind-scrollbar
     token: string
 }
 ```
-# /auth:
+# ✅ /auth:
 
 - ## POST /auth ✅
 
@@ -23,7 +21,7 @@ baixar: npm install tailwind-scrollbar
         password : string
     }
     ```
- h-[350px]
+
   - ## Back-end:
     
     ### Json:
@@ -33,20 +31,24 @@ baixar: npm install tailwind-scrollbar
     }
     ```
 
-# /register ✅:
+# ✅ /register
 
-- ## POST /register
+- ## POST /register ✅
 
   ### Requirements:
   Bcrypt, 8 characters;
-  
-  > [!IMPORTANT] retornos do backend:  
-  > 0: algum dos parâmetros é nulo  
-  > 1: e-mail inválido  
-  > 2: senha inválida  
-  > 3: edv repetido  
-  > 10: OK!  
 
+    > [!IMPORTANT] retornos do backend:  
+    >
+    > `0` - campos não completamente preenchidos pelo usuário, erro 400
+    >
+    > `1` - email inválido
+    >
+    > `2` - senha inválida
+    >
+    > `3` - edv não pode ser igual a um já cadastrado
+    >
+    > `10` - conta criada com sucesso
 
   - ## Front-end:
 
@@ -57,7 +59,7 @@ baixar: npm install tailwind-scrollbar
         password : string
         name : string
         email : string
-        intructor : boolean
+        instructor : boolean
     }
     ```
 
@@ -68,9 +70,9 @@ baixar: npm install tailwind-scrollbar
     number
     ```
 
-# /section:
+# ✅ /section:
 
-- ## GET /section
+- ## GET /section ✅
 
   - ## Front-end:
 
@@ -95,7 +97,7 @@ baixar: npm install tailwind-scrollbar
     ]
     ```
 
-- ## GET /section/{idSection}
+- ## GET /section/{idSection} ✅
 
   - ## Front-end:
 
@@ -113,6 +115,7 @@ baixar: npm install tailwind-scrollbar
         title : string
         image : string
         description : string
+        creator: string
 
         topics : [
             {
@@ -125,14 +128,13 @@ baixar: npm install tailwind-scrollbar
     }
     ```
 
-- ## POST /section
+- ## POST /section ✅
 
   - ## Front-end:
 
     ### Body:
     ```
     {
-        id : number
         title : string
         image : string
         description: string
@@ -154,9 +156,9 @@ baixar: npm install tailwind-scrollbar
     }
     ```
 
-# /topic
+# ✅ /topic
 
-- ## GET /topic/{idTopic}
+- ## GET /topic/{idTopic} ✅
 
   - ## Front-end:
     
@@ -182,6 +184,7 @@ baixar: npm install tailwind-scrollbar
         mainComment : {
             id : number
             content : string
+            likes : number
 
             user : {
                 id : string
@@ -195,6 +198,7 @@ baixar: npm install tailwind-scrollbar
             {
                 id : number
                 content : string
+                likes : number
 
                 user : {
                     id : string
@@ -214,12 +218,12 @@ baixar: npm install tailwind-scrollbar
     }
     ```
 
-> Esta requisição retorna o título do tópico e alguns dos comentários.  
-> Os comentários enviados são afetados pela paginação.  
-> Cada comentário tem seu conteúdo e dados do usuário para exibição.  
-> Se um comentário fizer menção à outro, ele terá o usuário mencionado e seu comentario.
+    > esta requisição retorna o título do tópico e alguns dos comentários  
+    > os comentários enviados são afetados pela paginação
+    > cada comentário tem seu conteúdo e dados do usuário para exibição
+    > se um comentário fizer menção à outro, ele terá o usuário mencionado e seu comentário
 
-- ## POST /topic
+- ## POST /topic ✅
 
   - ## Front-end:
 
@@ -237,16 +241,21 @@ baixar: npm install tailwind-scrollbar
     ### Json:
     ```
     {
-        id : number
-        idSection : number
-        title : string
-        mainComment : string
+        message: number
     }
     ```
 
-# /comment
+    > [!IMPORTANT] possíveis `retornos` e o que cada um significa:
+    >
+    > `1` - já existe um tópico com esse nome, erro 422
+    >
+    > `2` - campos não completamente preenchidos pelo usuário, erro 400
+    >
+    > `10` - tópico criado com sucesso
 
-- ## GET /comment/{idComment}
+# ✅ /comment
+
+- ## GET /comment/{idComment} ⁉️
 
   - ## Front-end:
 
@@ -262,6 +271,7 @@ baixar: npm install tailwind-scrollbar
     {
         id : number
         content : string
+        likes : number
 
         user : {
             id : string
@@ -278,7 +288,7 @@ baixar: npm install tailwind-scrollbar
     }
     ```
 
-- ## POST /comment
+- ## POST /comment/{idTopic} ✅
 
   - ## Front-end:
 
@@ -313,7 +323,7 @@ baixar: npm install tailwind-scrollbar
     }
     ```
 
-- ## DELETE /comment/{idComment}
+- ## DELETE /comment/{idComment} ✅
 
   - ## Front-end:
 
@@ -321,15 +331,47 @@ baixar: npm install tailwind-scrollbar
     ```
     idComment
     ```
+    
+    ### Attribute:
+    ```
+    token
+    ```
 
   - ## Back-end:
     
     ### Text:
     ```
     mensagem de sucesso / erro
+
+    1 - o usuário não é o dono do comentário
+    10 - Deu certo
     ```
 
-# /profile:
+- ## POST /comment/like/{idComment}
+
+  - ## Front-end:
+
+    ### Path:
+    ```
+    idComment
+    ```
+    
+    ### Body:
+    ```
+    {
+      userId: number
+    }
+    ```
+
+  - ## Back-end:
+    
+    ### Json:
+    ```
+    likes: number,
+
+    ```
+
+# ✅ /profile
 
 - ## GET /profile/{idUser}
 
@@ -349,7 +391,7 @@ baixar: npm install tailwind-scrollbar
         password : string
         name : string
         email : string
-        intructor : boolean
+        instructor : boolean
         github : string
         bio : string
         image : string
@@ -372,9 +414,9 @@ baixar: npm install tailwind-scrollbar
     }
     ```
 
-> Obs: Para a criação do perfil, não é necassário uma bio ou um github, caso o usuário não tenha estes dados, eles voltarão como string vazia
+> **obs: para a criação do perfil, não é necassário uma bio ou um github, caso o usuário não tenha estes dados, eles voltarão como string vazia**
 
-- ## GET /profile/feedback/{idUser}
+- ## GET /profile/feedback/{idUser} ✅
 
   - ## Front-end:
 
@@ -391,7 +433,7 @@ baixar: npm install tailwind-scrollbar
         {
             stars : number
             text : string
-            public : boolean
+            visibility : boolean
             projectName : string
             user : {
                 id : number
@@ -403,7 +445,7 @@ baixar: npm install tailwind-scrollbar
     ]
     ```
 
-- ## GET /profile/interactions/{idUser}
+- ## GET /profile/interactions/{idUser} ✅
 
   - ## Front-end:
 
@@ -438,7 +480,7 @@ baixar: npm install tailwind-scrollbar
     >
     > `feedback` - `content` terá o texto do feedback e o usuário pra quem ele foi dado. **Não retornar feedbacks privados.**
 
-- ## PATCH /profile/{idUser}
+- ## PATCH /profile/{idUser} ✅
 
   - ## Front-end:
   
@@ -461,18 +503,14 @@ baixar: npm install tailwind-scrollbar
 
   - ## Back-end:
     
-    ### Json:
+    ### message:
     ```
-    {
-        password : string
-        name : string
-        email : string
-        github : string
-        bio : string
-    }
+    1 - email inválido
+    2 - Senha inválida
+    10 - Deu certo
     ```
 
-- ## POST /profile/skill/{idUser}
+- ## POST /profile/skill/{idUser} ✅
 
   - ## Front-end:
   
@@ -499,7 +537,7 @@ baixar: npm install tailwind-scrollbar
     }
     ```
 
-- ## DELETE /profile/skill/{idUser}
+- ## DELETE /profile/skill/{idUser} ✅
   
   - ## Front-end:
 
@@ -520,9 +558,13 @@ baixar: npm install tailwind-scrollbar
     ### Text:
     ```
     mensagem de sucesso / erro
+
+    1 - UserSkill não existe
+    2 - Usuário bloqueado
+    10 - Deu certo
     ```
 
-- ## POST /profile/interest/{idUser}
+- ## POST /profile/interest/{idUser} ✅
 
   - ## Front-end:
 
@@ -548,7 +590,7 @@ baixar: npm install tailwind-scrollbar
     }
     ```
 
-- ## DELETE /profile/interest/{idUser}
+- ## DELETE /profile/interest/{idUser} ✅
   
   - ## Front-end:
 
@@ -569,11 +611,15 @@ baixar: npm install tailwind-scrollbar
     ### Text:
     ```
     mensagem de sucesso / erro
+
+    1 - Interesse não existe
+    2 - Usuário bloqueado
+    10 - Deu Certo
     ```
 
-# /skill:
+# ✅ /skill:
 
-- ## POST /skill
+- ## POST /skill ✅
 
   - ## Front-end:
 
@@ -597,7 +643,7 @@ baixar: npm install tailwind-scrollbar
     }
     ```
 
-- ## GET /skill
+- ## GET /skill ✅
   
   - ## Front-end:
 
@@ -616,7 +662,7 @@ baixar: npm install tailwind-scrollbar
     ]
     ```
 
-- ## DELETE /skill/{idSkill}
+- ## DELETE /skill/{idSkill} ✅
   
   - ## Front-end:
 
@@ -632,7 +678,7 @@ baixar: npm install tailwind-scrollbar
     mensagem de sucesso / erro
     ```
 
-# /chat
+# /chat ✅ 
 
 - ## GET /chat
   
@@ -657,7 +703,7 @@ baixar: npm install tailwind-scrollbar
     ]
     ```
 
-- ## GET /chat/{idChat}
+- ## GET /chat/{idChat} ✅ 
 
   - ## Front-end:
     
@@ -691,7 +737,7 @@ baixar: npm install tailwind-scrollbar
     }
     ```
 
-- ## POST /chat
+- ## POST /chat ✅ 
 
   > Cria um novo chat
 
@@ -714,7 +760,7 @@ baixar: npm install tailwind-scrollbar
     }
     ```
 
-- ## POST /chat/{idChat}
+- ## POST /chat/{idChat} ✅ 
 
   > Posta uma nova mensagem no chat
   - ## Front-end:
@@ -738,9 +784,31 @@ baixar: npm install tailwind-scrollbar
     mensagem de sucesso / erro
     ```
 
-# /project
+# /project ✅
 
-- ## GET /project/{idProject}
+- ## GET /project ✅
+  
+  > Retornar os projetos que o usuário faz parte, baseado no JWT
+
+  - ## Front-end:
+    ```
+    ```
+  
+  - ## Back-end:
+
+    ### Json:
+    ```
+    [
+        {
+            id : number
+            name : string
+            description : string
+            image : string
+        },
+    ]
+    ```
+
+- ## GET /project/{idProject} ✅
 
   - ## Front-end:
     
@@ -756,25 +824,32 @@ baixar: npm install tailwind-scrollbar
     {
         id : number
         name : string
+        description : string
+        goals : string[]
+
+        users : [
+          {
+              id : number
+              image : string
+              name : string
+              instructor : boolean
+          },
+          ...
+        ]
 
         messages : [
             {
                 id : number
                 text : string
 
-                user : {
-                    id : number
-                    image : string
-                    name : string
-                    instructor : boolean
-                }
+                id_user : number
             },
             ...
         ]
     }
     ```
 
-- ## POST /project
+- ## POST /project ✅
 
   > Cria um novo projeto
 
@@ -803,7 +878,7 @@ baixar: npm install tailwind-scrollbar
     }
     ```
 
-- ## POST /project/{idProject}
+- ## POST /project/{idProject} ✅
 
   > Posta uma nova mensagem no chat do projeto
   - ## Front-end:
@@ -839,7 +914,7 @@ baixar: npm install tailwind-scrollbar
         idSender : number
         idReceptor : number
         idProject : number
-        public : boolean
+        visibility : boolean
         text : string
         stars : number
     }
@@ -850,4 +925,31 @@ baixar: npm install tailwind-scrollbar
     ### Text:
     ```
     mensagem de sucesso / erro
+    ```
+
+# /user
+
+> Busca dados do usuário de forma mais simplificada que /profile
+
+- ## GET /user
+
+  - ## Front-end:
+
+    ### Query:
+    ```
+    name
+    ```
+
+  - ## Back-end:
+    
+    ### Json:
+    ```
+    [
+        {
+            id : number
+            name : string
+            image : string
+        },
+        ...
+    ]
     ```
