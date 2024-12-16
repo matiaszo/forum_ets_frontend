@@ -4,47 +4,63 @@
       "name": "Projeto Alpha",
       "goals": ["Desenvolver um novo produto", "Expandir para o mercado internacional", "Melhorar a experiência do usuário"],
       "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit officiis fugit culpa in. Rem sunt magnam consequuntur facere, quos nulla distinctio, sit fugiat voluptatum in autem minima, repellat cupiditate quod.Vitae illo commodi cupiditate officia corporis, culpa pariatur. Quasi explicabo aut quidem, iure a, optio odit aperiam corporis animi cumque adipisci porro incidunt tempore consectetur saepe illum error velit accusamus.Neque ea molestias minima voluptatibus! Reprehenderit quo ad, eos odio natus architecto quam, quisquam aspernatur voluptatum facilis, nobis reiciendis. Quas animi officiis mollitia iste illum magnam omnis eius, nostrum autem!Veniam velit aliquid ipsam, ex nam necessitatibus doloribus quia dignissimos, rerum tempora harum voluptate cum provident et esse soluta molestias itaque? Natus illo deleniti reprehenderit cupiditate asperiores praesentium fugit eum?Numquam aspernatur et beatae alias excepturi nemo laudantium cupiditate nisi quia nobis explicabo esse nostrum recusandae, placeat vero eos, odio in facere officia est accusamus sapiente similique mollitia? Odio, iure!",
+      "users" : [
+        {
+          "id": 1,
+          "name": "nini",
+          "intructor": false,
+          "image": "Nicole.jpg"
+        },
+        {
+          "id": 2,
+          "name": "Nicolle",
+          "intructor": false,
+          "image": "Nicole.jpg"
+        },
+        {
+          "id": 3,
+          "name": "Kau",
+          "intructor": true,
+          "image": "Kau.jpg"
+        },
+        {
+          "id": 4,
+          "name": "Mariana Marques",
+          "intructor": false,
+          "image": "Mari.jpg"
+        }
+      ],
       "messages": [
         {
           "id": 1,
           "text": "Olá, equipe! Como estão as atualizações?",
-          "user": {
-            "id": 1,
-            "image": "Mari.jpg",
-            "name": "João Silva",
-            "instructor": true
-          }
+          "id_user" : 1
         },
         {
           "id": 2,
           "text": "Estou finalizando a parte de testes, deve estar pronto amanhã.",
-          "user": {
-            "id": 2,
-            "image": "Nicole.jpg",
-            "name": "Maria Oliveira",
-            "instructor": false
-          }
+          "id_user": 2
         },
         {
           "id": 3,
-          "text": "Ótimo! Me avise se precisar de ajuda.",
-          "user": {
-            "id": 1,
-            "image": "Mari.jpg",
-            "name": "João Silva",
-            "instructor": true
-          }
+          "text": "Olá, equipe! Como estão as atualizações?",
+          "id_user" : 3
         },
         {
-            "id": 4,
-            "text": "Ótimo! Me avise se precisar de ajuda.",
-            "user": {
-              "id": 1,
-              "image": "Mari.jpg",
-              "name": "João Silva",
-              "instructor": true
-            }
-          }
+          "id": 4,
+          "text": "Ótimo! Me avise se precisar de ajuda.",
+          "id_user": 1
+        },
+        {
+          "id": 5,
+          "text": "Ótimo! Me avise se precisar de ajuda.",
+          "id_user": 1
+        },
+        {
+          "id": 6,
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa bom dia",
+          "id_user": 1
+        }
       ]
 
   }
