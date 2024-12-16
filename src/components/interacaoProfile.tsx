@@ -34,19 +34,17 @@ export const InteracaoProfile = () => {
     useEffect(() => {
         const fetchInteracoes = async () => {
             try {
-                const response = await fetch(
-                    `http://localhost:8080/profile/interactions/${retorno.id}`,
-                    {
-                        headers: {
-                            "Authorization": `Bearer ${retorno.token}`,
-                        },
+                const response = await fetch(`http://localhost:8080/profile/interactions/${retorno.id}`, {
+                    method: 'GET',
+                    headers: {
+                      'Authorization': `Bearer ${retorno.token}` 
                     }
-                );
+                  });
                 if (!response.ok) {
                     throw new Error("Erro ao buscar interações");
                 }
                 const data = await response.json();
-                console.log(data);
+                console.log("DATAAA INTRA",data);
                 setInteracoes(data);
             } catch (error: any) {
                 setError(error.message);

@@ -31,7 +31,7 @@ interface user {
     bio: string;
     email: string;
     edv: string;
-    gituser: string;
+    gitUsername: string;
     instructor: number;
     isUser: boolean;
 }
@@ -68,7 +68,7 @@ export default function Home() {
         name: '',
         image: '',
         bio: '',
-        gituser: '',
+        gitUsername: '',
         email: '',
         edv: '',
         instructor: 0,
@@ -93,9 +93,11 @@ export default function Home() {
         if (!response.ok) {
           throw new Error('Erro ao buscar dados');
         }
-
+        
         const dataUser = await response.json();
-
+        
+        console.log("DATAUSER:", dataUser); 
+        
         const mapUserData = (data: typeof dataUser): user => {
             return {
                 id: String(data.id),
@@ -104,11 +106,12 @@ export default function Home() {
                 bio: data.bio,
                 email: data.email,
                 edv: data.edv,
-                gituser: data.github || null, 
+                gitUsername: data.gitUserName != null ? data.gitUserName : null, 
                 instructor: data.instructor ? 1 : 0,
                 isUser: data.isUser, 
             };
         };
+
         
         const mapSkills = (skills: typeof dataUser.skills): skillInterface[] => {
             return skills.map((skill : skillInterface) => ({
@@ -126,6 +129,9 @@ export default function Home() {
         };
         
         const userData = mapUserData(dataUser);
+
+        console.log("USERDATA:", userData); 
+
         const skillData = mapSkills(dataUser.skills);
         const interests = mapInterests(dataUser.interests);
         
@@ -139,7 +145,7 @@ export default function Home() {
 
         setNameTemp(userData?.name || '');
         setBioTemp(userData?.bio || '');
-        setGithubTemp(userData?.gituser || '');
+        setGithubTemp(userData?.gitUsername || '');
         setEmailTemp(userData?.email || '');
 
 
@@ -166,19 +172,25 @@ export default function Home() {
 
           setSkillsDisponiveis(mapSkillsDisponiveis(allSkills));
     };
-
-    const getAuthData = () => {
-        return {
-            token: localStorage.getItem("token"),
-            id: localStorage.getItem("id"),
-        };
-    };
-
-    const retorno = getAuthData();
+    
+    const [retorno, setRetorno] = useState<{ token: string | null; id: string | null }>({
+        token: null,
+        id: null,
+    });
 
     useEffect(() => {
-        getUserData(retorno.token, retorno.id);
+
+        const token = localStorage.getItem("token");
+        const id = localStorage.getItem("id");
+        setRetorno({ token, id });
+
+        console.log("id:", id);
+        console.log("token:", token);
+
+        getUserData(token, id);
+        
     }, [])
+    
 
     const [activeTab, setActiveTab] = useState('inicio');
     const [theme, setTheme] = useState('dark');
@@ -208,11 +220,11 @@ export default function Home() {
     const closeModalAndSave = async () => {
         try {
             const dataToSend = {
-                bio: bioTemp.trim(),
-                name: nameTemp.trim(),
-                email: emailTemp.trim(),
-                image: nameTemp.trim(),
-                gitUsername: githubTemp.trim(),
+                bio: bioTemp.trim() != usuario.bio ? bioTemp : null,
+                name: nameTemp.trim() != usuario.name ? nameTemp : null,
+                email: emailTemp.trim() != usuario.email ? emailTemp : null,
+                image: nameTemp.trim() != usuario.name ? nameTemp : null,
+                gitUsername: githubTemp.trim() != usuario.gitUsername ? githubTemp : null,
             };
 
             console.log(dataToSend);
@@ -521,7 +533,7 @@ export default function Home() {
                             )}
 
                     </div>
-                    <div className="w-[100%] justify-end flex mb-10">
+                    <div className="w-[100%] justify-end flex mb-10 mt-2">
                         {usuario.isUser ? (
                             <button onClick={openModal} >
                                 <Image src={editPhoto} alt="edit" className="cursor-pointer" />
@@ -579,17 +591,17 @@ export default function Home() {
                         <label htmlFor="areas" className="mt-3 text-[18px] w-[100%]">Skills</label>
                         <div className="w-[100%]">
                             <div className="max-h-32 overflow-y-auto mb-4 scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100">
-                                {skills.map((sk) => (
-                                    <div key={sk.id} className="flex items-center mb-2">
+                                {skills.map((sk, i) => (
+                                    <div key={sk.id || i} className="flex items-center mb-2">
                                         <h2 className="w-[80%] border-b border-blue3 outline-none p-2">{sk.name}</h2>
-                                        <button onClick={() => handleRemoveSkill(sk.id)}className="ml-2 text-red-500"><Image src={trash} width={24} height={24} alt=""/></button>
+                                        <button onClick={() => handleRemoveSkill(sk.id)} className="ml-2 text-red-500"><Image src={trash} width={24} height={24} alt=""/></button>
                                     </div>
                                 ))}
                             </div>
                             <select name="skills" id="skills" className="w-[80%] border-b border-blue3 outline-none p-2 mt-2" onChange={(e) => setNewSkillId(e.target.value)}>
                                 <option value="">Selecione uma skill</option>
-                                {skillsDisponiveis.map((skill) => (
-                                    <option key={skill.id} value={skill.id}>{skill.name}</option>
+                                {skillsDisponiveis.map((skill, i) => (
+                                    <option key={skill.id || i} value={skill.id || i}>{skill.name}</option>
                                 ))}
                             </select>
                             <button onClick={handleAddSkill} className="px-4 py-2" ><Image src={plus} width={30} height={30} alt="Image"/></button>
