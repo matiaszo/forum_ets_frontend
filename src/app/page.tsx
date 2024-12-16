@@ -43,8 +43,9 @@ export default function Home() {
       const data: ReturnBack = await response.json();
       console.log("Token recebido:", data.token);
 
-      // Redirecionar ou salvar o token
-      localStorage.setItem("token", data.token); // Exemplo de salvamento
+      localStorage.setItem("token", data.token); 
+      localStorage.setItem("id", data.id.toString()); 
+      localStorage.setItem("instructor", data.instructor.toString()); 
       alert("Login bem-sucedido!");
       window.location.href = ROUTES.home;
     } catch (error) {
@@ -68,7 +69,6 @@ export default function Home() {
             <Image src={check} alt="check" />
             <h3 className="font-robFont text-white text-[20px]">Start your career</h3>
           </div>
-          {/* Outros elementos omitidos por brevidade */}
         </div>
       </div>
       <div className={style.secondDiv}>

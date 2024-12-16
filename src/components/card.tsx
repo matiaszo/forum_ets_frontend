@@ -3,10 +3,12 @@
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import { useState } from "react";
+import { StaticImageData } from "next/image";;
+import imagem from "@/assets/Matias3.jpg"
 
 type CardData = {
     title: string;
-    image: string;
+    image: StaticImageData;
     mainQuestion: string;
 }
 
@@ -17,13 +19,15 @@ const Card = ( {title, image, mainQuestion} : CardData) => {
     // const [img, setImg] = useState<StaticImport | string>('/img')
 
     // import(`@/assets/${image}`).then((data) => {setImg(data.default)})
+    const safeMainQuestion = typeof mainQuestion === 'string' ? mainQuestion : '';
+
     return (
         <>
             <div className={styles.container}> 
-                <div className="h-">
-                    <img src={image} alt={title} width={250} height={250} className={styles.img} />
+                <div className="">
+                    <Image src={imagem} alt={"title"} width={250} height={250} className={styles.img} />
                     <h1 className={styles.title} >{title}</h1>
-                    <p className={styles.question}> {mainQuestion.substring(0, limit)}{mainQuestion.length > limit ? "..." : ""}
+                    <p className={styles.question}> {safeMainQuestion.substring(0, limit)} {safeMainQuestion.length > limit ? '...' : ''}
                     </p>
                 </div>
             </div>

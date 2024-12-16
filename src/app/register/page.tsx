@@ -34,7 +34,6 @@ export default function Register() {
 
       if (status === 10) {
         alert("Registro feito com sucesso!");
-        // Redireciona para a página de login
         window.location.href = ROUTES.login;
       } else {
         alert("Erro ao registrar. Tente novamente.");

@@ -14,7 +14,7 @@ export const Header = () => {
         <div className="flex items-center w-[100%] bg-white shadow-md fixed top-0">
 
             <h1 className="ml-6">
-                <Image src={ets_logo} width={100} height={200} alt="ets logo"/>
+                <Image src={ets_logo} width={100} height={100} alt="ets logo"/>
             </h1>
 
             <div className="flex flex-grow gap-28 justify-end items-center mr-6">
@@ -22,7 +22,9 @@ export const Header = () => {
                 <Link className={style.option} href={ROUTES.forum}>Fórum</Link>
                 <Link className={style.option} href={ROUTES.chat}>Chats</Link>
                 <Link className={style.option} href={ROUTES.project}>Projetos</Link>
-                <Link  href={ROUTES.profile}><Image src={user_logo} width={50} height={50} alt="ets logo"/></Link>
+                <Link  
+                    href={ROUTES.profile}><Image src={user_logo} width={50} height={50} alt="ets logo"/>
+                </Link>
             </div>
         </div>
     )
