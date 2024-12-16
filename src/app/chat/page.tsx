@@ -52,7 +52,9 @@ export default function Chat() {
   const [newMessage, setNewMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [title, setTitle] = useState<string | undefined>();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  
   
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -72,32 +74,34 @@ export default function Chat() {
       isUser: false,
   });
 
+  const fetchGroups = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("http://localhost:8080/chat", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch groups");
+      }
+      const data = await response.json();
+      setGroups(data);
+    } catch (err) {
+      setError("Erro ao carregar os grupos");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     let user = localStorage.getItem("user");
     if(user != null)
     {
         setUsuario(JSON.parse(user))
     }
-    const fetchGroups = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch("http://localhost:8080/chat", {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch groups");
-        }
-        const data = await response.json();
-        setGroups(data);
-      } catch (err) {
-        setError("Erro ao carregar os grupos");
-      } finally {
-        setLoading(false);
-      }
-    };
+    
 
     fetchGroups(); // Call the fetch function when the component mounts
   }, []);
@@ -138,6 +142,29 @@ export default function Chat() {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [chat?.messages]);
+
+  const createChat = async () => {
+
+    if (title?.trim() === "") return;
+
+    try {
+      await fetch(`http://localhost:8080/chat`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: title,
+        }),
+      });
+    } catch (err) {
+      console.error("Error creating chat", err);
+    }
+
+    setIsModalOpen(false)
+    fetchGroups()
+  }
 
   // Send a new message
   const sendMessage = async () => {
@@ -230,7 +257,7 @@ export default function Chat() {
                   >
                     {msg.user.id !== Number(localStorage.getItem("id")) && (
                       <CldImage
-                        src={msg.user.image || "chair.jpg"} // Provide a fallback image if image is null
+                        src={msg.user.image || "	"} // Provide a fallback image if image is null
                         alt={msg.user.name}
                         width={40}
                         height={40}
@@ -255,7 +282,7 @@ export default function Chat() {
 
                     {msg.user.id === Number(localStorage.getItem("id")) && (
                       <CldImage
-                        src={msg.user.image || "chair.jpg"} // Provide a fallback image if image is null
+                        src={msg.user.image || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
                         alt={msg.user.name}
                         width={40}
                         height={40}
@@ -299,14 +326,30 @@ export default function Chat() {
       {isModalOpen && (
           <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
             <div className="bg-white p-12 rounded-lg w-[600px] ">
-                <h1 className="text-blue1 text-3xl font-robCondensed">Adicionar Noticia</h1>
+                <h1 className="text-blue1 text-3xl font-robCondensed">Adicionar Chat</h1>
+                <input 
+                  type="text" 
+                  placeholder="Digite o título do chat" 
+                  value={title} 
+                  onChange={(e) => setTitle(e.target.value)} 
+                  className="w-full p-4 my-4 border-b border-blue3 outline-none ease-in-out hover:border-blue1 "
+                />
+              <div className="w-[100%] flex items-end justify-end mt-5">
+                <button 
+                  type="button"
+                  onClick={createChat} 
+                  className="mt-4 mr-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-800"
+                >
+                  Criar
+                </button>
                 <button 
                   type="button" 
-                  onClick={() => {setIsModalOpen(false)}}
+                  onClick={() => setIsModalOpen(false)} 
                   className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-800"
                 >
                   Fechar
                 </button>
+              </div>
               
             </div>
           </div>
