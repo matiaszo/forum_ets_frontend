@@ -3,11 +3,16 @@ import Link from "next/link";
 import Image from "next/image";
 import ets_logo from "@/assets/ets_logo.png"
 import user_logo from "@/assets/user_logo.png"
+import { access } from "fs";
 
 export const Header = () => {
 
     const style= {
         option: "font-robFont text-blue5 text-xl"
+    }
+
+    const accessProfile = () => {
+        localStorage.setItem("profile", localStorage.getItem('id') || '1');
     }
     
     return(
@@ -22,7 +27,7 @@ export const Header = () => {
                 <Link className={style.option} href={ROUTES.forum}>Fórum</Link>
                 <Link className={style.option} href={ROUTES.chat}>Chats</Link>
                 <Link className={style.option} href={ROUTES.project}>Projetos</Link>
-                <Link href={ROUTES.profile}><Image src={user_logo} width={50} height={50} alt="ets logo"/></Link>
+                <Link onClick={accessProfile} href={ROUTES.profile}><Image src={user_logo} width={50} height={50} alt="ets logo"/></Link>
             </div>
         </div>
     )

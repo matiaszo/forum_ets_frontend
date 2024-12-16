@@ -5,7 +5,7 @@ interface Feedback {
     id: number;
     stars: number;
     text: string;
-    public: boolean;
+    visibility: boolean;
     projectName: string;
     giver: {
         id: number;
@@ -22,7 +22,7 @@ export const FeedbackProfile = ({isUser} : {isUser: boolean}) => {
     const getAuthData = () => {
         return {
             token: localStorage.getItem("token"),
-            id: localStorage.getItem("id"),
+            id: localStorage.getItem("profile"),
         };
     };
 
@@ -68,13 +68,13 @@ export const FeedbackProfile = ({isUser} : {isUser: boolean}) => {
         <div className="w-[100%]">
             {feedbacks && feedbacks.length > 0 ? (
                 feedbacks.map((feed, i) => (
-                    isUser || feed.public ? (
+                    isUser || feed.visibility ? (
                         <CardFeedback
                             key={feed.id || i}
                             id={feed.id}
                             stars={feed.stars}
                             text={feed.text}
-                            publico={feed.public}
+                            publico={feed.visibility}
                             projectName={feed.projectName}
                             isUser={isUser}
                             user={{

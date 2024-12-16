@@ -181,7 +181,7 @@ export default function Home() {
     useEffect(() => {
 
         const token = localStorage.getItem("token");
-        const id = localStorage.getItem("id");
+        const id = localStorage.getItem("profile");
         setRetorno({ token, id });
 
         console.log("id:", id);
@@ -246,6 +246,8 @@ export default function Home() {
             console.log("Dados salvos com sucesso:", result);
             
             closeModal();
+
+            location.reload();
         } catch (err) {
             console.error("Erro ao salvar os dados:", err);
         }
@@ -554,38 +556,46 @@ export default function Home() {
                 <Modal isOpen={isModalOpen} onClose={closeModal} className="m-0">
                     <div className="max-h-[90vh] overflow-y-auto flex flex-col w-[100%] items-center scrollbar scrollbar-thumb-blue5 scrollbar-track-gray-100 gap-2 p-2">
                         <h1 className="text-[32px] mt-5 font-robFont ">Editar Perfil</h1>
-                        <div className="flex flex-col items-center space-y-4">
-                            <input type="file" accept="image/*" capture="environment" id="cameraInput" onChange={handleImageChange} className="hidden" />
-                            <label htmlFor="cameraInput" className="cursor-pointer">
-                            {image ? (
-                                <img src={image} alt="Foto de Perfil" className="w-32 h-32 object-cover rounded-full" />
-                            ) : (
-                                <div className="w-32 h-32 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
-                                    Sem Foto
-                                </div>
-                            )}
-                            </label>
-                        </div>
 
-                        <label htmlFor="name" className="mt-3 text-[18px] w-[100%]">Nome</label>
-                        <input type="text" value={nameTemp} onChange={(e) => setNameTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu nome..." required/>
-                        <label htmlFor="email" className="mt-3 text-[18px] w-[100%]">Email</label>
-                        <input type="text" value={emailTemp} onChange={(e) => setEmailTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu email..." required/>
-                        <label htmlFor="name" className="mt-3 text-[18px] w-[100%]">GitHub Username</label>
-                        <input type="text" value={githubTemp} onChange={(e) => setGithubTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu username do github..."/>
-                        <label htmlFor="bio" className="mt-3 text-[18px] w-[100%]">Biografia</label>
-                        <textarea value={bioTemp} onChange={(e) => setBioTemp(e.target.value)} className="w-[100%] min-h-24 rounded-sm border border-blue3 outline-none p-2" placeholder="Sua biografia..." />
+                        <div className="flex flex-row gap-12 w-[90%] items-center">
+                            <div className="w-[40%]">
+                                <div className="flex flex-col items-center">
+                                    <input type="file" accept="image/*" capture="environment" id="cameraInput" onChange={handleImageChange} className="hidden" />
+                                    <label htmlFor="cameraInput" className="cursor-pointer">
+                                    {image ? (
+                                        <img src={image} alt="Foto de Perfil" className="w-32 h-32 object-cover rounded-full" />
+                                    ) : (
+                                        <div className="w-32 h-32 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
+                                            Sem Foto
+                                        </div>
+                                    )}
+                                    </label>
+                                </div>
+                                <label htmlFor="bio" className="mt-3 text-[18px] w-[100%]">Biografia</label>
+                                <textarea value={bioTemp} onChange={(e) => setBioTemp(e.target.value)} className="w-[100%] min-h-24 rounded-sm border border-blue3 outline-none p-2" placeholder="Sua biografia..." />
+                            </div>
+
+                            <div className="w-[60%] gap-3 flex flex-col">
+                                <label htmlFor="name" className=" text-[18px] w-[100%]">Nome</label>
+                                <input type="text" value={nameTemp} onChange={(e) => setNameTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-1" placeholder="Seu nome..." required/>
+                                <label htmlFor="email" className=" text-[18px] w-[100%]">Email</label>
+                                <input type="text" value={emailTemp} onChange={(e) => setEmailTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-1" placeholder="Seu email..." required/>
+                                <label htmlFor="name" className=" text-[18px] w-[100%]">GitHub Username</label>
+                                <input type="text" value={githubTemp} onChange={(e) => setGithubTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-1" placeholder="Seu username do github..."/>
+                            </div>
+                        </div>
+                        
                         <label htmlFor="areas" className="mt-3 text-[18px] w-[100%]">Áreas de Interesse</label>
                         <div className="w-[100%]">
                             <div className="max-h-32 overflow-y-auto mb-4 scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100">
                                 {areas.map((area) => (
                                     <div key={area.id} className="flex items-center mb-2">
-                                        <h2 className="w-[80%] border-b border-blue3 outline-none p-2">{area.name}</h2>
+                                        <h2 className="w-[90%] border-b border-blue3 outline-none p-2">{area.name}</h2>
                                         <button onClick={() => handleRemoveArea(area.id)}className="ml-2 text-red-500"><Image src={trash} width={24} height={24} alt=""/></button>
                                     </div>
                                 ))}
                             </div>
-                            <input type="text" value={newArea} onChange={(e) => setNewArea(e.target.value)}className="w-[80%] border-b border-blue3 outline-none p-2 mt-2" placeholder="Adicionar nova área" />
+                            <input type="text" value={newArea} onChange={(e) => setNewArea(e.target.value)}className="w-[90%] border-b-2 border-blue3 outline-none p-2 mt-2" placeholder="Adicionar nova área" />
                             <button onClick={handleAddArea} className="px-4 py-2" ><Image src={plus} width={30} height={30} alt="Image"/></button>
                         </div>
                         <label htmlFor="areas" className="mt-3 text-[18px] w-[100%]">Skills</label>
@@ -593,12 +603,12 @@ export default function Home() {
                             <div className="max-h-32 overflow-y-auto mb-4 scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100">
                                 {skills.map((sk, i) => (
                                     <div key={sk.id || i} className="flex items-center mb-2">
-                                        <h2 className="w-[80%] border-b border-blue3 outline-none p-2">{sk.name}</h2>
+                                        <h2 className="w-[90%] border-b border-blue3 outline-none p-2">{sk.name}</h2>
                                         <button onClick={() => handleRemoveSkill(sk.id)} className="ml-2 text-red-500"><Image src={trash} width={24} height={24} alt=""/></button>
                                     </div>
                                 ))}
                             </div>
-                            <select name="skills" id="skills" className="w-[80%] border-b border-blue3 outline-none p-2 mt-2" onChange={(e) => setNewSkillId(e.target.value)}>
+                            <select name="skills" id="skills" className="w-[90%] border-b-2 border-blue3 outline-none p-2 mt-2" onChange={(e) => setNewSkillId(e.target.value)}>
                                 <option value="">Selecione uma skill</option>
                                 {skillsDisponiveis.map((skill, i) => (
                                     <option key={skill.id || i} value={skill.id || i}>{skill.name}</option>
