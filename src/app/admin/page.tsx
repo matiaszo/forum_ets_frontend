@@ -1,7 +1,7 @@
 "use client";
 
 import { Header } from "@/components/header";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import arrouUp from '@/assets/arrow-up-blue.png';
 import arrouDown from '@/assets/arrow-down-blue.png';
@@ -10,10 +10,14 @@ import crown from '@/assets/crown.png';
 import edit from '@/assets/edit.png';
 import trash from '@/assets/trash-bin.png';
 import plus from '@/assets/icons8-adicionar-100.png';
+import { get } from "http";
 
 export default function Chat() {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenSkills, setIsOpenSkills] = useState(false);
+
+    const [skills, setSkills] = useState([]);
+    const [users, setUsers] = useState([]);
 
     const toggleDetails = () => {
       setIsOpen(!isOpen);
@@ -22,6 +26,53 @@ export default function Chat() {
     const toggleDetailsSkills = () => {
         setIsOpenSkills(!isOpenSkills);
     };
+
+    const getUserData = async () => {
+        const response = await fetch(`http://localhost:8080/user`, {
+            method: 'GET'
+        });
+        
+        if (!response.ok) {
+            throw new Error('Erro ao buscar dados');
+        }
+  
+        const dataUser = await response.json();
+
+        return dataUser;
+    }
+
+    const getSkillData = async () => {
+        const response = await fetch(`http://localhost:8080/skills`, {
+            method: 'GET'
+        });
+        
+        if (!response.ok) {
+            throw new Error('Erro ao buscar dados');
+        }
+  
+        const dataSkills = await response.json();
+
+        return dataSkills;
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const skillsData = await getSkillData();
+                setSkills(skillsData);
+
+                const userData = await getUserData();
+                setUsers(userData);
+
+                console.log(skillsData);
+                console.log(userData);
+            } catch (error) {
+                console.error("Erro ao carregar dados:", error);
+            }
+        };
+
+        fetchData();
+    }, []); 
     
     return (
         <div className="flex flex-row mt-20 justify-between min-h-[90vh] font-robFont">
