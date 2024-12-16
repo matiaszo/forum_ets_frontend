@@ -53,6 +53,12 @@ export default function Chat() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  
+  // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const [usuario, setUsuario] = useState<user>({
       id: '',
@@ -101,8 +107,6 @@ export default function Chat() {
 
     setLoading(true);
     try {
-      
-      
       const response = await fetch(`http://localhost:8080/chat/${selectedGroup}`, {
         method: "GET",
         headers: {
@@ -116,20 +120,16 @@ export default function Chat() {
       const data = await response.json();
 
       console.log(data);
-      setChat(data); 
+      setChat(data);
     } catch (e) {
       console.log(e);
-      
     }
 
     setLoading(false);
-
   }
 
   // Fetch messages when a group is selected
   useEffect(() => {
-    
-
     fetchMessagesForSelectedGroup();
   }, [selectedGroup]);
 
@@ -171,7 +171,6 @@ export default function Chat() {
     }
 
     fetchMessagesForSelectedGroup();
-
   };
 
   if (loading) {
@@ -189,7 +188,7 @@ export default function Chat() {
         <div className="flex flex-col gap-4 bg-white shadow-lg min-h-[100%] rounded-md p-3 items-center w-[30%]">
           <h1 className={`flex items-center rounded-md w-full h-8 text-blue1 text-3xl ${localStorage.getItem("instructor") == "1" ? "flex justify-between" : "hidden justify-start"}`}>
             Seus grupos
-            <div className="w-auto"> 
+            <div className="w-auto" onClick={openModal}> 
               <Image src={plus} width={50} height={50} alt="Criar Chat" />
             </div>
           </h1>
@@ -201,11 +200,8 @@ export default function Chat() {
               return (
                 <div
                   key={group.id}
-                  onClick={() => {setSelectedGroup(group.id); console.log(group);
-                  }}
-                  className={`flex flex-col p-3 border-b border-blue2 w-full cursor-pointer ${
-                    selectedGroup === group.id ? "bg-blue-100 rounded-lg" : ""
-                  }`}
+                  onClick={() => { setSelectedGroup(group.id); console.log(group); }}
+                  className={`flex flex-col p-3 border-b border-blue2 w-full cursor-pointer ${selectedGroup === group.id ? "bg-blue-100 rounded-lg" : ""}`}
                 >
                   <h2 className="text-lg text-blue0">{group.name}</h2>
                   <p className="text-[15px] text-gray-700">{lastMessage}</p>
@@ -218,8 +214,8 @@ export default function Chat() {
         <div className="flex flex-col rounded-lg items-center justify-start min-h-[100%] w-[70%] bg-alice">
           {chat ? (
             <>
-              <div className="flex flex-col items-center justify-center w-full bg-alice p-3 rounded-t-lg ">
-                <h1 className="text-xl text-blue2 mb-4 ">{chat.name}</h1>
+              <div className="flex flex-col items-center justify-center w-full bg-alice p-3 rounded-t-lg">
+                <h1 className="text-xl text-blue2 mb-4">{chat.name}</h1>
                 <hr className="w-full border-t-1 border-blue1 mt-1" />
               </div>
 
@@ -230,11 +226,7 @@ export default function Chat() {
                 {chat.messages.map((msg) => (
                   <div
                     key={msg.id}
-                    className={`flex items-center mb-4 ${
-                      msg.user.id === Number(localStorage.getItem("id"))
-                        ? "justify-end"
-                        : "justify-start"
-                    }`}
+                    className={`flex items-center mb-4 ${msg.user.id === Number(localStorage.getItem("id")) ? "justify-end" : "justify-start"}`}
                   >
                     {msg.user.id !== Number(localStorage.getItem("id")) && (
                       <CldImage
@@ -251,15 +243,11 @@ export default function Chat() {
                     )}
 
                     <div className="flex flex-col max-w-[70%]">
-                      <div className="text-sm text-blue2 ml-3 font-bold ">
+                      <div className="text-sm text-blue2 ml-3 font-bold">
                         {msg.user.name}
                       </div>
                       <div
-                        className={`p-3 rounded-lg text-white ml-3 ${
-                          msg.user.id === Number(localStorage.getItem("id"))
-                            ? "bg-blue2"
-                            : "bg-blue1"
-                        }`}
+                        className={`p-3 rounded-lg text-white ml-3 ${msg.user.id === Number(localStorage.getItem("id")) ? "bg-blue2" : "bg-blue1"}`}
                       >
                         <p className="font-robFont">{msg.text}</p>
                       </div>
@@ -306,6 +294,23 @@ export default function Chat() {
           )}
         </div>
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+          <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
+            <div className="bg-white p-12 rounded-lg w-[600px] ">
+                <h1 className="text-blue1 text-3xl font-robCondensed">Adicionar Noticia</h1>
+                <button 
+                  type="button" 
+                  onClick={() => {setIsModalOpen(false)}}
+                  className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-800"
+                >
+                  Fechar
+                </button>
+              
+            </div>
+          </div>
+        )}
     </div>
   );
 }
