@@ -89,7 +89,7 @@ const Forum = () => {
             setNewForum(forums);
         } catch (error) {
             console.error(error);
-            alert("Erro ao buscar sessões. Tente novamente.");
+            // alert("Erro ao buscar sessões. Tente novamente.");
         }
     };
 
