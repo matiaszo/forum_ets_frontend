@@ -56,7 +56,6 @@ export const CardFeedback = ({id, stars, text, publico, projectName, isUser, use
                     <Image key={index} src={char} width={24} height={24} alt="image" className="w-6 h-6"/>
                 ))}
             </div>
-            <h1>ID: {id}</h1>
         </div>
         <h1 className="font-robFont font-bold ml-8 text-[20px]">{text}</h1>
         <div className="w-[100%] justify-end flex">
