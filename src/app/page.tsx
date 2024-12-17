@@ -102,13 +102,13 @@ export default function Home() {
         <h1 className="font-robCondensed text-blue1 font-semibold text-[35px]">Login</h1>
         <div className="w-[100%] flex flex-col items-center">
           <label htmlFor="edv" className=" font-robFont w-[80%] text-start font-bold text-blue1">
-            Edv
+            EDV
           </label>
           <input
             type="text"
             name="edv"
             className="font-robFont border rounded-[8px] w-[80%] h-10 p-2"
-            placeholder="digite seu edv..."
+            placeholder="Digite seu edv..."
             value={auth.edv}
             onChange={handleInputChange}
           />
@@ -121,14 +121,14 @@ export default function Home() {
             type="password"
             name="password"
             className="font-robFont border rounded-[8px] w-[80%] h-10 p-2"
-            placeholder="digite sua senha..."
+            placeholder="Digite sua senha..."
             value={auth.password}
             onChange={handleInputChange}
           />
         </div>
         <button
           onClick={handleLogin}
-          className="bg-blue1 w-[80%] p-2 text-lessWhite rounded-[8px] font-robFont text-center font-medium"
+          className="bg-blue1 w-[80%] p-2 text-lessWhite rounded-[8px] font-medium  font-robCondensed text-center "
         >
           Entrar
         </button>
