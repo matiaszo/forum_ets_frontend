@@ -12,7 +12,7 @@ import trash from '@/assets/trash-bin.png';
 import plus from '@/assets/icons8-adicionar-100.png';
 import plusLight from '@/assets/plusClaro.png'
 import searchLight from '@/assets/pesquisarClaro.png'
-import { CldUploadWidget } from "next-cloudinary";
+import { CldImage, CldUploadWidget } from "next-cloudinary";
 
 const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
@@ -256,7 +256,7 @@ export default function Admin() {
       };
 
     return (
-        <div className="flex flex-row mt-20 justify-between min-h-[90vh] font-robFont">
+        <div className="flex flex-row mt-20 justify-between min-h-[90vh] ">
             <Header toggleTheme={toggleTheme} instructor={true} />
 
             {/* Modal de criação de usuario */}
@@ -456,20 +456,19 @@ export default function Admin() {
                                 {users.map((user, i) => {
                                     return (
                                         <div key={i} className="flex border-2 dark:border-blue4  flex-row gap-3 shadow-md p-4 rounded-md w-60 items-center justify-between">
-                                            <div>
-                                                
+                                            <div className="">    
+                                                <h1 className="capitalize dark:text-white font-robCondensed">{user.name}</h1>
+                                                {user.instructor ? (
+                                                    <div className="flex flex-col justify-start items-start font-robCondensed  text-blue1 font-bold">
+                                                        <h1>Instructor</h1>
+                                                        <Image src={crown} alt=""/>
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex flex-col justify-center items-center font-robCondensed  text-blue1 font-bold">
+                                                        <h1>Aprendiz</h1>
+                                                    </div>
+                                                )}
                                             </div>
-                                            <h1 className="capitalize dark:text-white">{user.name}</h1>
-                                            {user.instructor ? (
-                                                <div className="flex flex-col justify-center items-center  text-blue1 font-bold">
-                                                    <h1>Instructor</h1>
-                                                    <Image src={crown} alt=""/>
-                                                </div>
-                                            ) : (
-                                                <div className="flex flex-col justify-center items-center  text-blue1 font-bold">
-                                                    <h1>Aprendiz</h1>
-                                                </div>
-                                            )}
                                             <Image className="cursor-pointer" src={trash} alt="" onClick={() => deleteUser(user.id)} />
                                         </div> 
                                     )
@@ -513,7 +512,17 @@ export default function Admin() {
                             <div className="mt-4 mb-4 flex flex-wrap gap-10 w-[100%] justify-center">
                                 {skills.map((skill, index) => (
                                     <div key={index} className="flex flex-col gap-3 shadow-md p-4 rounded-md w-44 items-center justify-center">
-                                        <img className="w-20 h-auto object-cover" src={skill.image}></img>
+                                        <CldImage
+                                            src={skill.image || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
+                                            alt={skill.name}
+                                            width={40}
+                                            height={40}
+                                            radius={8}
+                                            crop={{
+                                                type: 'auto',
+                                                source: true,
+                                            }}
+                                        />
                                         <h1 className="w-[100%] text-blue1 font-semibold text-[20px]">{skill.name}</h1>
                                         <div className="flex flex-row w-[100%] justify-end">
                                             <Image src={trash} className="cursor-pointer" alt="" onClick={() => deleteSkill(skill.id)}/>
