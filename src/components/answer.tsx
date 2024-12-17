@@ -47,20 +47,7 @@ export const Answer: React.FC<AnswerProps> = ({
 
   const handleReplyClick = (commentId: number) => {
     setReplyingTo((prev) => (prev === commentId ? null : commentId)); 
-    /*
-  const handleReplySubmit = async () => {
-    if (replyContent.trim() === "") return;
-
-    addNewComment(replyContent, {
-      id: comment.id,
-      username: comment.user.name,
-      content: comment.content,
-    });
-
-    setReplyContent("");
-    setIsReplying(false);
   };
-  */
 
   const handleReplySubmit = async (replyingToId: number) => {
     if (replyContent.trim() === "") return;
@@ -108,9 +95,9 @@ export const Answer: React.FC<AnswerProps> = ({
                 type: 'auto',
                 source: true
             }}
-            alt={comment.user.image}
+            alt={"userimg"}
             />
-        <p className="font-bold text-blue1 ml-3">{comment.user.name}</p>
+        <p className="font-bold text-blue1">{comment.user.name}</p>
       </div>
 
       <p className="mt-1 text-black">{comment.content}</p>
@@ -165,4 +152,3 @@ export const Answer: React.FC<AnswerProps> = ({
     </div>
   );
 };
-}
