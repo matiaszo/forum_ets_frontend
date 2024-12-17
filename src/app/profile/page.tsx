@@ -474,6 +474,7 @@ export default function Home() {
         }
     };
 
+
     return (
         <div className="w-[100%] mt-7">
             <Header toggleTheme={ toggleTheme} instructor={localStorage.getItem('instructor') == '1' ? true : false} />
@@ -481,7 +482,7 @@ export default function Home() {
                 <div className="w-[30%] min-h-[80%] shadow-lg flex-col rounded-lg flex items-center p-12 justify-between">
                     <div className="flex flex-col items-center w-[100%]">
                         <CldImage
-                            src={usuario.image || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
+                            src={usuario.image || "xjlzp7la2pcpac629a85"}
                             alt={usuario.name}
                             width={150}
                             height={150}
@@ -565,51 +566,49 @@ export default function Home() {
                 <Modal isOpen={isModalOpen} onClose={closeModal} className="m-0">
                     <div className="max-h-[90vh] overflow-y-auto flex flex-col w-[100%] items-center scrollbar scrollbar-thumb-blue5 scrollbar-track-gray-100 gap-2 p-2">
                         <h1 className="text-[32px] mt-5 font-robFont ">Editar Perfil</h1>
-                        <div className="flex flex-col items-center space-y-4">
-                            <CldImage
-                                src={imageTemp ? imageTemp : usuario.image || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
-                                alt={usuario.name}
-                                width={130}
-                                height={130}
-                                radius={130}
-                                crop={{
-                                    type: 'auto',
-                                    source: true,
-                                }}
-                            />
-                            <CldUploadWidget
-                                uploadPreset={cloudPresetName}
-                                onSuccess={handleUploadComplete}
-                            >
-                                {({ open }) => (
-                                    <button
-                                        type="button"
-                                        onClick={() => open()}
-                                        className="w-96 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500"
-                                    >
-                                        Upload an Image
-                                    </button>
-                                )}
-                            </CldUploadWidget>
-                            {/* <label htmlFor="cameraInput" className="cursor-pointer">
-                                {image ? (
-                                    <img src={image} alt="Foto de Perfil" className="w-32 h-32 object-cover rounded-full" />
-                                ) : (
-                                    <div className="w-32 h-32 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
-                                        Sem Foto
-                                    </div>
-                                )}
-                            </label> */}
+                        <div className="flex flex-row w-[100%] gap-12">
+                            <div className="flex flex-col w-[40%]">
+                                <div className="flex flex-col items-center space-y-4">
+                                <CldImage
+                                    src={usuario.image || "xjlzp7la2pcpac629a85"}
+                                    alt={usuario.name}
+                                    width={100}
+                                    height={111}
+                                    radius={40}
+                                    crop={{
+                                        type: 'auto',
+                                        source: true,
+                                    }}
+                                    />
+                                    <CldUploadWidget
+                                        uploadPreset={cloudPresetName}
+                                        onSuccess={handleUploadComplete}
+                                        >
+                                        {({ open }) => (
+                                            <button
+                                            type="button"
+                                            onClick={() => open()}
+                                            className="w-60 h-8 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500"
+                                            >
+                                                Upload an Image
+                                            </button>
+                                        )}
+                                    </CldUploadWidget>
+                                </div>
+                                <label htmlFor="bio" className="mt-3 text-[18px] w-[100%]">Biografia</label>
+                                <textarea value={bioTemp} onChange={(e) => setBioTemp(e.target.value)} className="w-[100%] min-h-24 rounded-sm border border-blue3 outline-none p-2" placeholder="Sua biografia..." />
+                            </div>
+                            
+                            <div className="flex flex-col w-[60%] justify-between">
+                                <label htmlFor="name" className="mt-3 text-[18px] w-[100%]">Nome</label>
+                                <input type="text" value={nameTemp} onChange={(e) => setNameTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu nome..." required />
+                                <label htmlFor="email" className="mt-3 text-[18px] w-[100%]">Email</label>
+                                <input type="text" value={emailTemp} onChange={(e) => setEmailTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu email..." required />
+                                <label htmlFor="name" className="mt-3 text-[18px] w-[100%]">GitHub Username</label>
+                                <input type="text" value={githubTemp} onChange={(e) => setGithubTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu username do github..." />
+                            </div>
                         </div>
 
-                        <label htmlFor="name" className="mt-3 text-[18px] w-[100%]">Nome</label>
-                        <input type="text" value={nameTemp} onChange={(e) => setNameTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu nome..." required />
-                        <label htmlFor="email" className="mt-3 text-[18px] w-[100%]">Email</label>
-                        <input type="text" value={emailTemp} onChange={(e) => setEmailTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu email..." required />
-                        <label htmlFor="name" className="mt-3 text-[18px] w-[100%]">GitHub Username</label>
-                        <input type="text" value={githubTemp} onChange={(e) => setGithubTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu username do github..." />
-                        <label htmlFor="bio" className="mt-3 text-[18px] w-[100%]">Biografia</label>
-                        <textarea value={bioTemp} onChange={(e) => setBioTemp(e.target.value)} className="w-[100%] min-h-24 rounded-sm border border-blue3 outline-none p-2" placeholder="Sua biografia..." />
                         <label htmlFor="areas" className="mt-3 text-[18px] w-[100%]">Áreas de Interesse</label>
                         <div className="w-[100%]">
                             <div className="max-h-32 overflow-y-auto mb-4 scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100">
