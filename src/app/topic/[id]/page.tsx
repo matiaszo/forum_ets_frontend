@@ -40,18 +40,6 @@ interface Topic {
   comments: Comment[];
 }
 
-interface user {
-    id: string;
-    name: string;
-    image: string;
-    bio: string;
-    email: string;
-    edv: string;
-    gitUsername: string;
-    instructor: number;
-    isUser: boolean;
-  }
-
 const TopicPage = () => {
   const instructor = localStorage.getItem("instructor");
   const userId = localStorage.getItem("id");
@@ -59,18 +47,6 @@ const TopicPage = () => {
   const [topic, setTopic] = useState<Topic | null>(null);
   const [newReply, setNewReply] = useState("");
   const [replyingTo, setReplyingTo] = useState<Comment | null>(null);
-  
-  const [usuario, setUsuario] = useState<user>({
-    id: '',
-    name: '',
-    image: '',
-    bio: '',
-    gitUsername: '',
-    email: '',
-    edv: '',
-    instructor: 0,
-    isUser: false,
-});
 
   const params = useParams();
   const id = parseInt(params.id as string || "0", 10);
@@ -173,28 +149,19 @@ const TopicPage = () => {
 
   useEffect(() => {
     if (!isNaN(id)) fetchTopic(id);
-    let user = localStorage.getItem("user");
-    if(user != null)
-    {
-        setUsuario(JSON.parse(user))
-    }
-
-    if (id && !isNaN(id)) {
-      fetchTopic(id);
-    }
   }, [id]);
 
   if (!topic) return <p>Carregando...</p>;
 
   return (
-    <div className="h-screen mt-20 font-robFont">
-      <Header instructor={usuario.instructor ? true : false}/>
+    <div className="h-screen mt-20">
+      <Header instructor={instructor? true: false}/>
       <div className="flex m-10 flex-col">
-        <div className="flex flex-col items-center rounded-xl p-3 font-robFont mb-3 text-black">
-          <div className="flex flex-col ml-10 min-w-[95%]">
-            <h1 className="text-blue1 text-3xl mb-3 text-center">{topic.title}</h1>
-            <h3 className="ml-1 text-center">{topic.mainComment.content}</h3>
-            <div className="flex justify-end text-blue1">{topic.mainComment.user.name}</div>
+        <div className="flex flex-col items-center rounded-xl p-3 m-10 text-black">
+          <div className="flex flex-col mt-4min-w-[95%]">
+            <h1 className="text-blue1 text-3xl mb-3 capitalize font-robCondensed">{topic.title}</h1>
+            <h3 className="ml-1 text-start capitalize">{topic.mainComment.content}</h3>
+            <div className="flex justify-end text-blue1 capitalize">{topic.mainComment.user.name}</div>
           </div>
           <hr className="w-full border-t-1 border-black" />
         </div>

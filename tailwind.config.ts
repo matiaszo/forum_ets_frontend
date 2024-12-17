@@ -27,16 +27,19 @@ export default {
         alice: "var(--alice)",
         black: "var(--black)",
         lessWhite: "#D4D4D4",
-        'scrollbar-thumb': '#888888', 
+        'scrollbar-thumb': '#888888',
         'scrollbar-track': '#f1f1f1',
+
+        darkBlue0: "var(--dark-blue0)", 
+        darkBlue1: "var(--dark-blue1)",
       },
       scrollbar: ['rounded'],
-      fontSize:{
+      fontSize: {
         large: "40px",
         medium: "24px",
         small: "16px"
       },
-      fontFamily:{
+      fontFamily: {
         robFont: "var(--roboto)",
         robCondensed: "var(--robotoCondensed)"
       },
@@ -45,6 +48,6 @@ export default {
       }
     },
   },
+  darkMode: 'class', 
   plugins: [require('tailwind-scrollbar')],
 } satisfies Config;
-

@@ -5,6 +5,9 @@ import CardMessage from "@/components/cardMessage";
 import ImageComponent from "@/components/image";
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import Image from "next/image";
+import flecha from "@/assets/sending.png"
+import { CldImage } from "next-cloudinary";
 
 const limit = 350;
 
@@ -66,6 +69,7 @@ const projectPage = () => {
     const [feedbackText, setFeedbackText] = useState("");
     const [projectFeedbacks, setProjectFeedbacks] = useState<Feedback[]>([]);
     const [receiverUser, setReceiverUser] = useState<number | null>(null);
+    const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
     const [usuario, setUsuario] = useState<user>({
         id: '',
@@ -87,6 +91,15 @@ const projectPage = () => {
         if(user != null)
         {
           setUsuario(JSON.parse(user))
+        }
+
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "dark") {
+            setIsDarkMode(true);
+            document.documentElement.classList.add("dark");
+        } else {
+            setIsDarkMode(false);
+            document.documentElement.classList.remove("dark");
         }
 
         const params = new URLSearchParams(window.location.search);
@@ -120,6 +133,16 @@ const projectPage = () => {
         return <div>Erro ao carregar dados do projeto.</div>;
     }
 
+    const toggleTheme = () => {
+        setIsDarkMode((prevMode) => !prevMode);
+        if (isDarkMode) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        }
+    };
 
     const toggleDescription = () => {
         setIsExpanded(prevState => !prevState);
@@ -231,11 +254,11 @@ const projectPage = () => {
 
     return (
         <>
-            <Header instructor={usuario.instructor ? true : false} />
+            <Header instructor={usuario.instructor ? true : false} toggleTheme={toggleTheme} />
             {/* Modal de feedback */}
             {open && (
-                <div className="flex bg-[#000000A0] w-full h-full absolute items-center justify-center self-center justify-center">
-                    <form className="flex-col shadow p-2 rounded bg-white-100 bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[90%]" action="">
+                <div className="flex bg-[#000000A0] w-full h-full absolute items-center self-center justify-center">
+                    <form className="flex-col bg-white-100 bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[90%]" action="">
                         <p className="text-blue1 text-3xl mb-4 my-6">Feedback</p>
                         <textarea
                             className="bg-slate-100 w-full h-[200px] outline-none p-2"
@@ -269,9 +292,9 @@ const projectPage = () => {
             {/* Renderização dados carregados */}
             <div className="h-[480px] overflow-y-auto scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100 p-6">
                 <div className="mt-24 ml-8">
-                    <h1 className="text-blue1 text-3xl mb-4">{data.name}</h1>
+                    <h1 className="text-blue1 text-3xl dark:text-blue5 mb-4">{data.name}</h1>
                    
-                    <p className="flex flex-wrap max-w-[750px]">
+                    <p className="flex flex-wrap max-w-[750px] dark:text-white">
                         {isExpanded || (!data.Description || data.Description.length <= limit)
                             ? data.Description
                             : data.Description.substring(0, limit) + "..."}
@@ -282,8 +305,8 @@ const projectPage = () => {
                         )}
                     </p>
 
-                <h1 className="text-blue1 text-3xl mb-4 mt-4">Objetivos</h1>
-                <div className="flex flex-col mt-6 gap-3 items-start " >
+                <h1 className="text-blue1 dark:text-blue5 text-3xl mb-4 mt-4">Objetivos</h1>
+                <div className="dark:text-white flex flex-col mt-6 gap-3 items-start " >
                  {data.goals.map((item, index) => {
                     return(
                             <div key={index} className="flex gap-3" >
@@ -298,14 +321,14 @@ const projectPage = () => {
 
                 {/* Mostrando contribuidores do projeto */}
                 <div className="flex flex-col ml-8 mt-6 w-[300px]">
-                    <h1 className="text-blue1 text-3xl mb-4">Contribuidores</h1>
+                    <h1 className="text-blue1 text-3xl mb-4 dark:text-blue5">Contribuidores</h1>
                     {data.users?.map((contributor, index) => {
                         if(contributor.id !== Number(localStorage.getItem('id'))) {
                             return(
 
                                 <div key={index} className="flex gap-3 items-center mt-6">
-                                    <ImageComponent src={contributor.image} alt="" width={30} height={30} className="rounded-full object-cover aspect-square" />
-                                    <h1>{contributor.name}</h1>
+                                    <CldImage src={contributor.image} alt="" width={30} height={30} className="rounded-full object-cover aspect-square" />
+                                    <h1 className="dark:text-white">{contributor.name}</h1>
                                     <button
                                         className="flex bg-blue2 text-white self-end justify-self-end rounded p-2 hover:shadow hover:bg-blue1"
                                         onClick={() => openFeedbackModal(contributor)}
@@ -324,7 +347,7 @@ const projectPage = () => {
             <div className="flex flex-col w-11/12 p-4 justify-self-center">
                 <div className="flex flex-col h-[300px] overflow-y-auto gap-3 scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100">
                     {messages.length === 0 ? (
-                        <div>Nenhuma mensagem ainda.</div>
+                        <div className="dark:text-white">Nenhuma mensagem ainda.</div>
                     ) : (
                         messages.map((msg) => {
                       
@@ -369,8 +392,8 @@ const projectPage = () => {
                     onChange={(e) => setNewMessage(e.target.value)}
                 />
                 <div onClick={send}>
-                    <ImageComponent
-                        src="sending.png"
+                    <Image
+                        src={flecha}
                         width={50}
                         height={50}
                         alt="Enviar"

@@ -8,10 +8,12 @@ import { useState, useEffect } from "react";
 import { Header } from "@/components/header";
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
-import imagem from "@/assets/Matias3.jpg";
+// import imagem from "@/assets/Matias3.jpg";
 import plus from "@/assets/icons8-adicionar-100.png";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
-
+import { redirect } from "next/dist/server/api-utils";
+import searchLight from '@/assets/pesquisarClaro.png'
+import plusLight from '@/assets/plusClaro.png'
 const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
 interface user {
@@ -57,15 +59,27 @@ const Forum = () => {
     const [newImage, setNewImage] = useState<string>("");
     const [newTitle, setNewTitle] = useState<string>("");
     const [newDescription, setNewDescription] = useState<string>("");
+    const [isDarkMode, setIsDarkMode] = useState(false); 
 
     const handleSearchChange = (event: any) => {
         setSearchValue(event.target.value);
     };
 
+    const toggleTheme = () => {
+        const newTheme = isDarkMode ? "light" : "dark";
+        localStorage.setItem("theme", newTheme);
+        setIsDarkMode(!isDarkMode);
+        if (newTheme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      };
+
     const styles = {
-        h1: "text-blue1 text-3xl",
+        h1: "text-blue1 text-3xl dark:text-blue5",
         box: "flex w-[100%] gap-4 items-end justify-end",
-        search: "border-b-2 border-blue1 w-[100%] p-2 outline-none",
+        search: "border-b-2 border-blue1 w-[100%] p-2 outline-none text-black dark:border-blue5",
     };
 
     const handleImage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,6 +105,12 @@ const Forum = () => {
 
     const handleGetSession = async () => {
         const token = localStorage.getItem("token");
+
+        if (!token) {
+           alert("Token de autenticação não encontrado. Faça o login novamente.");
+           window.location.href ='http://localhost:3000'
+           return
+        }
 
         try {
             const response = await fetch("http://localhost:8080/section", {
@@ -137,7 +157,7 @@ const Forum = () => {
             if (newTitle && newDescription && newImage) {
                 const newForumData = {
                     title: newTitle,
-                    image: "newImage", 
+                    image: newImage, 
                     description: newDescription,
                     userId: userId,
                 };
@@ -179,6 +199,15 @@ const Forum = () => {
 
     useEffect(() => {
         handleGetSession();
+
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "dark") {
+          setIsDarkMode(true);
+          document.documentElement.classList.add("dark"); 
+        } else {
+          setIsDarkMode(false);
+          document.documentElement.classList.remove("dark");
+        }
         
         let user = localStorage.getItem("user");
         if(user != null)
@@ -189,12 +218,12 @@ const Forum = () => {
 
     return (
         <div className="flex flex-col mt-20 font-robFont">
-            <Header instructor={usuario.instructor ? true : false} />
+            <Header toggleTheme={toggleTheme} instructor={localStorage.getItem('instructor') == '1' ? true : false} />
             {modalAdd && (
                 <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
                     <div className="bg-white p-12 rounded-lg w-[600px] ">
                         <form id="modal" className="">
-                            <h1 className="text-blue1 text-3xl">Adicionar Sessão ao Fórum</h1>
+                            <h1 className="text-blue1 dark:text-blue5 text-3xl">Adicionar Sessão ao Fórum</h1>
                             <div className="flex flex-col items-center space-y-4">
                                 <input
                                     type="file"
@@ -205,17 +234,20 @@ const Forum = () => {
                                     className="hidden"
                                 />
                                 <label htmlFor="cameraInput" className="cursor-pointer">
-                                    {newImage ? (
-                                        <img
-                                            src={newImage}
-                                            alt="Nova Imagem"
-                                            className="w-96 h-64 object-cover rounded-lg"
-                                        />
-                                    ) : (
-                                        <div className="w-96 h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
-                                            Adicione uma imagem
-                                        </div>
+                                <CldUploadWidget
+                                    uploadPreset={cloudPresetName}
+                                    onSuccess={handleUploadComplete}
+                                >
+                                    {({ open }) => (
+                                        <button
+                                            type="button"
+                                            onClick={() => open()}
+                                            className="w-96 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500"
+                                        >
+                                            Upload an Image
+                                        </button>
                                     )}
+                                </CldUploadWidget>
                                 </label>
                             </div>
                             <input
@@ -252,7 +284,7 @@ const Forum = () => {
             <div className="pr-20 pl-20 pt-10 flex flex-col items-center">
                 <div className="flex flex-col flex-wrap w-[100%]">
                     <h1 className={styles.h1}>Acesse o fórum do setor aqui</h1>
-                    <p>Converse com seus colegas sobre os mais diversos tópicos.</p>
+                    <p className="dark:text-white" >Converse com seus colegas sobre os mais diversos tópicos.</p>
                 </div>
 
                 <div className="w-[100%] flex flex-row justify-end items-end">
@@ -267,7 +299,7 @@ const Forum = () => {
                             />
                             <Image
                                 className="cursor-pointer"
-                                src={search}
+                                src={isDarkMode ? searchLight : search}
                                 alt={""}
                                 width={33}
                                 height={33}
@@ -280,7 +312,7 @@ const Forum = () => {
                                     onClick={() => setModalAdd(true)}
                                 >
                                     <Image
-                                        src={plus}
+                                        src={isDarkMode? plusLight:plus}
                                         width={50}
                                         height={50}
                                         alt="Adicionar Sessao"
@@ -302,7 +334,7 @@ const Forum = () => {
                             <Card
                                 title={item.title || "Título Indisponível"}
                                 mainQuestion={item.description || "Descrição Indisponível"}
-                                image={imagem.src}
+                                image={item.image}
                             />
                         </Link>
                     ))}

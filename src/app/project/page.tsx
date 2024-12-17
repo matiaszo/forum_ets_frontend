@@ -8,7 +8,14 @@ import Link from "next/link";
 import axios from "axios";
 import Image from "next/image";
 import ImageComponent from "@/components/image";
-import placeholder from '@/assets/placeholder.jpg'
+import { CldImage, CldUploadWidget } from "next-cloudinary";
+import mais from "@/assets/icons8-adicionar-100.png"
+import menos from "@/assets/menos.png"
+import topic3 from "@/assets/topic3.png"
+import adicionar from "@/assets/icons8-adicionar-100.png"
+import plusLight from '@/assets/plusClaro.png'
+
+const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
 // tipo de dado para os participantes
 type Person = {
@@ -28,8 +35,8 @@ type IProject = {
 
 type IAllUsers = {
   id: number,
-  name : string,
-  image : string
+  name: string,
+  image: string
 }
 
 interface user {
@@ -65,17 +72,18 @@ const Projects = () => {
   const [goals, setGoals] = useState<string[]>([]);
   const [listContributors, setListContributors] = useState<Person[]>([]);
   const [listIdContributors, setIdListContributors] = useState<number[]>([])
+  const [isDarkMode, setIsDarkMode] = useState(false); 
 
   const [usuario, setUsuario] = useState<user>({
-      id: '',
-      name: '',
-      image: '',
-      bio: '',
-      gitUsername: '',
-      email: '',
-      edv: '',
-      instructor: 0,
-      isUser: false,
+    id: '',
+    name: '',
+    image: '',
+    bio: '',
+    gitUsername: '',
+    email: '',
+    edv: '',
+    instructor: 0,
+    isUser: false,
   });
 
   // estado para armazenar o projeto criado localmente
@@ -124,70 +132,93 @@ const Projects = () => {
 
   let tokenToGet: string | null;
 
-  // tudo dentro dele carrega antes da página carregar na primeira vez
-  useEffect(() => {
-
-    let user = localStorage.getItem("user");
-    if(user != null)
-    {
-      setUsuario(JSON.parse(user))
-    }
-      
-    // get para pegar os projetos
-    tokenToGet = localStorage.getItem('token')
-
-    // get para pegar o id do user
-    var idUser = localStorage.getItem('id')
-
-    if (idUser !== null) {
-      const parsedId = parseInt(idUser, 10);
-      if (!isNaN(parsedId)) {
-        setIdListContributors(prevList => [...prevList, parsedId]);
-      } else {
-        console.error('ID inválido no localStorage');
-      }
-    }
-
-    const fetchProjects = async () => {
-      try {
-        const responseProject = await axios.get("http://localhost:8080/project", {
-          headers: {
-            // method : 'GET',
-            Authorization: `Bearer ${tokenToGet}`,
-          },
-        });
-
-        setProject(responseProject.data);
-
-      } catch (err) {
-        console.log(err)
-      }
-    };
-
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/user', {
-          headers: {
-            Authorization: `Bearer ${tokenToGet}`,
-          },
-        });
-        console.log("Usuários recebidos:", response.data); // Adicionando log para conferir os dados recebidos
-        setDataUser(response.data);
-      } catch (err) {
-        console.error('Erro ao carregar usuários:', err);
-      }
-    }
-
-    // chama a função para buscar os dados
-    if (tokenToGet) {
-      fetchUsers();
-      fetchProjects();
+  const toggleTheme = () => {
+    const newTheme = isDarkMode ? "light" : "dark";
+    localStorage.setItem("theme", newTheme);
+    setIsDarkMode(!isDarkMode);
+    if (newTheme === "dark") {
+      document.documentElement.classList.add("dark");
     } else {
-      alert("Você precisa estar logado para acessar os projetos.");
-      return;
+      document.documentElement.classList.remove("dark");
     }
+  };
 
-  }, []); // O array vazio [] faz com que o efeito seja executado apenas uma vez (quando o componente monta)
+useEffect(() => {
+  let user = localStorage.getItem("user");
+  if (user != null) {
+    setUsuario(JSON.parse(user));
+  }
+
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "dark") {
+    setIsDarkMode(true);
+    document.documentElement.classList.add("dark"); 
+  } else {
+    setIsDarkMode(false);
+    document.documentElement.classList.remove("dark");
+  }
+
+  // Get token and user ID from localStorage
+  const tokenToGet = localStorage.getItem('token');
+  const idUser = localStorage.getItem('id');
+
+  // Handle user ID
+  if (idUser !== null) {
+    const parsedId = parseInt(idUser, 10);
+    if (!isNaN(parsedId)) {
+      setIdListContributors(prevList => [...prevList, parsedId]);
+    } else {
+      console.error('ID inválido no localStorage');
+    }
+  }
+
+  // Fetch projects and users
+  const fetchProjects = async () => {
+    try {
+      const responseProject = await axios.get("http://localhost:8080/project", {
+        headers: {
+          Authorization: `Bearer ${tokenToGet}`,
+        },
+      });
+
+      setProject(responseProject.data); // Set the project data
+    } catch (err) {
+      console.error("Error fetching projects:", err);
+    }
+  };
+
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/user', {
+        headers: {
+          Authorization: `Bearer ${tokenToGet}`,
+        },
+      });
+      setDataUser(response.data); // Set the users data
+    } catch (err) {
+      console.error('Error fetching users:', err);
+    }
+  };
+
+  // Trigger fetch calls if token is available
+  if (tokenToGet) {
+    fetchUsers();
+    fetchProjects();
+  } else {
+    alert("Você precisa estar logado para acessar os projetos.");
+    return;
+  }
+
+}, []); // Empty dependency array ensures this runs only once when the component mounts
+
+// Add a useEffect to handle when projects are fetched and logged
+useEffect(() => {
+  // if (project.length > 0) {
+  //   console.log("Fetched Projects:", project);
+  // }
+}, [project]); // This will log the projects when the 'project' state changes
+
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -212,11 +243,11 @@ const Projects = () => {
       goals: goals,
       description: description,
       users: listIdContributors,
-      // image: newImage, // Se for necessário enviar a imagem, descomente isso
+      image: newImage, // Se for necessário enviar a imagem, descomente isso
     };
 
-    const tokenToPost = localStorage.getItem('token') 
-  
+    const tokenToPost = localStorage.getItem('token')
+
     try {
       console.log("Enviando projeto:", newProject);
       console.log(tokenToPost)
@@ -224,20 +255,23 @@ const Projects = () => {
         method: 'POST',
         headers: {
           "Authorization": `Bearer ${tokenToPost}`,
-          "Content-Type": "application/json", 
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(newProject)
       });
-  
+
+      console.log(newProject);
+      
+
       if (response.ok) {
         const projectData = await response.json(); // receber o projeto criado
-  
+
         alert('Projeto criado com sucesso!');
         console.log("Projeto criado:", projectData);
-  
+
         // atualiza a lista de projetos localmente 
         setProject((prevProjects) => [...prevProjects, projectData]);
-  
+
         // resetar os campos para o próximo projeto
         resetProjectForm();
 
@@ -250,7 +284,17 @@ const Projects = () => {
       alert("Erro ao enviar os dados. Tente novamente.");
     }
   };
-  
+
+  const handleUploadComplete = (result: any) => {
+    if (result?.info?.public_id) {
+      const publicId = result.info.public_id;
+      console.log('Uploaded file public_id:', publicId);
+      setNewImage(publicId); 
+    } else {
+      console.error('Upload failed or public_id is not present in the result');
+    }
+  };
+
   // Função para resetar os campos do formulário
   const resetProjectForm = () => {
     setNameProject("");
@@ -261,7 +305,6 @@ const Projects = () => {
     setPersonValue("");
     setGoalValue("");
   };
-  
 
   const deleteGoal = (goalToRemove: string) => {
     setGoals((prevGoals) => prevGoals.filter(goal => goal !== goalToRemove));
@@ -274,24 +317,45 @@ const Projects = () => {
 
   return (
     <div className="flex flex-col mt-20">
-        <Header instructor={usuario.instructor ? true : false} />
-        <div className="pr-20 pl-20 pt-10 w-[100%]">
-            {/* Modal de criação do projeto */}
-            {openModalInfo && (
-                <div className={styles.modalContainer}>
-                <form  id="modal" className={styles.modalBox}>
-                    <h1 className={styles.title}>Crie um novo projeto</h1>
-                    <div className="flex flex-col items-center space-y-4">
-                        <input type="file" accept="image/*" capture="environment" id="cameraInput" onChange={handleImageChange} className="hidden"/>
-                        <label htmlFor="cameraInput" className="cursor-pointer">
-                        {newImage ? (
-                            <Image src={newImage} width={0} height={0} alt="Nova Imagem" priority className="w-96 h-64 object-cover rounded-lg"/>
-                            ) : (
-                                <div className="w-96 h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">Adicione uma imagem</div>
-                            )}
-                        </label>
-                    </div>
-                    <div className={styles.content}>
+      <Header toggleTheme={toggleTheme} instructor={usuario.instructor ? true : false} />
+      <div className="pr-20 pl-20 pt-10 w-[100%]">
+        {/* Modal de criação do projeto */}
+        {openModalInfo && (
+          <div className={styles.modalContainer}>
+            <form id="modal" className={styles.modalBox}>
+              <h1 className={styles.title}>Crie um novo projeto</h1>
+              <div className="flex flex-col items-center space-y-4">
+                {
+                  newImage ? 
+                  <CldImage
+                  src={newImage || "segsnhic8wvgxhmcmj5w"} // Provide a fallback image if image is null
+                  alt={usuario.name}
+                  width={90}
+                  height={90}
+                  radius={40}
+                  crop={{
+                    type: 'auto',
+                    source: true,
+                  }}
+                /> : ""
+                }
+
+                <CldUploadWidget
+                  uploadPreset={cloudPresetName}
+                  onSuccess={handleUploadComplete}
+                >
+                  {({ open }) => (
+                    <button
+                      type="button"
+                      onClick={() => open()}
+                      className="w-96 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500"
+                    >
+                      Upload an Image
+                    </button>
+                  )}
+                </CldUploadWidget>
+              </div>
+              <div className={styles.content}>
 
                 <input
                   className={styles.input + 'capitalize'}
@@ -323,7 +387,7 @@ const Projects = () => {
                   />
                   <div className="self-center " onClick={addGoal}>
                     <ImageComponent
-                      src={"icons8-adicionar-100.png"}
+                      src={isDarkMode? 'plusClaro.png' :"icons8-adicionar-100.png"}
                       width={50}
                       height={50}
                       alt="Adicionar objetivo"
@@ -338,12 +402,12 @@ const Projects = () => {
                   {goals.map((goal, index) => {
                     return (
                       <div key={index} className="flex items-center justify-between m-2">
-                        <ImageComponent src="topic3.png" width={25} height={25} alt="topic" />
+                        <Image src={topic3} width={25} height={25} alt="topic" />
                         <h1 className="flex-wrap">{goal}</h1>
                         <div className="ml-auto" onClick={() => { deleteGoal(goal) }} >
-                          <ImageComponent
+                          <Image
                             className="cursor-pointer"
-                            src="menos.png"
+                            src={menos}
                             width={30}
                             height={30}
                             alt="topic"
@@ -412,7 +476,7 @@ const Projects = () => {
                         className={styles.person}
                         onClick={() => addPeopleToList(person)}
                       >
-                        <ImageComponent
+                        <CldImage
                           src={person.image}
                           width={40}
                           height={40}
@@ -421,8 +485,8 @@ const Projects = () => {
                         />
                         <p className="self-center">{person.name}</p>
                         <div className="ml-auto">
-                          <ImageComponent
-                            src={"icons8-adicionar-100.png"}
+                          <Image
+                            src={adicionar}
                             width={30}
                             height={30}
                             alt=""
@@ -440,7 +504,7 @@ const Projects = () => {
                   <div className={styles.people}>
                     {listContributors.map((person) => (
                       <div key={person.id} className={styles.person}>
-                        <ImageComponent
+                        <CldImage
                           src={person.image ? person.image : ''}
                           width={40}
                           height={40}
@@ -449,9 +513,9 @@ const Projects = () => {
                         />
                         <p className="self-center">{person.name}</p>
                         <div className="ml-auto" onClick={() => { deletePerson(person) }} >
-                          <ImageComponent
+                          <Image
                             className="cursor-pointer"
-                            src="menos.png"
+                            src={menos}
                             width={30}
                             height={30}
                             alt="topic"
@@ -486,14 +550,14 @@ const Projects = () => {
           </div>
         )}
 
-            <div className={styles.header}>
-                <h1 className={styles.title}>Seus projetos</h1>
-                <p>Colabore com seus colegas em grupos exclusivos sobre projetos</p>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Seus projetos</h1>
+          <p className="dark:text-white" >Colabore com seus colegas em grupos exclusivos sobre projetos</p>
 
           {/* Add projects */}
           <div className="flex justify-end">
             <div className="w-auto" onClick={() => setOpenModalInfo(true)}>
-              <ImageComponent src={'icons8-adicionar-100.png'} width={50} height={50} alt="" className={styles.icon} />
+              <Image src={mais} width={50} height={50} alt="" className={styles.icon} />
             </div>
           </div>
         </div>
@@ -507,7 +571,7 @@ const Projects = () => {
           ) : (
             project?.map((item, index) => (
               <Link key={index} href={`/projectSelected?id=${item.id}`}>
-                <Card title={item.name} mainQuestion={item.description} image={item.image ? item.image : "placeholder.jpg"} />
+                <Card title={item.name} mainQuestion={item.description} image={item.image ? item.image : "xjlzp7la2pcpac629a85" } />
               </Link>
             ))
           )}
@@ -521,7 +585,7 @@ const Projects = () => {
 export default Projects;
 
 const styles = {
-  title: "text-blue1 text-3xl font-robCondensed",
+  title: "text-blue1 dark:text-blue5 text-3xl font-robCondensed",
   input: " w-full p-2 my-4 border-b border-blue3 outline-none ease-in-out hover:border-blue1 ",
   inputObj: "capitalize w-[500px] p-2 my-4 border-b border-blue3 outline-none ease-in-out hover:border-blue1",
   content: "m-4",

@@ -48,7 +48,7 @@ export default function Home() {
       localStorage.setItem("token", data.token); // Exemplo de salvamento
       localStorage.setItem("id", data.id.toString()); // Exemplo de salvamento
       
-      localStorage.setItem("profile", data.id.toString()); 
+      localStorage.setItem("profile", data.id.toString());
 
       fetch(`http://localhost:8080/profile/${data.id}`,
         {
@@ -79,22 +79,22 @@ export default function Home() {
           </h1>
         </div>
         <div className="flex flex-col gap-3 m-10">
-          <h1 className="font-robCondensed text-lessWhite text-[26px] font-semibold">Welcome to ETS</h1>
+          <h1 className="font-robCondensed text-lessWhite text-[26px] font-semibold">Bem-vindo(a) à ETS</h1>
           <div className="flex flex-row gap-4 items-end">
             <Image src={check} alt="check" />
-            <h3 className="font-robFont text-lessWhite text-[20px]">Build a strong community</h3>
+            <h3 className="font-robFont text-lessWhite text-[20px]">Forme uma comunidade unida</h3>
           </div>
           <div className="flex flex-row gap-4 items-end">
             <Image src={check} alt="check" />
-            <h3 className="font-robFont text-lessWhite text-[20px]">Meet with Colleagues</h3>
+            <h3 className="font-robFont text-lessWhite text-[20px]">Junte-se com colegas</h3>
           </div>
           <div className="flex flex-row gap-4 items-end">
             <Image src={check} alt="check" />
-            <h3 className="font-robFont text-lessWhite text-[20px]">Share your knowladge</h3>
+            <h3 className="font-robFont text-lessWhite text-[20px]">Compartilhe seu conhecimento</h3>
           </div>
           <div className="flex flex-row gap-4 items-end">
             <Image src={check} alt="check" />
-            <h3 className="font-robFont text-lessWhite text-[20px]">Stay updated</h3>
+            <h3 className="font-robFont text-lessWhite text-[20px]">Não fique desconectado</h3>
           </div>
         </div>
       </div>
@@ -108,20 +108,20 @@ export default function Home() {
             type="text"
             name="edv"
             className="font-robFont border rounded-[8px] w-[80%] h-10 p-2"
-            placeholder="Type your edv..."
+            placeholder="digite seu edv..."
             value={auth.edv}
             onChange={handleInputChange}
           />
         </div>
         <div className="w-[100%] flex flex-col items-center">
           <label htmlFor="password" className="font-robFont w-[80%] text-start font-bold text-blue1">
-            Password
+            Senha
           </label>
           <input
             type="password"
             name="password"
             className="font-robFont border rounded-[8px] w-[80%] h-10 p-2"
-            placeholder="Type your password..."
+            placeholder="digite sua senha..."
             value={auth.password}
             onChange={handleInputChange}
           />
@@ -130,10 +130,10 @@ export default function Home() {
           onClick={handleLogin}
           className="bg-blue1 w-[80%] p-2 text-lessWhite rounded-[8px] font-robFont text-center font-medium"
         >
-          Sign In
+          Entrar
         </button>
         <a href={ROUTES.register} className="font-robFont w-[80%] text-end font-bold text-blue1">
-          Sign Up
+          Registrar-se
         </a>
       </div>
     </div>

@@ -6,6 +6,7 @@ import dataTests from "@/constants/dataTests.json";
 import { ROUTES } from "@/constants/routes";
 import Link from "next/link";
 import plus from "@/assets/icons8-adicionar-100.png";
+import plusLight from '@/assets/plusClaro.png'
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -63,6 +64,7 @@ const Home = () => {
   const [newImage, setNewImage] = useState<string>("");
   const [newTitle, setNewTitle] = useState<string>("");
   const [newContent, setNewContent] = useState<string>("");
+  const [isDarkMode, setIsDarkMode] = useState(false); 
 
   useEffect(() =>
   {
@@ -71,7 +73,26 @@ const Home = () => {
     {
       setUsuario(JSON.parse(user))
     }
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setIsDarkMode(true);
+      document.documentElement.classList.add("dark"); 
+    } else {
+      setIsDarkMode(false);
+      document.documentElement.classList.remove("dark");
+    }
   },[])
+
+  const toggleTheme = () => {
+    const newTheme = isDarkMode ? "light" : "dark";
+    localStorage.setItem("theme", newTheme);
+    setIsDarkMode(!isDarkMode);
+    if (newTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
 
   const handleAddNotice = () => {
     if (newTitle && newContent && newImage) {
@@ -102,13 +123,13 @@ const Home = () => {
 
   return (
     <div className="flex flex-col mt-20">
-      <Header instructor={usuario.instructor ? true : false} />
+      <Header instructor={usuario.instructor == 1} toggleTheme={toggleTheme}/>
       <div className="mr-10 ml-10 mb-10">
         {modalAdd && (
           <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
             <div className="bg-white p-12 rounded-lg w-[600px] ">
               <form id="modal" onSubmit={(e) => e.preventDefault()} className="">
-                <h1 className="text-blue1 text-3xl">Adicionar Noticia</h1>
+                <h1 className="text-blue1 dark:text-blue5 text-3xl">Adicionar Noticia</h1>
                 <div className="flex flex-col items-center space-y-4">
                   {
                     newImage ? 
@@ -176,15 +197,15 @@ const Home = () => {
         )}
         <div className="pr-20 pl-20 pt-10 flex flex-col items-center w-[100%]">
           <div className="flex flex-col flex-wrap w-[100%]">
-            <h1 className="text-blue1 text-3xl">As principais notícias do setor aqui</h1>
-            <p>Fique atento às datas e novidades por aqui.</p>
+            <h1 className="text-blue1 text-3xl dark:text-blue5">As principais notícias do setor aqui</h1>
+            <p className="dark:text-white">Fique atento às datas e novidades por aqui.</p>
           </div>
           <div className="flex justify-end w-[100%]">
             <div className="flex items-end justify-end cursor-pointer w-[100%]" onClick={() => setModalAdd(true)}>
               {usuario.instructor == 1 ? (
                 <div className="flex justify-end">
                   <div className="w-auto" onClick={() => setModalAdd(true)}>
-                    <Image src={plus} width={50} height={50} alt="Adicionar Notícia" />
+                    <Image src={isDarkMode? plusLight :plus} width={50} height={50} alt="Adicionar Notícia" />
                   </div>
                 </div>
               ) : (
