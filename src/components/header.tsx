@@ -13,6 +13,10 @@ import userLight from '@/assets/userClaro.png'
 
 import { useEffect, useState } from "react";
 
+const style= {
+    option: "font-robCondensed text-blue2 text-[18px] hover:border-b-2 hover:border-blue1 dark:text-blue5"
+}
+
 export const Header = ({ instructor, toggleTheme }: { instructor: Boolean, toggleTheme: () => void }) => {
   
   const [isDarkMode, setIsDarkMode] = useState(false); // controla o solzinho e a luazinha
@@ -34,7 +38,6 @@ export const Header = ({ instructor, toggleTheme }: { instructor: Boolean, toggl
   const handleToggleTheme = () => {
     const newIsDarkMode = !isDarkMode;
     setIsDarkMode(newIsDarkMode);
-    
     if (newIsDarkMode) { // tema escuro
       document.documentElement.classList.add("dark"); 
       localStorage.setItem("theme", "dark");
@@ -43,34 +46,26 @@ export const Header = ({ instructor, toggleTheme }: { instructor: Boolean, toggl
       localStorage.setItem("theme", "light");
     }
   };
+    
+    return(
+        <div className="flex items-center w-[100%] bg-white shadow-md fixed top-0 p-1">
 
-  return (
-    <div className="flex items-center w-[100%] bg-white shadow-md fixed top-0 dark:bg-black">
-      <h1 className="ml-6">
-        <Image src={ets_logo} width={100} height={100} alt="ets logo" />
-      </h1>
+            <h1 className="ml-6">
+                <Image src={ets_logo} width={90} height={90} alt="ets logo"/>
+            </h1>
 
-      <div className="flex flex-grow gap-20 justify-end items-center mr-24">
-        {instructor ? (
-          <Link className="font-robFont text-blue2 dark:text-blue5 text-xl" href={ROUTES.admin}>
-            Admin
-          </Link>
-        ) : (
-          <></>
-        )}
-        <Link className="font-robFont dark:text-blue5 text-blue2 text-xl" href={ROUTES.home}>
-          Home
-        </Link>
-        <Link className="font-robFont text-blue2 text-xl dark:text-blue5" href={ROUTES.forum}>
-          Fórum
-        </Link>
-        <Link className="font-robFont text-blue2 text-xl dark:text-blue5" href={ROUTES.chat}>
-          Chats
-        </Link>
-        <Link className="font-robFont text-blue2 text-xl dark:text-blue5" href={ROUTES.project}>
-          Projetos
-        </Link>
-
+            <div className="flex flex-grow gap-16 justify-end items-center mr-6">
+                {instructor ? (
+                    <Link className={style.option} href={ROUTES.admin}>Admin</Link>
+                ) : (
+                    <></>
+                )}
+                <Link className={style.option} href={ROUTES.home}>Home</Link>
+                <Link className={style.option} href={ROUTES.forum}>Fórum</Link>
+                <Link className={style.option} href={ROUTES.chat}>Chats</Link>
+                <Link className={style.option} href={ROUTES.project}>Projetos</Link>
+                <Link className={style.option} href={ROUTES.profile}>Profile</Link>
+                <Link className={style.option} href={ROUTES.login}>Logout</Link>
         <div onClick={handleToggleTheme} className="cursor-pointer">
           <Image
             src={isDarkMode ? sunLight : moon}
@@ -79,14 +74,6 @@ export const Header = ({ instructor, toggleTheme }: { instructor: Boolean, toggl
             alt="Modo de tema"
           />
         </div>
-
-        <Link href={ROUTES.profile}>
-          <Image src={isDarkMode ? userLight: user_logo} width={30} height={30} alt="Logo do usuário" />
-        </Link>
-
-        <Link href={ROUTES.login}>
-          <Image src={isDarkMode? logoutLight :logoutimg} width={23} height={23} alt="Logout" />
-        </Link>
       </div>
     </div>
   );

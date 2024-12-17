@@ -16,9 +16,9 @@ export default function Home() {
   const [auth, setAuth] = useState({ edv: "", password: "" });
 
   const style = {
-    firstDiv: "w-1/4 md:w-1/3  h-4/5",
-    secondDiv: "bg-white w-1/4 md:w-1/3  rounded-[8px] flex flex-col items-center justify-center h-4/5 gap-10",
-    principalDiv: "bg-blue1 h-screen flex flex-row w-[100%] justify-center pt-20 pb-20 items-center gap-12",
+    firstDiv: "w-1/3 h-[100%]",
+    secondDiv: "bg-white w-1/3  rounded-[8px] flex flex-col items-center justify-center h-[100%] gap-10",
+    principalDiv: "bg-blue1 h-screen flex flex-row w-[100%] justify-center pt-10 pb-10 items-center gap-12",
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
