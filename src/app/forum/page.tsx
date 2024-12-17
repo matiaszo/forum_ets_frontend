@@ -100,17 +100,24 @@ const Forum = () => {
                     "Authorization": `Bearer ${token}`,
                 },
             });
-
+        
             if (!response.ok) {
                 throw new Error("Erro ao buscar sessões. Tente novamente.");
             }
-
-            const forums: forum[] = await response.json();
-            setNewForum(forums);
+        
+            const text = await response.text(); 
+        
+            if (text) {
+                const forums: forum[] = JSON.parse(text);
+                setNewForum(forums);
+            } else {
+                console.warn("Resposta vazia ou sem conteúdo.");
+            }
         } catch (error) {
-            console.error(error);
+            console.error("Erro ao buscar sessões:", error);
             // alert("Erro ao buscar sessões. Tente novamente.");
         }
+        
     };
 
     const handleAddSession = async () => {
