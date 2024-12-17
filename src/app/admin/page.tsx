@@ -12,6 +12,12 @@ import trash from '@/assets/trash-bin.png';
 import plus from '@/assets/icons8-adicionar-100.png';
 import plusLight from '@/assets/plusClaro.png'
 import searchLight from '@/assets/pesquisarClaro.png'
+import { CldUploadWidget } from "next-cloudinary";
+
+const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
+
+
+
 
 interface usuario {
     id: string;
@@ -239,6 +245,16 @@ export default function Admin() {
         setOpenModalSkills(false); 
     };
 
+    const handleUploadComplete = (result: any) => {
+        if (result?.info?.public_id) {
+          const publicId = result.info.public_id;
+          console.log('Uploaded file public_id:', publicId);
+          setImage(publicId); 
+        } else {
+          console.error('Upload failed or public_id is not present in the result');
+        }
+      };
+
     return (
         <div className="flex flex-row mt-20 justify-between min-h-[90vh] font-robFont">
             <Header toggleTheme={toggleTheme} instructor={true} />
@@ -346,14 +362,20 @@ export default function Admin() {
                                     Image
                                 </label>
                                 {/* KAU COLOCAR AQUI O CLOUDINERY*/}
-                                <input
-                                    type="file"
-                                    name="name"
-                                    className="font-robFont w-[100%] h-10 p-2 border-b-2 border-blue2"
-                                    placeholder="select image..."
-                                    value={image}
-                                    onChange={handleImageChange}
-                                />
+                                <CldUploadWidget
+                                    uploadPreset={cloudPresetName}
+                                    onSuccess={handleUploadComplete}
+                                >
+                                    {({ open }) => (
+                                        <button
+                                            type="button"
+                                            onClick={() => open()}
+                                            className="w-96 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500"
+                                        >
+                                            Upload an Image
+                                        </button>
+                                    )}
+                                </CldUploadWidget>
                             </div>
 
                             <div className="w-[100%] flex mb-4 flex-col items-center">
@@ -434,14 +456,19 @@ export default function Admin() {
                                 {users.map((user, i) => {
                                     return (
                                         <div key={i} className="flex border-2 dark:border-blue4  flex-row gap-3 shadow-md p-4 rounded-md w-60 items-center justify-between">
+                                            <div>
+                                                
+                                            </div>
                                             <h1 className="capitalize dark:text-white">{user.name}</h1>
                                             {user.instructor ? (
-                                                <div className="flex flex-row  text-blue1 font-bold">
+                                                <div className="flex flex-col justify-center items-center  text-blue1 font-bold">
                                                     <h1>Instructor</h1>
                                                     <Image src={crown} alt=""/>
                                                 </div>
                                             ) : (
-                                                <></>
+                                                <div className="flex flex-col justify-center items-center  text-blue1 font-bold">
+                                                    <h1>Aprendiz</h1>
+                                                </div>
                                             )}
                                             <Image className="cursor-pointer" src={trash} alt="" onClick={() => deleteUser(user.id)} />
                                         </div> 
