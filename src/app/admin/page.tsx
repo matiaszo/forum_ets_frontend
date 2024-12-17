@@ -33,7 +33,8 @@ export default function Admin() {
     const [searchUser, setSearchUser] = useState('');
     const [searchSkill, setSearchSkill] = useState('');
 
-    const [openModalInfo, setOpenModalInfo] = useState<boolean>(true);
+    const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
+    const [openModalSkills, setOpenModalSkills] = useState<boolean>(false);
 
     const toggleDetails = () => {
         setIsOpen(!isOpen);
@@ -128,7 +129,14 @@ export default function Admin() {
         setFormData({ ...formData, [name]: value });
     };
 
-    const createUser = async () => {
+    const createUser = async (e:any) => {
+        e.preventDefault();
+
+        if (!formData.email.includes("@")) {
+            alert("Por favor, insira um email válido.");
+            return;
+        }
+
         try {
             const response = await fetch("http://localhost:8080/register", {
                 method: "POST",
@@ -156,20 +164,63 @@ export default function Admin() {
             }
     
             setUsers((prevUsers) => [...prevUsers, u]); 
-            alert("Usuario criado com sucesso!")
             setOpenModalInfo(false);
+            alert("Usuario criado com sucesso!")
             
         } catch (error) {
             console.error("Erro ao criar usuário:", error);
         }
     };
+
+    const createSkill = async (skill : {name: string, image: string}) => {
+        try {
+            const response = await fetch("http://localhost:8080/skills", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                },
+                body: JSON.stringify({
+                    name: skill.name,  
+                    image: skill.image,
+                }),
+            });
     
+            if (!response.ok) {
+                throw new Error("Erro ao criar skill");
+            }
+    
+            const newSkill = await response.json();
+            setSkills((prevSkills) => [...prevSkills, newSkill]);
+            alert("Skill criada com sucesso!");
+        } catch (error) {
+            console.error("Erro ao criar skill:", error);
+            alert("Erro ao criar skill. Verifique os dados e tente novamente.");
+        }
+    };
+    
+    
+    const [name, setName] = useState("");
+    const [image, setImage] = useState("");
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setName(e.target.value);
+    };
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setImage(e.target.value);
+    };
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        createSkill({ name, image }); 
+        setName(""); 
+        setImage("");
+        setOpenModalSkills(false); 
+    };
 
     return (
         <div className="flex flex-row mt-20 justify-between min-h-[90vh] font-robFont">
             <Header instructor={true} />
 
-            {/* Modal de criação do projeto */}
+            {/* Modal de criação de usuario */}
             {openModalInfo && (
                 <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
                     <form  id="modal" className="bg-white w-[600px] p-8 flex-wrap rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)]">
@@ -234,9 +285,10 @@ export default function Admin() {
                         <div className="flex justify-end gap-3">
                             <button
                             className="bg-blue-500 text-white rounded-md px-3 py-3 hover:bg-blue-800"
-                            onClick={() => {
-                                createUser();
-                            }}>
+                            onClick={(event) => {
+                                createUser(event);
+                            }}
+                            >
                             Adicionar
                             </button>
                             <button
@@ -246,6 +298,63 @@ export default function Admin() {
                             }}
                             >
                             Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            )}
+
+            {/* Modal de criação de skills */}
+            {openModalSkills && (
+                <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
+                    <form
+                        id="modal"
+                        className="bg-white w-[600px] p-8 flex-wrap rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)]"
+                        onSubmit={handleSubmit} // Evento de submit do form
+                    >
+                        <h1 className="text-blue1 text-3xl font-robCondensed mb-5">
+                            Adicionar Skill
+                        </h1>
+
+                        <div className="">
+
+                            <div className="w-[100%] flex mb-4 flex-col items-center">
+                                <label className="font-robFont w-[100%] text-start text-[18px]">
+                                    Image
+                                </label>
+                                {/* KAU COLOCAR AQUI O CLOUDINERY*/}
+                            </div>
+
+                            <div className="w-[100%] flex mb-4 flex-col items-center">
+                                <label className="font-robFont w-[100%] text-start text-[18px]">
+                                    Name
+                                </label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    className="font-robFont w-[100%] h-10 p-2 border-b-2 border-blue2"
+                                    placeholder="type name..."
+                                    value={name}
+                                    onChange={handleNameChange}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end gap-3">
+                            <button
+                                type="submit"
+                                className="bg-blue-500 text-white rounded-md px-3 py-3 hover:bg-blue-800"
+                            >
+                                Adicionar
+                            </button>
+                            <button
+                                type="button"
+                                className="bg-red-500 text-white rounded-md px-3 py-3 hover:bg-red-800"
+                                onClick={() => {
+                                    setOpenModalInfo(false);
+                                }}
+                            >
+                                Cancelar
                             </button>
                         </div>
                     </form>
@@ -338,7 +447,7 @@ export default function Admin() {
                                     </button>
                                 </div>
                                 <button className="p-2 text-white rounded-md">
-                                    <Image src={plus} alt="" className="w-12 h-12" />
+                                    <Image src={plus} alt="" className="w-12 h-12" onClick={() => setOpenModalSkills(true)} />
                                 </button>
                             </div>
                             <div className="mt-4 mb-4 flex flex-wrap gap-10 w-[100%] justify-center">
