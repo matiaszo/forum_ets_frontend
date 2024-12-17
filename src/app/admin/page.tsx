@@ -36,12 +36,9 @@ export default function Admin() {
     const [searchSkill, setSearchSkill] = useState('');
 
     const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
-<<<<<<< HEAD
     const [openModalSkills, setOpenModalSkills] = useState<boolean>(false);
-=======
 
     const [isDarkMode, setIsDarkMode] = useState(false); 
->>>>>>> 0d7e7991ecf95924bd1e51f92d72f0d4d465bb39
 
     const toggleDetails = () => {
         setIsOpen(!isOpen);
@@ -481,11 +478,7 @@ export default function Admin() {
                                     </button>
                                 </div>
                                 <button className="p-2 text-white rounded-md">
-<<<<<<< HEAD
-                                    <Image src={plus} alt="" className="w-12 h-12" onClick={() => setOpenModalSkills(true)} />
-=======
                                     <Image src={isDarkMode? plusLight: plus} alt="" className="w-12 h-12" />
->>>>>>> 0d7e7991ecf95924bd1e51f92d72f0d4d465bb39
                                 </button>
                             </div>
                             <div className="mt-4 mb-4 flex flex-wrap gap-10 w-[100%] justify-center">

@@ -13,7 +13,7 @@ import userLight from '@/assets/userClaro.png'
 
 import { useEffect, useState } from "react";
 
-export const Header = ({ instructor }: { instructor: Boolean}) => {
+export const Header = ({ instructor, toggleTheme }: { instructor: Boolean, toggleTheme: () => void }) => {
   
   const [isDarkMode, setIsDarkMode] = useState(false); // controla o solzinho e a luazinha
 
