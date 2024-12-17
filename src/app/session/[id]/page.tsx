@@ -34,6 +34,9 @@ interface User {
 }
 
 const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
+  const instructor = localStorage.getItem("instructor");
+  const userId = localStorage.getItem("id");
+
   const [sessionData, setSessionData] = useState<any | null>(null);
   const [usuario, setUsuario] = useState<User | null>(null);
   const [modalAdd, setModalAdd] = useState<boolean>(false);
@@ -78,6 +81,7 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
       handleGetSingleSession(id);
       console.log("deu fetch")
     }
+
   }, [id]);
 
 

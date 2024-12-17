@@ -1,11 +1,10 @@
+// TopicPage Component
 "use client";
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import blueColor from "@/assets/blueColor.jpg";
 import { Answer } from "@/components/answer";
 import { Header } from "@/components/header";
-import { StaticImageData } from "next/image";
 
 interface User {
   id: string;
@@ -54,6 +53,9 @@ interface user {
   }
 
 const TopicPage = () => {
+  const instructor = localStorage.getItem("instructor");
+  const userId = localStorage.getItem("id");
+
   const [topic, setTopic] = useState<Topic | null>(null);
   const [newReply, setNewReply] = useState("");
   const [replyingTo, setReplyingTo] = useState<Comment | null>(null);
@@ -71,27 +73,19 @@ const TopicPage = () => {
 });
 
   const params = useParams();
-  const id = typeof params.id === "string" ? parseInt(params.id) : parseInt(params.id?.[0] || "0"); 
+  const id = parseInt(params.id as string || "0", 10);
 
-  const userId = "1";
 
   const fetchTopic = async (topicId: number) => {
     const token = localStorage.getItem("token");
-    try {
-      if (!token) {
-        throw new Error("Token não encontrado. Faça login novamente.");
-      }
+    if (!token) return console.error("Token não encontrado. Faça login novamente.");
 
+    try {
       const response = await fetch(`http://localhost:8080/topic/${topicId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (!response.ok) {
-        throw new Error("Erro ao buscar os dados do tópico.");
-      }
+      if (!response.ok) throw new Error("Erro ao buscar os dados do tópico.");
 
       const data: Topic = await response.json();
       setTopic(data);
@@ -102,61 +96,19 @@ const TopicPage = () => {
 
   const handlePostAnswer = async (content: string, mention: Mention | null) => {
     const token = localStorage.getItem("token");
-    if (!token || !topic) {
-      console.error("Token ou tópico não encontrado.");
-      return;
-    }
+    if (!token || !topic) return console.error("Token ou tópico não encontrado.");
 
-    const mentionId = mention ? mention.id : null;
-
-    console.log("Content "+ content)
-    console.log("mentionId "+ mentionId)
-    console.log("userId "+ userId)
-    console.log("topicId "+ topic.id)
-
+    console.log("Mention " + mention)
+  
     const body = JSON.stringify({
       content,
-      mentionId,
+      mentionId: mention ? mention.id : topic.mainComment.id,
       userId,
       topicId: topic.id,
     });
-
+  
     try {
       const response = await fetch("http://localhost:8080/comment/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-        body,
-      });
-
-      if (!response.ok) {
-        throw new Error("Erro ao enviar a resposta.");
-      }
-
-      fetchTopic(topic.id);
-      setReplyingTo(null);
-      setNewReply("");
-    } catch (error) {
-      console.error("Erro ao postar a resposta:", error);
-    }
-  };
-
-  const handleLike = async (commentId: number) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("Token não encontrado.");
-      return;
-    }
-
-    const body = JSON.stringify({
-      userId: parseInt(userId), 
-      commentId,
-    });
-
-    try {
-      const response = await fetch("http://localhost:8080/comment/like", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -164,18 +116,63 @@ const TopicPage = () => {
         },
         body,
       });
+  
+      if (!response.ok) throw new Error("Erro ao enviar a resposta.");
+  
+      fetchTopic(topic.id);
+      setReplyingTo(null);
+      setNewReply("");
+    } catch (error) {
+      console.error("Erro ao postar a resposta:", error);
+    }
+  };
+  
 
+  const handleLike = async (commentId: number) => {
+    // Recuperando o token do localStorage
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Token não encontrado.");
+      return;
+    }
+  
+    const userId = localStorage.getItem("id");
+    if (!userId) {
+      console.error("User ID não encontrado.");
+      return;
+    }
+  
+    const userIdInt = parseInt(userId, 10);
+    if (isNaN(userIdInt)) {
+      console.error("User ID inválido.");
+      return;
+    }
+  
+    try {
+      const response = await fetch("http://localhost:8080/comment/like", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ userId: userIdInt, commentId }),
+      });
+  
       if (!response.ok) {
         throw new Error("Erro ao enviar o like.");
       }
-
-      if (topic) fetchTopic(topic.id);
+  
+      if (topic) {
+        fetchTopic(topic.id);
+      }
     } catch (error) {
-      console.error("Erro ao enviar o like:", error);
+      console.error("Erro ao processar o like:", error);
     }
   };
+  
 
   useEffect(() => {
+    if (!isNaN(id)) fetchTopic(id);
     let user = localStorage.getItem("user");
     if(user != null)
     {
@@ -187,9 +184,7 @@ const TopicPage = () => {
     }
   }, [id]);
 
-  if (!topic) {
-    return <p>Carregando...</p>;
-  }
+  if (!topic) return <p>Carregando...</p>;
 
   return (
     <div className="h-screen mt-20 font-robFont">
@@ -199,17 +194,13 @@ const TopicPage = () => {
           <div className="flex flex-col ml-10 min-w-[95%]">
             <h1 className="text-blue1 text-3xl mb-3 text-center">{topic.title}</h1>
             <h3 className="ml-1 text-center">{topic.mainComment.content}</h3>
-            <div className="flex justify-end text-blue1">
-              {topic.mainComment.user.name}
-            </div>
+            <div className="flex justify-end text-blue1">{topic.mainComment.user.name}</div>
           </div>
           <hr className="w-full border-t-1 border-black" />
         </div>
 
         <div className="flex flex-col border-blue5 border-2 rounded-md m-10">
           <textarea
-            name="ans"
-            id="ans"
             value={newReply}
             onChange={(e) => setNewReply(e.target.value)}
             className="m-1 text-black placeholder-blue0 p-1 h-30 mb-1 focus:outline-none focus:border-none"
@@ -224,14 +215,13 @@ const TopicPage = () => {
         </div>
 
         {topic.comments.map((comment) => (
-          <div key={comment.id} className="mb-5">
-            <Answer
-              comment={comment}
-              onReply={() => setReplyingTo(comment)}
-              addNewComment={handlePostAnswer}
-              onLike={() => handleLike(comment.id)} 
-            />
-          </div>
+          <Answer
+            key={comment.id}
+            comment={comment}
+            onReply={() => setReplyingTo(comment)}
+            addNewComment={handlePostAnswer}
+            onLike={() => handleLike(comment.id)}
+          />
         ))}
 
         {replyingTo && (
@@ -241,7 +231,6 @@ const TopicPage = () => {
                 Responder a {replyingTo.user.name}
               </h2>
               <textarea
-                name="reply"
                 className="m-1 text-black placeholder-blue0 p-1 h-30 mb-1 focus:outline-none focus:border-none"
                 placeholder={`Responda a: ${replyingTo.content}`}
                 value={newReply}

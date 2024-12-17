@@ -30,8 +30,8 @@ interface Comment {
 interface AnswerProps {
   comment: Comment;
   onReply: (comment: Comment) => void;
-  addNewComment: (content: string, mention: Mention | null) => void;
-  onLike: () => Promise<void>; 
+  addNewComment: (content: string, mention: Mention | null) => Promise<void>;
+  onLike: () => Promise<void>;
 }
 
 export const Answer: React.FC<AnswerProps> = ({
@@ -40,10 +40,14 @@ export const Answer: React.FC<AnswerProps> = ({
   addNewComment,
   onLike,
 }) => {
-  const [isReplying, setIsReplying] = useState(false);
+  const [replyingTo, setReplyingTo] = useState<number | null>(null); 
   const [replyContent, setReplyContent] = useState("");
+
   const [liked, setLiked] = useState(false);
 
+  const handleReplyClick = (commentId: number) => {
+    setReplyingTo((prev) => (prev === commentId ? null : commentId)); 
+    /*
   const handleReplySubmit = async () => {
     if (replyContent.trim() === "") return;
 
@@ -56,11 +60,28 @@ export const Answer: React.FC<AnswerProps> = ({
     setReplyContent("");
     setIsReplying(false);
   };
+  */
+
+  const handleReplySubmit = async (replyingToId: number) => {
+    if (replyContent.trim() === "") return;
+  
+    const mention =
+      replyingToId !== comment.id
+        ? { id: comment.id, username: comment.user.name, content: comment.content }
+        : { id: comment.id, username: comment.user.name, content: comment.content };
+  
+    console.log("Answer mention: " + mention)
+    await addNewComment(replyContent, mention);
+  
+    setReplyContent("");
+    setReplyingTo(null);
+  };
+  
 
   const handleLikeClick = async () => {
     try {
       await onLike();
-      setLiked((prevLiked) => !prevLiked); 
+      setLiked((prevLiked) => !prevLiked);
     } catch (error) {
       console.error("Erro ao processar o like:", error);
     }
@@ -97,7 +118,7 @@ export const Answer: React.FC<AnswerProps> = ({
       <div className="flex justify-around items-center">
         <button
           className="flex justify-end rounded-md w-[90%]"
-          onClick={() => onReply(comment)}
+          onClick={() => handleReplyClick(comment.id)}
         >
           <Image src={arrow_ans} height="30" width="30" alt="Responder" />
         </button>
@@ -112,12 +133,12 @@ export const Answer: React.FC<AnswerProps> = ({
             />
           </button>
           <p className="flex p-2 rounded-[100%] border-[1px] border-black h-8 items-center justify-center">
-            {comment.likes + (liked ? 1 : 0)}
+            {comment.likes}
           </p>
         </div>
       </div>
 
-      {isReplying && (
+      {replyingTo === comment.id && (
         <div className="mt-3 border-t pt-3">
           <textarea
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue5"
@@ -128,13 +149,13 @@ export const Answer: React.FC<AnswerProps> = ({
           <div className="flex justify-end mt-2">
             <button
               className="bg-gray-300 text-black px-4 py-2 rounded-md mr-2"
-              onClick={() => setIsReplying(false)}
+              onClick={() => setReplyingTo(null)}
             >
               Cancelar
             </button>
             <button
               className="bg-blue5 text-white px-4 py-2 rounded-md"
-              onClick={handleReplySubmit}
+              onClick={() => handleReplySubmit(comment.id)}
             >
               Enviar
             </button>

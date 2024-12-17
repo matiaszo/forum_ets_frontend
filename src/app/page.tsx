@@ -43,6 +43,7 @@ export default function Home() {
       const data: ReturnBack = await response.json();
       console.log("Token recebido:", data.token);
 
+      localStorage.setItem("instructor", data.instructor.toString()); 
       // Redirecionar ou salvar o token
       localStorage.setItem("token", data.token); // Exemplo de salvamento
       localStorage.setItem("id", data.id.toString()); // Exemplo de salvamento
@@ -94,7 +95,6 @@ export default function Home() {
             <Image src={check} alt="check" />
             <h3 className="font-robFont text-lessWhite text-[20px]">Stay updated</h3>
           </div>
-          {/* Outros elementos omitidos por brevidade */}
         </div>
       </div>
       <div className={style.secondDiv}>

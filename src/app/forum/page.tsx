@@ -35,6 +35,10 @@ interface forum {
 }
 
 const Forum = () => {
+
+    const instructor = localStorage.getItem("instructor");
+    const userId = localStorage.getItem("id");
+
    
     const [usuario, setUsuario] = useState<user>({
         id: '',
@@ -105,7 +109,7 @@ const Forum = () => {
             setNewForum(forums);
         } catch (error) {
             console.error(error);
-            alert("Erro ao buscar sessões. Tente novamente.");
+            // alert("Erro ao buscar sessões. Tente novamente.");
         }
     };
 
@@ -263,7 +267,7 @@ const Forum = () => {
                             />
                         </div>
                         <div className="flex items-end justify-end w-[100%]">
-                            {usuario.instructor == 1 ? (
+                            {instructor == "1" ? (
                                 <div
                                     className="w-auto cursor-pointer"
                                     onClick={() => setModalAdd(true)}
