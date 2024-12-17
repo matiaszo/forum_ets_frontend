@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import Image from "next/image";
 import flecha from "@/assets/sending.png"
+import { CldImage } from "next-cloudinary";
 
 const limit = 350;
 
@@ -326,7 +327,7 @@ const projectPage = () => {
                             return(
 
                                 <div key={index} className="flex gap-3 items-center mt-6">
-                                    <ImageComponent src={contributor.image} alt="" width={30} height={30} className="rounded-full object-cover aspect-square" />
+                                    <CldImage src={contributor.image} alt="" width={30} height={30} className="rounded-full object-cover aspect-square" />
                                     <h1>{contributor.name}</h1>
                                     <button
                                         className="flex bg-blue2 text-white self-end justify-self-end rounded p-2 hover:shadow hover:bg-blue1"
