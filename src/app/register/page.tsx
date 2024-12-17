@@ -45,9 +45,9 @@ export default function Register() {
   };
 
   const style = {
-    firstDiv: "w-1/4 md:w-1/3  h-4/5",
-    secondDiv: "bg-white w-1/4 md:w-1/3 rounded-[8px] flex flex-col items-center justify-center pt-16 pb-16 gap-5",
-    principalDiv: "bg-blue1 h-screen flex flex-row w-[100%] justify-center pt-20 pb-20 items-center gap-12",
+    firstDiv: "w-1/3 h-[100%]",
+    secondDiv: "bg-white w-1/3  rounded-[8px] flex flex-col items-center justify-center h-[100%] gap-5",
+    principalDiv: "bg-blue1 h-screen flex flex-row w-[100%] justify-center pt-[10px] pb-[10px] items-center gap-12",
   };
 
   return (
@@ -60,12 +60,23 @@ export default function Register() {
           </h1>
         </div>
         <div className="flex flex-col gap-3 m-10">
-          <h1 className="font-robFont text-white text-[26px]">Welcome to ETS</h1>
+          <h1 className="font-robCondensed text-lessWhite text-[26px] font-semibold">Welcome to ETS</h1>
           <div className="flex flex-row gap-4 items-end">
             <Image src={check} alt="check" />
-            <h3 className="font-robFont text-white text-[20px]">Start your career</h3>
+            <h3 className="font-robFont text-lessWhite text-[20px]">Build a strong community</h3>
           </div>
-          {/* Outros elementos omitidos por brevidade */}
+          <div className="flex flex-row gap-4 items-end">
+            <Image src={check} alt="check" />
+            <h3 className="font-robFont text-lessWhite text-[20px]">Meet with Colleagues</h3>
+          </div>
+          <div className="flex flex-row gap-4 items-end">
+            <Image src={check} alt="check" />
+            <h3 className="font-robFont text-lessWhite text-[20px]">Share your knowladge</h3>
+          </div>
+          <div className="flex flex-row gap-4 items-end">
+            <Image src={check} alt="check" />
+            <h3 className="font-robFont text-lessWhite text-[20px]">Stay updated</h3>
+          </div>
         </div>
       </div>
       <div className={style.secondDiv}>

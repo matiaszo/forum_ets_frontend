@@ -8,7 +8,7 @@ import logoutimg from '@/assets/logout.png';
 export const Header = ( {instructor} : {instructor : Boolean}) => {
 
     const style= {
-        option: "font-robFont text-blue2 text-xl"
+        option: "font-robCondensed text-blue2 text-[18px] hover:border-b-2 hover:border-blue1"
     }
 
     const logout = () => {
@@ -17,13 +17,13 @@ export const Header = ( {instructor} : {instructor : Boolean}) => {
     }
     
     return(
-        <div className="flex items-center w-[100%] bg-white shadow-md fixed top-0">
+        <div className="flex items-center w-[100%] bg-white shadow-md fixed top-0 p-1">
 
             <h1 className="ml-6">
-                <Image src={ets_logo} width={100} height={100} alt="ets logo"/>
+                <Image src={ets_logo} width={90} height={90} alt="ets logo"/>
             </h1>
 
-            <div className="flex flex-grow gap-28 justify-end items-center mr-6">
+            <div className="flex flex-grow gap-16 justify-end items-center mr-6">
                 {instructor ? (
                     <Link className={style.option} href={ROUTES.admin}>Admin</Link>
                 ) : (
@@ -33,8 +33,8 @@ export const Header = ( {instructor} : {instructor : Boolean}) => {
                 <Link className={style.option} href={ROUTES.forum}>Fórum</Link>
                 <Link className={style.option} href={ROUTES.chat}>Chats</Link>
                 <Link className={style.option} href={ROUTES.project}>Projetos</Link>
-                <Link href={ROUTES.profile}><Image src={user_logo} width={50} height={50} alt="ets logo"/></Link>
-                <Link href={ROUTES.login} onClick={logout}><Image src={logoutimg} width={33} height={33} alt="ets logo"/></Link>
+                <Link className={style.option} href={ROUTES.profile}>Profile</Link>
+                <Link className={style.option} href={ROUTES.login} onClick={logout}>Logout</Link>
             </div>
         </div>
     )

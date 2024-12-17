@@ -385,84 +385,6 @@ export default function Home() {
         }
     };
 
-    // const feed : feedback[] = [
-    //     {id: "1", stars: 2, text: "mais ou menos boa", public: true, projectName: "Projeto JAVA FINAL", user: {id: '1', name: 'Kau Menendez', image: "https://borboletariodesaopaulo.com.br/wp-content/uploads/2024/03/borboleta-monarca-foto-macro.jpg", isUser: true}},
-    //     {id: "2", stars: 4, text: "Muito n sei o que n sei o que lá", public: false, projectName: "Projeto de IoT", user: {id: '1', name: 'Matias Zoniga', image: "https://s2.glbimg.com/RFnG4EgIzgmpejlSjWA8K3apZ5M=/e.glbimg.com/og/ed/f/original/2016/04/15/tiger-02.jpg", isUser: true}}
-    // ];
-
-    const inte: interacao[] = [
-        {
-            id: "1",
-            type: "like",
-            timestamp: new Date(),
-            content: {
-                text: null,
-                username: "usuario123",
-                title: "Integração dia 12!!!!",
-                public: null,
-            }
-        },
-
-        {
-            id: "2",
-            type: "comment",
-            timestamp: new Date(),
-            content: {
-                text: "Fazendo pipipi popopo",
-                username: null,
-                title: "Como faz n sei o que lá?",
-                public: null,
-            }
-        },
-
-        {
-            id: "3",
-            type: "feedback",
-            timestamp: new Date(),
-            content: {
-                text: "Achei ele muito mandão af",
-                username: "Matias Zoniga",
-                title: null,
-                public: true,
-            }
-        },
-        {
-            id: "4",
-            type: "feedback",
-            timestamp: new Date(),
-            content: {
-                text: "Achei ele muito mandão af",
-                username: "Matias Zoniga",
-                title: null,
-                public: true,
-            }
-        },
-
-        {
-            id: "5",
-            type: "comment",
-            timestamp: new Date(),
-            content: {
-                text: "Fazendo pipipi popopo",
-                username: null,
-                title: "Como faz n sei o que lá?",
-                public: null,
-            }
-        },
-
-        {
-            id: "6",
-            type: "like",
-            timestamp: new Date(),
-            content: {
-                text: null,
-                username: "usuario123",
-                title: "Integração dia 12!!!!",
-                public: null,
-            }
-        },
-    ];
-
     const renderTabContent = () => {
         switch (activeTab) {
             case 'inicio':
@@ -526,7 +448,7 @@ export default function Home() {
                 <div className="w-[30%] min-h-[80%] shadow-lg flex-col rounded-lg flex items-center p-12 justify-between">
                     <div className="flex flex-col items-center w-[100%]">
                         <CldImage
-                            src={usuario.image || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
+                            src={usuario.image || "xjlzp7la2pcpac629a85"}
                             alt={usuario.name}
                             width={90}
                             height={90}
@@ -583,51 +505,49 @@ export default function Home() {
                 <Modal isOpen={isModalOpen} onClose={closeModal} className="m-0">
                     <div className="max-h-[90vh] overflow-y-auto flex flex-col w-[100%] items-center scrollbar scrollbar-thumb-blue5 scrollbar-track-gray-100 gap-2 p-2">
                         <h1 className="text-[32px] mt-5 font-robFont ">Editar Perfil</h1>
-                        <div className="flex flex-col items-center space-y-4">
-                        <CldImage
-                            src={usuario.image || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
-                            alt={usuario.name}
-                            width={90}
-                            height={90}
-                            radius={40}
-                            crop={{
-                                type: 'auto',
-                                source: true,
-                            }}
-                        />
-                            <CldUploadWidget
-                                uploadPreset={cloudPresetName}
-                                onSuccess={handleUploadComplete}
-                            >
-                                {({ open }) => (
-                                    <button
-                                        type="button"
-                                        onClick={() => open()}
-                                        className="w-96 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500"
-                                    >
-                                        Upload an Image
-                                    </button>
-                                )}
-                            </CldUploadWidget>
-                            {/* <label htmlFor="cameraInput" className="cursor-pointer">
-                                {image ? (
-                                    <img src={image} alt="Foto de Perfil" className="w-32 h-32 object-cover rounded-full" />
-                                ) : (
-                                    <div className="w-32 h-32 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
-                                        Sem Foto
-                                    </div>
-                                )}
-                            </label> */}
+                        <div className="flex flex-row w-[100%] gap-12">
+                            <div className="flex flex-col w-[40%]">
+                                <div className="flex flex-col items-center space-y-4">
+                                <CldImage
+                                    src={usuario.image || "xjlzp7la2pcpac629a85"}
+                                    alt={usuario.name}
+                                    width={100}
+                                    height={111}
+                                    radius={40}
+                                    crop={{
+                                        type: 'auto',
+                                        source: true,
+                                    }}
+                                    />
+                                    <CldUploadWidget
+                                        uploadPreset={cloudPresetName}
+                                        onSuccess={handleUploadComplete}
+                                        >
+                                        {({ open }) => (
+                                            <button
+                                            type="button"
+                                            onClick={() => open()}
+                                            className="w-60 h-8 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500"
+                                            >
+                                                Upload an Image
+                                            </button>
+                                        )}
+                                    </CldUploadWidget>
+                                </div>
+                                <label htmlFor="bio" className="mt-3 text-[18px] w-[100%]">Biografia</label>
+                                <textarea value={bioTemp} onChange={(e) => setBioTemp(e.target.value)} className="w-[100%] min-h-24 rounded-sm border border-blue3 outline-none p-2" placeholder="Sua biografia..." />
+                            </div>
+                            
+                            <div className="flex flex-col w-[60%] justify-between">
+                                <label htmlFor="name" className="mt-3 text-[18px] w-[100%]">Nome</label>
+                                <input type="text" value={nameTemp} onChange={(e) => setNameTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu nome..." required />
+                                <label htmlFor="email" className="mt-3 text-[18px] w-[100%]">Email</label>
+                                <input type="text" value={emailTemp} onChange={(e) => setEmailTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu email..." required />
+                                <label htmlFor="name" className="mt-3 text-[18px] w-[100%]">GitHub Username</label>
+                                <input type="text" value={githubTemp} onChange={(e) => setGithubTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu username do github..." />
+                            </div>
                         </div>
 
-                        <label htmlFor="name" className="mt-3 text-[18px] w-[100%]">Nome</label>
-                        <input type="text" value={nameTemp} onChange={(e) => setNameTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu nome..." required />
-                        <label htmlFor="email" className="mt-3 text-[18px] w-[100%]">Email</label>
-                        <input type="text" value={emailTemp} onChange={(e) => setEmailTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu email..." required />
-                        <label htmlFor="name" className="mt-3 text-[18px] w-[100%]">GitHub Username</label>
-                        <input type="text" value={githubTemp} onChange={(e) => setGithubTemp(e.target.value)} className="w-[100%] border-b border-blue3 outline-none p-2" placeholder="Seu username do github..." />
-                        <label htmlFor="bio" className="mt-3 text-[18px] w-[100%]">Biografia</label>
-                        <textarea value={bioTemp} onChange={(e) => setBioTemp(e.target.value)} className="w-[100%] min-h-24 rounded-sm border border-blue3 outline-none p-2" placeholder="Sua biografia..." />
                         <label htmlFor="areas" className="mt-3 text-[18px] w-[100%]">Áreas de Interesse</label>
                         <div className="w-[100%]">
                             <div className="max-h-32 overflow-y-auto mb-4 scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100">
@@ -638,7 +558,7 @@ export default function Home() {
                                     </div>
                                 ))}
                             </div>
-                            <input type="text" value={newArea} onChange={(e) => setNewArea(e.target.value)} className="w-[80%] border-b border-blue3 outline-none p-2 mt-2" placeholder="Adicionar nova área" />
+                            <input type="text" value={newArea} onChange={(e) => setNewArea(e.target.value)} className="w-[90%] border-b-2 border-blue3 outline-none p-2 mt-2" placeholder="Adicionar nova área" />
                             <button onClick={handleAddArea} className="px-4 py-2" ><Image src={plus} width={30} height={30} alt="Image" /></button>
                         </div>
                         <label htmlFor="areas" className="mt-3 text-[18px] w-[100%]">Skills</label>
