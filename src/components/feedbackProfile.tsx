@@ -5,7 +5,7 @@ interface Feedback {
     id: number;
     stars: number;
     text: string;
-    public: boolean;
+    visibility: boolean;
     projectName: string;
     giver: {
         id: number;
@@ -19,16 +19,18 @@ export const FeedbackProfile = ({isUser} : {isUser: boolean}) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const getAuthData = () => {
-        return {
-            token: localStorage.getItem("token"),
-            id: localStorage.getItem("id"),
-        };
-    };
-
-    const retorno = getAuthData();
+    
 
     useEffect(() => {
+        const getAuthData = () => {
+            return {
+                token: localStorage.getItem("token"),
+                id: localStorage.getItem("profile"),
+            };
+        };
+    
+        const retorno = getAuthData();
+
         const fetchFeedbacks = async () => {
             try {
                 const response = await fetch(`http://localhost:8080/profile/feedback/${retorno.id}`, {
@@ -60,21 +62,21 @@ export const FeedbackProfile = ({isUser} : {isUser: boolean}) => {
         return <p>Carregando feedbacks...</p>;
     }
 
-    if (error) {
-        return <p className="text-red-500">{error}</p>;
-    }
+    // if (error) {
+    //     return <p className="text-red-500">{error}</p>;
+    // }
 
     return (
         <div className="w-[100%]">
             {feedbacks && feedbacks.length > 0 ? (
                 feedbacks.map((feed, i) => (
-                    isUser || feed.public ? (
+                    isUser || feed.visibility ? (
                         <CardFeedback
                             key={feed.id || i}
                             id={feed.id}
                             stars={feed.stars}
                             text={feed.text}
-                            publico={feed.public}
+                            publico={feed.visibility}
                             projectName={feed.projectName}
                             isUser={isUser}
                             user={{

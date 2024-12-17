@@ -186,7 +186,7 @@ export default function Home() {
     useEffect(() => {
 
         const token = localStorage.getItem("token");
-        const id = localStorage.getItem("id");
+        const id = localStorage.getItem("profile");
         setRetorno({ token, id });
 
         console.log("id:", id);
@@ -252,6 +252,8 @@ export default function Home() {
             console.log("Dados salvos com sucesso:", result);
 
             closeModal();
+
+            location.reload();
         } catch (err) {
             console.error("Erro ao salvar os dados:", err);
         }
@@ -649,7 +651,7 @@ export default function Home() {
                                     </div>
                                 ))}
                             </div>
-                            <select name="skills" id="skills" className="w-[80%] border-b border-blue3 outline-none p-2 mt-2" onChange={(e) => setNewSkillId(e.target.value)}>
+                            <select name="skills" id="skills" className="w-[90%] border-b-2 border-blue3 outline-none p-2 mt-2" onChange={(e) => setNewSkillId(e.target.value)}>
                                 <option value="">Selecione uma skill</option>
                                 {skillsDisponiveis.map((skill, i) => (
                                     <option key={skill.id || i} value={skill.id || i}>{skill.name}</option>
