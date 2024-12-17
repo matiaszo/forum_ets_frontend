@@ -60,23 +60,23 @@ export default function Register() {
           </h1>
         </div>
         <div className="flex flex-col gap-3 m-10">
-          <h1 className="font-robFont text-white text-[26px]">Welcome to ETS</h1>
+          <h1 className="font-robFont text-white text-[26px]">Bem-vindo(a) à ETS</h1>
           <div className="flex flex-row gap-4 items-end">
             <Image src={check} alt="check" />
-            <h3 className="font-robFont text-white text-[20px]">Start your career</h3>
+            <h3 className="font-robFont text-white text-[20px]">Começe sua carreira aqui</h3>
           </div>
           {/* Outros elementos omitidos por brevidade */}
         </div>
       </div>
       <div className={style.secondDiv}>
-        <h1 className="font-robFont text-blue0 font-bold text-[35px]">Register</h1>
+        <h1 className="font-robFont text-blue0 font-bold text-[35px]">Registrar-se</h1>
         <div className="w-[100%] flex flex-col items-center">
           <label className="font-robFont w-[80%] text-start font-bold text-blue0">Edv</label>
           <input
             type="text"
             name="edv"
             className="font-robFont border rounded-[8px] w-[80%] h-10 p-2"
-            placeholder="type your edv..."
+            placeholder="digite seu edv..."
             value={formData.edv}
             onChange={handleInputChange}
           />
@@ -87,7 +87,7 @@ export default function Register() {
             type="text"
             name="name"
             className="font-robFont border rounded-[8px] w-[80%] h-10 p-2"
-            placeholder="type your name..."
+            placeholder="digite seu name..."
             value={formData.name}
             onChange={handleInputChange}
           />
@@ -98,7 +98,7 @@ export default function Register() {
             type="email"
             name="email"
             className="font-robFont border rounded-[8px] w-[80%] h-10 p-2"
-            placeholder="type your email..."
+            placeholder="digite seu email..."
             value={formData.email}
             onChange={handleInputChange}
           />
@@ -109,7 +109,7 @@ export default function Register() {
             type="password"
             name="password"
             className="font-robFont border rounded-[8px] w-[80%] h-10 p-2"
-            placeholder="type your pass..."
+            placeholder="digite sua senha..."
             value={formData.password}
             onChange={handleInputChange}
           />
@@ -118,10 +118,10 @@ export default function Register() {
           onClick={handleRegister}
           className="bg-blue1 w-[80%] p-2 text-white rounded-[8px] font-robFont"
         >
-          Sign Up
+          Registrar-se
         </button>
         <a href={ROUTES.login} className="font-robFont w-[80%] text-end font-bold text-blue0">
-          Sign In
+          Login
         </a>
       </div>
     </div>
