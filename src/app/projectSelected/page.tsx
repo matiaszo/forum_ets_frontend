@@ -5,6 +5,8 @@ import CardMessage from "@/components/cardMessage";
 import ImageComponent from "@/components/image";
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import Image from "next/image";
+import flecha from "@/assets/sending.png"
 
 const limit = 350;
 
@@ -369,8 +371,8 @@ const projectPage = () => {
                     onChange={(e) => setNewMessage(e.target.value)}
                 />
                 <div onClick={send}>
-                    <ImageComponent
-                        src="sending.png"
+                    <Image
+                        src={flecha}
                         width={50}
                         height={50}
                         alt="Enviar"
