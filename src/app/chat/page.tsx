@@ -4,7 +4,7 @@
   import { CldImage } from "next-cloudinary";
   import React, { useState, useRef, useEffect } from "react";
   import plus from "@/assets/icons8-adicionar-100.png"
-  import Image from "next/image";
+  import Image from "next/image"; 
 
   export default function Chat() {
     interface User {
@@ -54,7 +54,8 @@
     const [error, setError] = useState<string | null>(null);
     const [title, setTitle] = useState<string | undefined>();
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
-    
+    const [isDarkMode, setIsDarkMode] = useState(false); 
+
     
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -72,6 +73,17 @@
         instructor: 0,
         isUser: false,
     });
+
+    const toggleTheme = () => {
+      const newTheme = isDarkMode ? "light" : "dark";
+      localStorage.setItem("theme", newTheme);
+      setIsDarkMode(!isDarkMode);
+      if (newTheme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    };
 
     const fetchGroups = async () => {
       setLoading(true);
@@ -96,11 +108,20 @@
 
     useEffect(() => {
       let user = localStorage.getItem("user");
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        setIsDarkMode(true);
+        document.documentElement.classList.add("dark"); 
+      } else {
+        setIsDarkMode(false);
+        document.documentElement.classList.remove("dark");
+      }
+
       if(user != null)
       {
           setUsuario(JSON.parse(user))
       }
-      
+  
 
       fetchGroups(); // Call the fetch function when the component mounts
     }, []);
@@ -209,7 +230,7 @@
 
     return (
       <div className="flex flex-row mt-20 justify-between min-h-[90vh] font-robFont">
-        <Header instructor={usuario.instructor ? true : false} />
+        <Header toggleTheme={toggleTheme} instructor={usuario.instructor ? true : false} />
         <div className="mr-20 ml-20 flex w-[100%] gap-3">
           <div className="flex flex-col gap-4 bg-white shadow-lg min-h-[100%] rounded-md p-3 items-center w-[30%]">
             <h1 className={`flex items-center rounded-md w-full h-8 text-blue1 text-3xl ${localStorage.getItem("instructor") == "1" ? "flex justify-between" : "hidden justify-start"}`}>
