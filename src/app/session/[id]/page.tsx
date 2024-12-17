@@ -144,7 +144,7 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <div className="flex flex-col border-black rounded-md mt-20 font-robFont">
-      <Header instructor={usuario?.instructor ? true : false}/>
+      <Header instructor={localStorage.getItem('instructor') == '1' ? true : false} />
       {modalAdd && (
         <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
           <div className="bg-white p-12 rounded-lg w-[600px]">
@@ -188,11 +188,9 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
           <p className="text-md mt-5">Nome do instrutor: {sessionData.section?.creator || "Desconhecido"}</p>
         </div>
         <div className="flex items-end justify-end w-[100%]">
-          {usuario?.instructor === 1 && (
-            <div className="w-auto cursor-pointer" onClick={() => setModalAdd(true)}>
-              <Image src={plus} width={50} height={50} alt="Adicionar Sessão" />
-            </div>
-          )}
+          <div className="w-auto cursor-pointer" onClick={() => setModalAdd(true)}>
+            <Image src={plus} width={50} height={50} alt="Adicionar Sessão" />
+          </div>
         </div>
         {sessionData.topics && sessionData.topics.length > 0 ? (
           sessionData.topics.map((topic: any, index: number) => (

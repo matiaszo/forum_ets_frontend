@@ -165,7 +165,7 @@ const projectPage = () => {
 
     return (
         <>
-            <Header />
+            <Header instructor={localStorage.getItem('instructor') == '1' ? true : false} />
             {/* Modal de feedback */}
             {open && (
                 <div className="flex bg-[#000000A0] w-full h-full absolute items-center justify-center self-center justify-center">

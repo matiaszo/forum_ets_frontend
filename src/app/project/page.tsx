@@ -274,7 +274,7 @@ const Projects = () => {
 
   return (
     <div className="flex flex-col mt-20">
-        <Header instructor={usuario.instructor ? true : false} />
+        <Header instructor={localStorage.getItem('instructor') == '1' ? true : false} />
         <div className="pr-20 pl-20 pt-10 w-[100%]">
             {/* Modal de criação do projeto */}
             {openModalInfo && (
