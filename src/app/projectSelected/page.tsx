@@ -43,6 +43,19 @@ interface dataProject {
     messages: projectMenssageDto[];
 }
 
+interface user {
+    id: string;
+    name: string;
+    image: string;
+    bio: string;
+    email: string;
+    edv: string;
+    gitUsername: string;
+    instructor: number;
+    isUser: boolean;
+  }
+  
+
 const projectPage = () => {
     const [data, setData] = useState<dataProject | undefined>();
     const [isExpanded, setIsExpanded] = useState(false);
@@ -53,11 +66,29 @@ const projectPage = () => {
     const [feedbackText, setFeedbackText] = useState("");
     const [projectFeedbacks, setProjectFeedbacks] = useState<Feedback[]>([]);
     const [receiverUser, setReceiverUser] = useState<number | null>(null);
-    const [publicFeedback, setPublicFeedback] = useState<boolean>(true);
+
+    const [usuario, setUsuario] = useState<user>({
+        id: '',
+        name: '',
+        image: '',
+        bio: '',
+        gitUsername: '',
+        email: '',
+        edv: '',
+        instructor: 0,
+        isUser: false,
+    });
 
     let tokenToGet: string | null;
     
     useEffect(() => {
+
+        let user = localStorage.getItem("user");
+        if(user != null)
+        {
+          setUsuario(JSON.parse(user))
+        }
+
         const params = new URLSearchParams(window.location.search);
         const id = params.get('id');
 
@@ -200,7 +231,7 @@ const projectPage = () => {
 
     return (
         <>
-            <Header />
+            <Header instructor={usuario.instructor ? true : false} />
             {/* Modal de feedback */}
             {open && (
                 <div className="flex bg-[#000000A0] w-full h-full absolute items-center justify-center self-center justify-center">
