@@ -11,6 +11,7 @@ import { ROUTES } from "@/constants/routes";
 // import imagem from "@/assets/Matias3.jpg";
 import plus from "@/assets/icons8-adicionar-100.png";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
+import { redirect } from "next/dist/server/api-utils";
 
 const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
@@ -91,6 +92,12 @@ const Forum = () => {
 
     const handleGetSession = async () => {
         const token = localStorage.getItem("token");
+
+        if (!token) {
+           alert("Token de autenticação não encontrado. Faça o login novamente.");
+           window.location.href ='http://localhost:3000'
+           return
+        }
 
         try {
             const response = await fetch("http://localhost:8080/section", {

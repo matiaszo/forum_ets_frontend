@@ -188,7 +188,7 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
           <p className="text-md mt-5">Nome do instrutor: {sessionData.section?.creator || "Desconhecido"}</p>
         </div>
         <div className="flex items-end justify-end w-[100%]">
-          {usuario?.instructor === 1 && (
+          {instructor === "1" && (
             <div className="w-auto cursor-pointer" onClick={() => setModalAdd(true)}>
               <Image src={plus} width={50} height={50} alt="Adicionar Sessão" />
             </div>

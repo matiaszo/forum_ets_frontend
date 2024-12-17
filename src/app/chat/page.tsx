@@ -56,7 +56,6 @@ export default function Chat() {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   
   
-  // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
