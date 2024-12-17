@@ -305,7 +305,7 @@ useEffect(() => {
                 {
                   newImage ? 
                   <CldImage
-                  src={newImage || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
+                  src={newImage || "segsnhic8wvgxhmcmj5w"} // Provide a fallback image if image is null
                   alt={usuario.name}
                   width={90}
                   height={90}
