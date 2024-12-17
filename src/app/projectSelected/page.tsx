@@ -7,7 +7,6 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 
 const limit = 350;
-const curUserLoggedExemple = 1;
 
 interface User {
     id: number;
@@ -75,7 +74,6 @@ const projectPage = () => {
                     // console.log(response.data)
                     setMessages(response.data.messages || []);
                 } catch (error) {
-                    alert(`Erro na requisição ${error}`);
                     console.log(`Erro na requisição ${error}`);
                 }
             };
@@ -97,16 +95,53 @@ const projectPage = () => {
     };
 
     const send = () => {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        const token = localStorage.getItem('token');
+        const idUser = localStorage.getItem('id')
+    
         if (newMessage.trim()) {
             const newMessageObject = {
-                id: messages.length + 1,
                 text: newMessage,
-                id_user: 1,
             };
-            setMessages(prevMessages => [...prevMessages, newMessageObject]);
-            setNewMessage("");
+    
+            const postMessage = async () => {
+                try {
+                    const response = await fetch(`http://localhost:8080/project/${id}`, {
+                        method: 'POST',
+                        headers: {
+                            "Authorization": `Bearer ${token}`,
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(newMessageObject),
+                    });
+    
+                    if (!response.ok) {
+                        console.log('Erro:', response.status);
+                    } else {
+                        // Adiciona a nova mensagem no estado local
+                        setMessages(prevMessages => [
+                            ...prevMessages,
+                            {
+                                id: new Date().getTime(), 
+                                text: newMessage,
+                                id_user: parseInt(idUser? idUser : '-1') , 
+                            },
+                        ]);
+                    }
+                    
+                } catch (error) {
+                    console.log('Erro ao enviar a mensagem:', error);
+                }
+            };
+    
+            if (token &&  params && id) 
+                postMessage();
+    
+            setNewMessage(""); // Limpa o campo de mensagem
         }
     };
+    
 
     const handleRating = (index: number) => {
         setRating(index + 1);
@@ -261,16 +296,17 @@ const projectPage = () => {
                         <div>Nenhuma mensagem ainda.</div>
                     ) : (
                         messages.map((msg) => {
-                            const exempleIdUserLogged = 1;  // id do usuário logado exemplo
+                      
                             let MsgOwner = { name: "<Deletado>", image: "", id: -1 }; // Default
                             let CurrentUser = false;
 
                             if (data) {
                                 const users = data.users;
+                                const idUser = localStorage.getItem('id')
                                 for (let i = 0; i < users.length; ++i) {
                                     if (users[i].id === msg.id_user) {
                                         MsgOwner = users[i];
-                                        if (users[i].id === exempleIdUserLogged) {
+                                        if (users[i].id === parseInt(idUser? idUser : '-1')) {
                                             CurrentUser = true;
                                         }
                                         break;
