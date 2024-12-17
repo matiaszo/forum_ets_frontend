@@ -453,7 +453,7 @@ useEffect(() => {
                         className={styles.person}
                         onClick={() => addPeopleToList(person)}
                       >
-                        <ImageComponent
+                        <CldImage
                           src={person.image}
                           width={40}
                           height={40}
@@ -481,7 +481,7 @@ useEffect(() => {
                   <div className={styles.people}>
                     {listContributors.map((person) => (
                       <div key={person.id} className={styles.person}>
-                        <ImageComponent
+                        <CldImage
                           src={person.image ? person.image : ''}
                           width={40}
                           height={40}
