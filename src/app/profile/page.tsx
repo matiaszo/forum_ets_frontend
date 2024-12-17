@@ -210,7 +210,29 @@ export default function Home() {
 
         getUserData(token, id);
 
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "dark") {
+          setIsDarkMode(true);
+          document.documentElement.classList.add("dark"); 
+        } else {
+          setIsDarkMode(false);
+          document.documentElement.classList.remove("dark");
+        }
+      
+      
+
     }, [])
+
+    const toggleTheme = () => {
+        const newTheme = isDarkMode ? "light" : "dark";
+        localStorage.setItem("theme", newTheme);
+        setIsDarkMode(!isDarkMode);
+        if (newTheme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      };
 
 
     const [activeTab, setActiveTab] = useState('inicio');
@@ -228,6 +250,8 @@ export default function Home() {
     const [newSkillId, setNewSkillId] = useState("");
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [isDarkMode, setIsDarkMode] = useState(false); 
 
     // --- MODAL
 
@@ -452,7 +476,7 @@ export default function Home() {
 
     return (
         <div className="w-[100%] mt-7">
-            <Header instructor={localStorage.getItem('instructor') == '1' ? true : false} />
+            <Header toggleTheme={ toggleTheme} instructor={localStorage.getItem('instructor') == '1' ? true : false} />
             <div className="w-[100%] flex flex-row p-10 gap-10">
                 <div className="w-[30%] min-h-[80%] shadow-lg flex-col rounded-lg flex items-center p-12 justify-between">
                     <div className="flex flex-col items-center w-[100%]">
