@@ -12,12 +12,36 @@ export const CardFeedback = ({id, stars, text, publico, projectName, isUser, use
     const maxStars = 5; 
     const starDisplay = Array.from({length: maxStars}, (_, index) => index < stars ? star : stargray); 
 
-    const [eye, setEye] = useState(view); 
-
+    const [eye, setEye] = useState(publico ? view : hide);
+    console.log("public", publico)
     // --- MODAL
-    const openModal = () => {
-      publico = !publico;
-      setEye(publico ? view : hide);
+    const openModal = async () => {
+
+        
+        try {
+          const response = await fetch(`http://localhost:8080/profile/feedback/${id}`, {
+            method: 'PATCH',
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`, 
+            }
+          });
+  
+          if (!response.ok) {
+            throw new Error('Falha ao alterar a visibilidade do feedback');
+          }
+  
+          const result = await response.text();
+          console.log(result);
+          
+            if (result === "true") {
+                setEye(view); 
+            } else {
+                setEye(hide);
+            }
+    
+        } catch (error) {
+          console.error('Erro ao atualizar o feedback:', error);
+        }
     };
 
     return (
