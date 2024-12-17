@@ -13,9 +13,6 @@ import { CldImage, CldUploadWidget } from "next-cloudinary";
 
 const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
-
-
-
 // tipo de dado para os participantes
 type Person = {
   id: number;
