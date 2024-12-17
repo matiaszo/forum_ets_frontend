@@ -47,6 +47,7 @@ export default function Home() {
       // Redirecionar ou salvar o token
       localStorage.setItem("token", data.token); // Exemplo de salvamento
       localStorage.setItem("id", data.id.toString()); // Exemplo de salvamento
+      localStorage.setItem("profile", data.id.toString()); // Exemplo de salvamento
 
 
       fetch(`http://localhost:8080/profile/${data.id}`,
