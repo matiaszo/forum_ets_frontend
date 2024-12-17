@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import CardMessage from "@/components/cardMessage";
 import ImageComponent from "@/components/image";
 import axios from 'axios';
-import { useRouter } from 'next/router';
 
 const limit = 350;
 
@@ -66,6 +65,7 @@ const projectPage = () => {
     const [feedbackText, setFeedbackText] = useState("");
     const [projectFeedbacks, setProjectFeedbacks] = useState<Feedback[]>([]);
     const [receiverUser, setReceiverUser] = useState<number | null>(null);
+    const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
     const [usuario, setUsuario] = useState<user>({
         id: '',
@@ -87,6 +87,15 @@ const projectPage = () => {
         if(user != null)
         {
           setUsuario(JSON.parse(user))
+        }
+
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "dark") {
+            setIsDarkMode(true);
+            document.documentElement.classList.add("dark");
+        } else {
+            setIsDarkMode(false);
+            document.documentElement.classList.remove("dark");
         }
 
         const params = new URLSearchParams(window.location.search);
@@ -120,6 +129,16 @@ const projectPage = () => {
         return <div>Erro ao carregar dados do projeto.</div>;
     }
 
+    const toggleTheme = () => {
+        setIsDarkMode((prevMode) => !prevMode);
+        if (isDarkMode) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        }
+    };
 
     const toggleDescription = () => {
         setIsExpanded(prevState => !prevState);
@@ -231,7 +250,7 @@ const projectPage = () => {
 
     return (
         <>
-            <Header instructor={usuario.instructor ? true : false} />
+            <Header instructor={usuario.instructor ? true : false} toggleTheme={toggleTheme} />
             {/* Modal de feedback */}
             {open && (
                 <div className="flex bg-[#000000A0] w-full h-full absolute items-center justify-center self-center justify-center">
