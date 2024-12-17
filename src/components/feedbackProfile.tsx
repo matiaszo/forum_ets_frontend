@@ -19,16 +19,18 @@ export const FeedbackProfile = ({isUser} : {isUser: boolean}) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const getAuthData = () => {
-        return {
-            token: localStorage.getItem("token"),
-            id: localStorage.getItem("profile"),
-        };
-    };
-
-    const retorno = getAuthData();
+    
 
     useEffect(() => {
+        const getAuthData = () => {
+            return {
+                token: localStorage.getItem("token"),
+                id: localStorage.getItem("profile"),
+            };
+        };
+    
+        const retorno = getAuthData();
+
         const fetchFeedbacks = async () => {
             try {
                 const response = await fetch(`http://localhost:8080/profile/feedback/${retorno.id}`, {
@@ -60,9 +62,9 @@ export const FeedbackProfile = ({isUser} : {isUser: boolean}) => {
         return <p>Carregando feedbacks...</p>;
     }
 
-    if (error) {
-        return <p className="text-red-500">{error}</p>;
-    }
+    // if (error) {
+    //     return <p className="text-red-500">{error}</p>;
+    // }
 
     return (
         <div className="w-[100%]">
