@@ -288,9 +288,9 @@ const projectPage = () => {
             {/* Renderização dados carregados */}
             <div className="h-[480px] overflow-y-auto scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100 p-6">
                 <div className="mt-24 ml-8">
-                    <h1 className="text-blue1 text-3xl mb-4">{data.name}</h1>
+                    <h1 className="text-blue1 text-3xl dark:text-blue5 mb-4">{data.name}</h1>
                    
-                    <p className="flex flex-wrap max-w-[750px]">
+                    <p className="flex flex-wrap max-w-[750px] dark:text-white">
                         {isExpanded || (!data.Description || data.Description.length <= limit)
                             ? data.Description
                             : data.Description.substring(0, limit) + "..."}
@@ -301,8 +301,8 @@ const projectPage = () => {
                         )}
                     </p>
 
-                <h1 className="text-blue1 text-3xl mb-4 mt-4">Objetivos</h1>
-                <div className="flex flex-col mt-6 gap-3 items-start " >
+                <h1 className="text-blue1 dark:text-blue5 text-3xl mb-4 mt-4">Objetivos</h1>
+                <div className="dark:text-white flex flex-col mt-6 gap-3 items-start " >
                  {data.goals.map((item, index) => {
                     return(
                             <div key={index} className="flex gap-3" >
@@ -317,14 +317,14 @@ const projectPage = () => {
 
                 {/* Mostrando contribuidores do projeto */}
                 <div className="flex flex-col ml-8 mt-6 w-[300px]">
-                    <h1 className="text-blue1 text-3xl mb-4">Contribuidores</h1>
+                    <h1 className="text-blue1 text-3xl mb-4 dark:text-blue5">Contribuidores</h1>
                     {data.users?.map((contributor, index) => {
                         if(contributor.id !== Number(localStorage.getItem('id'))) {
                             return(
 
                                 <div key={index} className="flex gap-3 items-center mt-6">
                                     <ImageComponent src={contributor.image} alt="" width={30} height={30} className="rounded-full object-cover aspect-square" />
-                                    <h1>{contributor.name}</h1>
+                                    <h1 className="dark:text-white">{contributor.name}</h1>
                                     <button
                                         className="flex bg-blue2 text-white self-end justify-self-end rounded p-2 hover:shadow hover:bg-blue1"
                                         onClick={() => openFeedbackModal(contributor)}
@@ -343,7 +343,7 @@ const projectPage = () => {
             <div className="flex flex-col w-11/12 p-4 justify-self-center">
                 <div className="flex flex-col h-[300px] overflow-y-auto gap-3 scrollbar-thin scrollbar-thumb-blue3 scrollbar-track-gray-100">
                     {messages.length === 0 ? (
-                        <div>Nenhuma mensagem ainda.</div>
+                        <div className="dark:text-white">Nenhuma mensagem ainda.</div>
                     ) : (
                         messages.map((msg) => {
                       
