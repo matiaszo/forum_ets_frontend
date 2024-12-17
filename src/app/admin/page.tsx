@@ -323,6 +323,14 @@ export default function Admin() {
                                     Image
                                 </label>
                                 {/* KAU COLOCAR AQUI O CLOUDINERY*/}
+                                <input
+                                    type="file"
+                                    name="name"
+                                    className="font-robFont w-[100%] h-10 p-2 border-b-2 border-blue2"
+                                    placeholder="select image..."
+                                    value={image}
+                                    onChange={handleImageChange}
+                                />
                             </div>
 
                             <div className="w-[100%] flex mb-4 flex-col items-center">
@@ -456,7 +464,6 @@ export default function Admin() {
                                         <img className="w-20 h-auto object-cover" src={skill.image}></img>
                                         <h1 className="w-[100%] text-blue1 font-semibold text-[20px]">{skill.name}</h1>
                                         <div className="flex flex-row w-[100%] justify-end">
-                                            <Image src={edit} alt=""/>
                                             <Image src={trash} className="cursor-pointer" alt="" onClick={() => deleteSkill(skill.id)}/>
                                         </div>
                                     </div>
