@@ -14,7 +14,6 @@ import plus from '@/assets/icons8-adicionar-100.png';
 interface usuario {
     id: string;
     name: string;
-    image: string;
     instructor: boolean;
 }
 
@@ -33,6 +32,8 @@ export default function Admin() {
 
     const [searchUser, setSearchUser] = useState('');
     const [searchSkill, setSearchSkill] = useState('');
+
+    const [openModalInfo, setOpenModalInfo] = useState<boolean>(true);
 
     const toggleDetails = () => {
         setIsOpen(!isOpen);
@@ -114,9 +115,143 @@ export default function Admin() {
         fetchData();
     }, [searchUser, searchSkill]);
 
+    const [formData, setFormData] = useState({
+        edv: "",
+        password: "12345678",
+        name: "",
+        email: "",
+        instructor: false, 
+      });
+    
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const createUser = async () => {
+        try {
+            const response = await fetch("http://localhost:8080/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                },
+                body: JSON.stringify({
+                    edv: formData.edv,
+                    password: formData.password,
+                    name: formData.name,
+                    email: formData.email,
+                    instructor: formData.instructor
+                }),
+            });
+    
+            if (!response.ok) {
+                throw new Error("Erro ao criar usuário");
+            }
+
+            const u = {
+                id: formData.edv,
+                name: formData.name,
+                instructor: formData.instructor
+            }
+    
+            setUsers((prevUsers) => [...prevUsers, u]); 
+            alert("Usuario criado com sucesso!")
+            setOpenModalInfo(false);
+            
+        } catch (error) {
+            console.error("Erro ao criar usuário:", error);
+        }
+    };
+    
+
     return (
         <div className="flex flex-row mt-20 justify-between min-h-[90vh] font-robFont">
             <Header instructor={true} />
+
+            {/* Modal de criação do projeto */}
+            {openModalInfo && (
+                <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
+                    <form  id="modal" className="bg-white w-[600px] p-8 flex-wrap rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)]">
+                        <h1 className="text-blue1 text-3xl font-robCondensed mb-5">Adicionar Usuário</h1>
+
+                        <div className="">
+
+                            <div className="w-[100%] flex mb-4 flex-col items-center">
+                                <label className="font-robFont w-[100%] text-start text-[18px]">Edv</label>
+                                <input
+                                    type="text"
+                                    name="edv"
+                                    className="font-robFont w-[100%] h-10 p-2 border-b-2 border-blue2"
+                                    placeholder="type edv..."
+                                    value={formData.edv}
+                                    onChange={handleInputChange}
+                                    />
+                            </div>
+                            <div className="w-[100%] flex mb-4 flex-col items-center">
+                                <label className="font-robFont w-[100%] text-start text-[18px]">Name</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    className="font-robFont w-[100%] h-10 p-2 border-b-2 border-blue2"
+                                    placeholder="type name..."
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                    />
+                            </div>
+                            <div className="w-[100%] flex mb-4 flex-col items-center">
+                                <label className="font-robFont w-[100%] text-start text-[18px]">Email</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    className="font-robFont w-[100%] h-10 p-2 border-b-2 border-blue2"
+                                    placeholder="type email..."
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    />
+                            </div>
+                            <div className="w-[100%] flex mb-4 flex-col">
+                                <label className="font-robFont w-[100%] text-start text-[18px]">Instrutor</label>
+                                <label className="relative inline-flex items-center cursor-pointer mt-2">
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.instructor}
+                                        onChange={() => setFormData({ ...formData, instructor: !formData.instructor })}
+                                        className="sr-only peer"
+                                        />
+                                    <div
+                                        className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer
+                                        dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
+                                        ></div>
+                                    <span className="ml-3 text-sm font-medium text-gray-900">
+                                        {formData.instructor ? "Sim" : "Não"}
+                                    </span>
+                                </label>
+                            </div>
+                            <h1 className="text-red-600">Senha primeiro acesso: 123456</h1>
+
+                        </div>
+                        <div className="flex justify-end gap-3">
+                            <button
+                            className="bg-blue-500 text-white rounded-md px-3 py-3 hover:bg-blue-800"
+                            onClick={() => {
+                                createUser();
+                            }}>
+                            Adicionar
+                            </button>
+                            <button
+                            className="bg-red-500 text-white rounded-md px-3 py-3 hover:bg-red-800"
+                            onClick={() => {
+                                setOpenModalInfo(false);
+                            }}
+                            >
+                            Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            )}
+
             <div className="w-full">
                 <div className="m-10">
                     <h1 className="text-2xl mb-4 text-blue1 ">Bem-vindo(a), instrutor(a).</h1>
@@ -149,9 +284,11 @@ export default function Admin() {
                                         <Image src={search} alt="" className="w-8 h-8" />
                                     </button>
                                 </div>
-                                <button className="p-2 text-white rounded-md">
-                                    <Image src={plus} alt="" className="w-12 h-12" />
-                                </button>
+                                <div className="flex justify-end">
+                                    <div className="w-auto cursor-pointer" onClick={() => setOpenModalInfo(true)}>
+                                        <Image src={plus} alt="" className="w-12 h-12" />
+                                    </div>
+                                </div>
                             </div>
                             <div className="mt-4 mb-4 flex flex-wrap gap-6">
                                 {users.map((user, i) => {

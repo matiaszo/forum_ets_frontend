@@ -12,6 +12,21 @@
     --alice: #f0f8ff;
     --black: #0c0c0c;
 }
+
+html.dark {
+    --blue0: #151C48;
+    --blue1: #174580;
+    --blue2: #3B70A2;
+    --blue3: #00A1D7;
+    --blue4: #92b7c8;
+    --blue5: #5BB9D3;
+    --alice: #f0f8ff;
+    --black: #282626;
+}
+html.dark body {
+    background-color: var(--black); /* Cor de fundo quando no modo escuro */
+    color: var(--alice); /* Cor do texto no modo escuro */
+  }
 .scrollbar-hidden::-webkit-scrollbar {
     display: none; 
 

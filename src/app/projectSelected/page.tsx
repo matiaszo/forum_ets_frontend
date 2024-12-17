@@ -68,6 +68,7 @@ const projectPage = () => {
     const [feedbackText, setFeedbackText] = useState("");
     const [projectFeedbacks, setProjectFeedbacks] = useState<Feedback[]>([]);
     const [receiverUser, setReceiverUser] = useState<number | null>(null);
+    const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
     const [usuario, setUsuario] = useState<user>({
         id: '',
@@ -89,6 +90,15 @@ const projectPage = () => {
         if(user != null)
         {
           setUsuario(JSON.parse(user))
+        }
+
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "dark") {
+            setIsDarkMode(true);
+            document.documentElement.classList.add("dark");
+        } else {
+            setIsDarkMode(false);
+            document.documentElement.classList.remove("dark");
         }
 
         const params = new URLSearchParams(window.location.search);
@@ -122,6 +132,16 @@ const projectPage = () => {
         return <div>Erro ao carregar dados do projeto.</div>;
     }
 
+    const toggleTheme = () => {
+        setIsDarkMode((prevMode) => !prevMode);
+        if (isDarkMode) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        }
+    };
 
     const toggleDescription = () => {
         setIsExpanded(prevState => !prevState);
@@ -233,11 +253,11 @@ const projectPage = () => {
 
     return (
         <>
-            <Header instructor={usuario.instructor ? true : false} />
+            <Header instructor={usuario.instructor ? true : false} toggleTheme={toggleTheme} />
             {/* Modal de feedback */}
             {open && (
-                <div className="flex bg-[#000000A0] w-full h-full absolute items-center justify-center self-center justify-center">
-                    <form className="flex-col shadow p-2 rounded bg-white-100 bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[90%]" action="">
+                <div className="flex bg-[#000000A0] w-full h-full absolute items-center self-center justify-center">
+                    <form className="flex-col bg-white-100 bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[90%]" action="">
                         <p className="text-blue1 text-3xl mb-4 my-6">Feedback</p>
                         <textarea
                             className="bg-slate-100 w-full h-[200px] outline-none p-2"

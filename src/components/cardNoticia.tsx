@@ -38,10 +38,10 @@ const CardNoticia = ( {title, image, content} : CardData) => {
 }
 
 const styles = {
-    container: "w-[100%] rounded-lg p-5 shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] ease-in-out duration-300 hover:bg-zinc-200 hover:shadow-[0_0_2px_1px_rgba(0,0,0,0.3)] cursor-pointer",
+    container: "w-[100%] rounded-lg p-5 shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] ease-in-out duration-300 hover:bg-zinc-200 dark:hover:bg-neutral-700 dark:bg-zinc-900 hover:shadow-[0_0_2px_1px_rgba(0,0,0,0.3)] cursor-pointer",
     img: "rounded w-400 h-400",
-    title: "text-blue1 text-2xl my-2",
-    question:"w-full text-sm text-gray-700 overflow-hidden overflow-ellipsis whitespace-nowrap",
+    title: "text-blue1 text-2xl my-2 dark:text-blue5",
+    question:"w-full text-sm text-gray-700 overflow-hidden overflow-ellipsis whitespace-nowrap dark:text-blue4",
   };
 
 

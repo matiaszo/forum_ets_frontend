@@ -67,10 +67,10 @@ export const InteracaoProfile = () => {
     return (
         <div className="w-[100%] shadow-sm h-full p-4 rounded-lg flex flex-col gap-5 mt-5">
             {interacoes && interacoes.length > 0 ? (
-                interacoes.map((interacao) => (
-                    <div key={interacao.id} className="flex flex-col gap-5">
+                interacoes.map((interacao, index) => (
+                    <div key={interacao.id || index} className="flex flex-col gap-5">
                         <div className="w-[90%] flex flex-row justify-between">
-                            {interacao.type === "like" ? (
+                            {interacao.type === "LIKE" ? (
                                 <>
                                     <div className="flex flex-row items-center gap-3">
                                         <Image src={like} alt="Like" />
@@ -81,7 +81,7 @@ export const InteracaoProfile = () => {
                                     </div>
                                     <h2>{new Date(interacao.timestamp).toLocaleDateString()}</h2>
                                 </>
-                            ) : interacao.type === "comment" ? (
+                            ) : interacao.type === "COMMENT" ? (
                                 <>
                                     <div className="flex flex-row items-center gap-3">
                                         <Image src={comment} alt="Comment" />
@@ -92,7 +92,7 @@ export const InteracaoProfile = () => {
                                     </div>
                                     <h2>{new Date(interacao.timestamp).toLocaleDateString()}</h2>
                                 </>
-                            ) : interacao.type === "feedback" && interacao.content.public ? (
+                            ) : interacao.type === "FEEDBACK" && interacao.content.public ? (
                                 <>
                                     <div className="flex flex-row items-center gap-3">
                                         <Image src={stari} alt="Feedback" />

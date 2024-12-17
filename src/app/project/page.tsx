@@ -16,9 +16,6 @@ import adicionar from "@/assets/icons8-adicionar-100.png"
 
 const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
-
-
-
 // tipo de dado para os participantes
 type Person = {
   id: number;
@@ -308,7 +305,7 @@ useEffect(() => {
                 {
                   newImage ? 
                   <CldImage
-                  src={newImage || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
+                  src={newImage || "segsnhic8wvgxhmcmj5w"} // Provide a fallback image if image is null
                   alt={usuario.name}
                   width={90}
                   height={90}

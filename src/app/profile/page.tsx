@@ -385,84 +385,6 @@ export default function Home() {
         }
     };
 
-    // const feed : feedback[] = [
-    //     {id: "1", stars: 2, text: "mais ou menos boa", public: true, projectName: "Projeto JAVA FINAL", user: {id: '1', name: 'Kau Menendez', image: "https://borboletariodesaopaulo.com.br/wp-content/uploads/2024/03/borboleta-monarca-foto-macro.jpg", isUser: true}},
-    //     {id: "2", stars: 4, text: "Muito n sei o que n sei o que lá", public: false, projectName: "Projeto de IoT", user: {id: '1', name: 'Matias Zoniga', image: "https://s2.glbimg.com/RFnG4EgIzgmpejlSjWA8K3apZ5M=/e.glbimg.com/og/ed/f/original/2016/04/15/tiger-02.jpg", isUser: true}}
-    // ];
-
-    const inte: interacao[] = [
-        {
-            id: "1",
-            type: "like",
-            timestamp: new Date(),
-            content: {
-                text: null,
-                username: "usuario123",
-                title: "Integração dia 12!!!!",
-                public: null,
-            }
-        },
-
-        {
-            id: "2",
-            type: "comment",
-            timestamp: new Date(),
-            content: {
-                text: "Fazendo pipipi popopo",
-                username: null,
-                title: "Como faz n sei o que lá?",
-                public: null,
-            }
-        },
-
-        {
-            id: "3",
-            type: "feedback",
-            timestamp: new Date(),
-            content: {
-                text: "Achei ele muito mandão af",
-                username: "Matias Zoniga",
-                title: null,
-                public: true,
-            }
-        },
-        {
-            id: "4",
-            type: "feedback",
-            timestamp: new Date(),
-            content: {
-                text: "Achei ele muito mandão af",
-                username: "Matias Zoniga",
-                title: null,
-                public: true,
-            }
-        },
-
-        {
-            id: "5",
-            type: "comment",
-            timestamp: new Date(),
-            content: {
-                text: "Fazendo pipipi popopo",
-                username: null,
-                title: "Como faz n sei o que lá?",
-                public: null,
-            }
-        },
-
-        {
-            id: "6",
-            type: "like",
-            timestamp: new Date(),
-            content: {
-                text: null,
-                username: "usuario123",
-                title: "Integração dia 12!!!!",
-                public: null,
-            }
-        },
-    ];
-
     const renderTabContent = () => {
         switch (activeTab) {
             case 'inicio':
@@ -512,25 +434,18 @@ export default function Home() {
         }
     };
 
-
-    const handleSubmit = async (e: any) => {
-        e.preventDefault();
-        await closeModalAndSave();
-    };
-
-
     return (
         <div className="w-[100%] mt-7">
-            <Header instructor={usuario.instructor ? true : false} />
+            <Header instructor={localStorage.getItem('instructor') == '1' ? true : false} />
             <div className="w-[100%] flex flex-row p-10 gap-10">
                 <div className="w-[30%] min-h-[80%] shadow-lg flex-col rounded-lg flex items-center p-12 justify-between">
                     <div className="flex flex-col items-center w-[100%]">
                         <CldImage
                             src={usuario.image || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
                             alt={usuario.name}
-                            width={90}
-                            height={90}
-                            radius={40}
+                            width={150}
+                            height={150}
+                            radius={150}
                             crop={{
                                 type: 'auto',
                                 source: true,
@@ -585,11 +500,11 @@ export default function Home() {
                         <h1 className="text-[32px] mt-5 font-robFont ">Editar Perfil</h1>
                         <div className="flex flex-col items-center space-y-4">
                         <CldImage
-                            src={usuario.image || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
+                            src={imageTemp ? imageTemp : usuario.image || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
                             alt={usuario.name}
-                            width={90}
-                            height={90}
-                            radius={40}
+                            width={130}
+                            height={130}
+                            radius={130}
                             crop={{
                                 type: 'auto',
                                 source: true,
@@ -638,7 +553,7 @@ export default function Home() {
                                     </div>
                                 ))}
                             </div>
-                            <input type="text" value={newArea} onChange={(e) => setNewArea(e.target.value)} className="w-[80%] border-b border-blue3 outline-none p-2 mt-2" placeholder="Adicionar nova área" />
+                            <input type="text" value={newArea} onChange={(e) => setNewArea(e.target.value)} className="w-[90%] border-b-2 border-blue3 outline-none p-2 mt-2" placeholder="Adicionar nova área" />
                             <button onClick={handleAddArea} className="px-4 py-2" ><Image src={plus} width={30} height={30} alt="Image" /></button>
                         </div>
                         <label htmlFor="areas" className="mt-3 text-[18px] w-[100%]">Skills</label>

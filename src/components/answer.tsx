@@ -35,11 +35,11 @@ interface AnswerProps {
 }
 
 export const Answer: React.FC<AnswerProps> = ({
-  comment,
-  onReply,
-  addNewComment,
-  onLike,
-}) => {
+    comment,
+    onReply,
+    addNewComment,
+    onLike,
+  }) => {
   const [replyingTo, setReplyingTo] = useState<number | null>(null); 
   const [replyContent, setReplyContent] = useState("");
 
@@ -152,3 +152,4 @@ export const Answer: React.FC<AnswerProps> = ({
     </div>
   );
 };
+
