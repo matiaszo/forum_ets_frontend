@@ -294,7 +294,7 @@ export default function Admin() {
                                 <input
                                     type="email"
                                     name="email"
-                                    className="font-robFont text-black w-[100%] h-10 p-2 text-black border-b-2 border-blue2"
+                                    className="font-robFont w-[100%] h-10 p-2 text-black border-b-2 border-blue2"
                                     placeholder="type email..."
                                     value={formData.email}
                                     onChange={handleInputChange}
@@ -404,7 +404,7 @@ export default function Admin() {
                                 type="button"
                                 className="bg-red-500 text-white rounded-md px-3 py-3 hover:bg-red-800"
                                 onClick={() => {
-                                    setOpenModalInfo(false);
+                                    setOpenModalSkills(false);
                                 }}
                             >
                                 Cancelar
@@ -505,7 +505,9 @@ export default function Admin() {
                                     </button>
                                 </div>
                                 <button className="p-2 text-white rounded-md">
-                                    <Image src={isDarkMode? plusLight: plus} alt="" className="w-12 h-12" />
+                                    <Image src={isDarkMode? plusLight: plus} alt="" className="w-12 h-12" onClick={() => {
+                                        setOpenModalSkills(true);
+                                    }} />
                                 </button>
                             </div>
                             <div className="mt-4 mb-4 flex flex-wrap gap-10 w-[100%] justify-center">
