@@ -433,7 +433,7 @@ export default function Admin() {
                             <div className="mt-4 mb-4 flex flex-wrap gap-6">
                                 {users.map((user, i) => {
                                     return (
-                                        <div key={i} className="flex border-2 dark:border-blue4  flex-row gap-3 shadow-md p-4 rounded-md w-60 items-center justify-between">
+                                        <div key={i} className="flex border-2 dark:border-blue4  flex-row gap-3 shadow-md p-4 rounded-md w-80 items-center justify-between">
                                             <h1 className="capitalize dark:text-white">{user.name}</h1>
                                             {user.instructor ? (
                                                 <div className="flex flex-row  text-blue1 font-bold">
