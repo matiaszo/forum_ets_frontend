@@ -36,6 +36,7 @@ export default function Admin() {
     const [searchSkill, setSearchSkill] = useState('');
 
     const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
+    const [openModalSkills, setOpenModalSkills] = useState<boolean>(false);
 
     const [isDarkMode, setIsDarkMode] = useState(false); 
 
@@ -151,7 +152,14 @@ export default function Admin() {
         setFormData({ ...formData, [name]: value });
     };
 
-    const createUser = async () => {
+    const createUser = async (e:any) => {
+        e.preventDefault();
+
+        if (!formData.email.includes("@")) {
+            alert("Por favor, insira um email válido.");
+            return;
+        }
+
         try {
             const response = await fetch("http://localhost:8080/register", {
                 method: "POST",
@@ -179,20 +187,63 @@ export default function Admin() {
             }
     
             setUsers((prevUsers) => [...prevUsers, u]); 
-            alert("Usuario criado com sucesso!")
             setOpenModalInfo(false);
+            alert("Usuario criado com sucesso!")
             
         } catch (error) {
             console.error("Erro ao criar usuário:", error);
         }
     };
+
+    const createSkill = async (skill : {name: string, image: string}) => {
+        try {
+            const response = await fetch("http://localhost:8080/skills", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                },
+                body: JSON.stringify({
+                    name: skill.name,  
+                    image: skill.image,
+                }),
+            });
     
+            if (!response.ok) {
+                throw new Error("Erro ao criar skill");
+            }
+    
+            const newSkill = await response.json();
+            setSkills((prevSkills) => [...prevSkills, newSkill]);
+            alert("Skill criada com sucesso!");
+        } catch (error) {
+            console.error("Erro ao criar skill:", error);
+            alert("Erro ao criar skill. Verifique os dados e tente novamente.");
+        }
+    };
+    
+    
+    const [name, setName] = useState("");
+    const [image, setImage] = useState("");
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setName(e.target.value);
+    };
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setImage(e.target.value);
+    };
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        createSkill({ name, image }); 
+        setName(""); 
+        setImage("");
+        setOpenModalSkills(false); 
+    };
 
     return (
         <div className="flex flex-row mt-20 justify-between min-h-[90vh] font-robFont">
             <Header toggleTheme={toggleTheme} instructor={true} />
 
-            {/* Modal de criação do projeto */}
+            {/* Modal de criação de usuario */}
             {openModalInfo && (
                 <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
                     <form  id="modal" className="bg-white w-[600px] p-8 flex-wrap rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)]">
@@ -257,9 +308,10 @@ export default function Admin() {
                         <div className="flex justify-end gap-3">
                             <button
                             className="bg-blue-500 text-white rounded-md px-3 py-3 hover:bg-blue-800"
-                            onClick={() => {
-                                createUser();
-                            }}>
+                            onClick={(event) => {
+                                createUser(event);
+                            }}
+                            >
                             Adicionar
                             </button>
                             <button
@@ -275,112 +327,173 @@ export default function Admin() {
                 </div>
             )}
 
+            {/* Modal de criação de skills */}
+            {openModalSkills && (
+                <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
+                    <form
+                        id="modal"
+                        className="bg-white w-[600px] p-8 flex-wrap rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)]"
+                        onSubmit={handleSubmit} // Evento de submit do form
+                    >
+                        <h1 className="text-blue1 text-3xl font-robCondensed mb-5">
+                            Adicionar Skill
+                        </h1>
+
+                        <div className="">
+
+                            <div className="w-[100%] flex mb-4 flex-col items-center">
+                                <label className="font-robFont w-[100%] text-start text-[18px]">
+                                    Image
+                                </label>
+                                {/* KAU COLOCAR AQUI O CLOUDINERY*/}
+                                <input
+                                    type="file"
+                                    name="name"
+                                    className="font-robFont w-[100%] h-10 p-2 border-b-2 border-blue2"
+                                    placeholder="select image..."
+                                    value={image}
+                                    onChange={handleImageChange}
+                                />
+                            </div>
+
+                            <div className="w-[100%] flex mb-4 flex-col items-center">
+                                <label className="font-robFont w-[100%] text-start text-[18px]">
+                                    Name
+                                </label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    className="font-robFont w-[100%] h-10 p-2 border-b-2 border-blue2"
+                                    placeholder="type name..."
+                                    value={name}
+                                    onChange={handleNameChange}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end gap-3">
+                            <button
+                                type="submit"
+                                className="bg-blue-500 text-white rounded-md px-3 py-3 hover:bg-blue-800"
+                            >
+                                Adicionar
+                            </button>
+                            <button
+                                type="button"
+                                className="bg-red-500 text-white rounded-md px-3 py-3 hover:bg-red-800"
+                                onClick={() => {
+                                    setOpenModalInfo(false);
+                                }}
+                            >
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            )}
+
             <div className="w-full">
                 <div className="m-10">
                     <h1 className="text-2xl mb-4 text-blue1 dark:text-blue5 ">Bem-vindo(a), instrutor(a).</h1>
                     <p className="dark:text-white" >Por aqui faça a administração dos usuários e skills do sistema.</p>
                 </div>
-                <div className="m-12">
-                    <div className="border border-gray-300 p-4">
-                        <button
-                            onClick={toggleDetails}
-                            className="w-[100%] flex flex-row justify-between pr-5 pl-5"
-                        >
-                            <h1 className="text-[22px] text-blue1 dark:text-blue5 font-bold">Usuários</h1>
-                            {isOpen ? (
-                                <Image src={arrouUp} alt=""/>
-                            ) : (
-                                <Image src={arrouDown} alt=""/>
-                            )}
-                        </button>
-                        {isOpen && (
-                            <div className="mt-4 m-10">
-                                <div className="flex flex-row justify-between items-center">
-                                    <div className="flex space-x-4 w-[60%]">
-                                        <input
-                                            type="text"
-                                            placeholder="Pesquise..."
-                                            className="p-2 text-black border border-blue2 rounded-md w-full outline-none"
-                                            value={searchUser}
-                                            onChange={(e) => setSearchUser(e.target.value)}
-                                        />
-                                        <button className="p-2 text-white rounded-md">
-                                            <Image src={isDarkMode? searchLight: search} alt="" className="w-8 h-8" />
-                                        </button>
-                                    </div>
-                                    <div className="flex justify-end">
-                                        <div className="w-auto cursor-pointer" onClick={() => setOpenModalInfo(true)}>
-                                            <Image src={isDarkMode? plusLight:plus} alt="" className="w-12 h-12" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="mt-4 mb-4  flex flex-wrap gap-6">
-                                    {/* card user */}
-                                    {users.map((user, i) => {
-                                        return (
-                                            <div key={i} className="flex dark:hover:bg-zinc-900 border-2 dark:border-blue4 flex-row gap-3 shadow-md p-4 rounded-md w-60 items-center justify-between cursor-pointer ">
-                                                <h1 className="capitalize dark:text-white">{user.name}</h1>
-                                                {user.instructor ? (
-                                                    <div className="flex flex-row  text-blue1 font-bold">
-                                                        <h1>Instructor</h1>
-                                                        <Image src={crown} alt=""/>
-                                                    </div>
-                                                ) : (
-                                                    <></>
-                                                )}
-                                                <Image className="cursor-pointer" src={trash} alt="" onClick={() => deleteUser(user.id)} />
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            </div>
+                <div className="border border-gray-300 p-4">
+                    <button
+                        onClick={toggleDetails}
+                        className="w-[100%] flex flex-row justify-between pr-5 pl-5"
+                    >
+                        <h1 className="text-[22px] text-blue1 dark:text-blue5 font-bold">Usuários</h1>
+                        {isOpen ? (
+                            <Image src={arrouUp} alt=""/>
+                        ) : (
+                            <Image src={arrouDown} alt=""/>
                         )}
-                    </div>
-                    <div className="border border-gray-300 p-4">
-                        <button
-                            onClick={toggleDetailsSkills}
-                            className="w-[100%] flex flex-row justify-between pr-5 pl-5">
-                            <h1 className="text-[22px] dark:text-blue5 text-blue1 font-bold">Skills</h1>
-                            {isOpenSkills ? (
-                                <Image src={arrouUp} alt=""/>
-                            ) : (
-                                <Image src={arrouDown} alt=""/>
-                            )}
-                        </button>
-                        {isOpenSkills && (
-                            <div className="mt-4 m-10">
-                                <div className="flex flex-row justify-between items-center">
-                                    <div className="flex space-x-4 w-[60%]">
-                                        <input
-                                            type="text"
-                                            placeholder="Pesquise..."
-                                            className="p-2 border text-black border-blue2 rounded-md w-full outline-none"
-                                            value={searchSkill}
-                                            onChange={(e) => setSearchSkill(e.target.value)}
-                                        />
-                                        <button className="p-2 text-white rounded-md">
-                                            <Image src={isDarkMode? searchLight: search} alt="" className="w-8 h-8" />
-                                        </button>
-                                    </div>
+                    </button>
+                    {isOpen && (
+                        <div className="mt-4 m-10">
+                            <div className="flex flex-row justify-between items-center">
+                                <div className="flex space-x-4 w-[60%]">
+                                    <input
+                                        type="text"
+                                        placeholder="Pesquise..."
+                                        className="p-2 text-black border border-blue2 rounded-md w-full outline-none"
+                                        value={searchUser}
+                                        onChange={(e) => setSearchUser(e.target.value)}
+                                    />
                                     <button className="p-2 text-white rounded-md">
-                                        <Image src={isDarkMode? plusLight: plus} alt="" className="w-12 h-12" />
+                                        <Image src={isDarkMode? searchLight: search} alt="" className="w-8 h-8" />
                                     </button>
                                 </div>
-                                <div className="mt-4 mb-4 flex flex-wrap gap-10 w-[100%] justify-center">
-                                    {skills.map((skill, index) => (
-                                        <div key={index} className="flex flex-col gap-3 shadow-md p-4 rounded-md w-44 items-center justify-center">
-                                            <img className="w-20 h-auto object-cover" src={skill.image}></img>
-                                            <h1 className="w-[100%] text-blue1 font-semibold text-[20px]">{skill.name}</h1>
-                                            <div className="flex flex-row w-[100%] justify-end">
-                                                <Image src={edit} alt=""/>
-                                                <Image src={trash} className="cursor-pointer" alt="" onClick={() => deleteSkill(skill.id)}/>
-                                            </div>
-                                        </div>
-                                    ))}
+                                <div className="flex justify-end">
+                                    <div className="w-auto cursor-pointer" onClick={() => setOpenModalInfo(true)}>
+                                        <Image src={isDarkMode? plusLight:plus} alt="" className="w-12 h-12" />
+                                    </div>
                                 </div>
                             </div>
+                            <div className="mt-4 mb-4 flex flex-wrap gap-6">
+                                {users.map((user, i) => {
+                                    return (
+                                        <div key={i} className="flex border-2 dark:border-blue4  flex-row gap-3 shadow-md p-4 rounded-md w-60 items-center justify-between">
+                                            <h1 className="capitalize dark:text-white">{user.name}</h1>
+                                            {user.instructor ? (
+                                                <div className="flex flex-row  text-blue1 font-bold">
+                                                    <h1>Instructor</h1>
+                                                    <Image src={crown} alt=""/>
+                                                </div>
+                                            ) : (
+                                                <></>
+                                            )}
+                                            <Image className="cursor-pointer" src={trash} alt="" onClick={() => deleteUser(user.id)} />
+                                        </div> 
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    )}
+                </div>
+                <div className="border border-gray-300 p-4">
+                    <button
+                        onClick={toggleDetailsSkills}
+                        className="w-[100%] flex flex-row justify-between pr-5 pl-5">
+                        <h1 className="text-[22px] dark:text-blue5 text-blue1 font-bold">Skills</h1>
+                        {isOpenSkills ? (
+                            <Image src={arrouUp} alt=""/>
+                        ) : (
+                            <Image src={arrouDown} alt=""/>
                         )}
-                    </div>
+                    </button>
+                    {isOpenSkills && (
+                        <div className="mt-4 m-10">
+                            <div className="flex flex-row justify-between items-center">
+                                <div className="flex space-x-4 w-[60%]">
+                                    <input
+                                        type="text"
+                                        placeholder="Pesquise..."
+                                        className="p-2 border text-black border-blue2 rounded-md w-full outline-none"
+                                        value={searchSkill}
+                                        onChange={(e) => setSearchSkill(e.target.value)}
+                                    />
+                                    <button className="p-2 text-white rounded-md">
+                                        <Image src={isDarkMode? searchLight: search} alt="" className="w-8 h-8" />
+                                    </button>
+                                </div>
+                                <button className="p-2 text-white rounded-md">
+                                    <Image src={isDarkMode? plusLight: plus} alt="" className="w-12 h-12" />
+                                </button>
+                            </div>
+                            <div className="mt-4 mb-4 flex flex-wrap gap-10 w-[100%] justify-center">
+                                {skills.map((skill, index) => (
+                                    <div key={index} className="flex flex-col gap-3 shadow-md p-4 rounded-md w-44 items-center justify-center">
+                                        <img className="w-20 h-auto object-cover" src={skill.image}></img>
+                                        <h1 className="w-[100%] text-blue1 font-semibold text-[20px]">{skill.name}</h1>
+                                        <div className="flex flex-row w-[100%] justify-end">
+                                            <Image src={trash} className="cursor-pointer" alt="" onClick={() => deleteSkill(skill.id)}/>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

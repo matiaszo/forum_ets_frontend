@@ -474,6 +474,7 @@ export default function Home() {
         }
     };
 
+
     return (
         <div className="w-[100%] mt-7">
             <Header toggleTheme={ toggleTheme} instructor={localStorage.getItem('instructor') == '1' ? true : false} />
