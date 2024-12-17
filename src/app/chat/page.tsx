@@ -209,7 +209,7 @@ export default function Chat() {
 
   return (
     <div className="flex flex-row mt-20 justify-between min-h-[90vh] font-robFont">
-      <Header instructor={usuario.instructor ? true : false} />
+      <Header instructor={localStorage.getItem('instructor') == '1' ? true : false} />
       <div className="mr-20 ml-20 flex w-[100%] gap-3">
         <div className="flex flex-col gap-4 bg-white shadow-lg min-h-[100%] rounded-md p-3 items-center w-[30%]">
           <h1 className={`flex items-center rounded-md w-full h-8 text-blue1 text-3xl ${localStorage.getItem("instructor") == "1" ? "flex justify-between" : "hidden justify-start"}`}>
