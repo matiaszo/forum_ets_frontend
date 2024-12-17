@@ -6,9 +6,17 @@ import liked_icon from "@/assets/liked2.png";
 import user_img from "@/assets/Helena.jpg";
 import { CldImage } from "next-cloudinary";
 
+import plat from "@/assets/platina.png"
+import rubi from "@/assets/rubi.png"
+import ouro from "@/assets/ouro.png"
+import esm from "@/assets/esmeralda.png"
+import ferro from "@/assets/ferro.png"
+import madeira from "@/assets/madeira.png"
+
 interface User {
   id: string;
   name: string;
+  num: number;
   instructor: boolean;
   image: string;
 }
@@ -86,18 +94,32 @@ export const Answer: React.FC<AnswerProps> = ({
       )}
 
       <div className="flex items-center mb-2">
-      <CldImage
-            src={comment.user.image}
-            width={40} 
-            height={40}
-            radius={40}
-            crop={{
-                type: 'auto',
-                source: true
-            }}
-            alt={"userimg"}
-            />
+        <CldImage
+              src={comment.user.image}
+              width={40} 
+              height={40}
+              radius={40}
+              crop={{
+                  type: 'auto',
+                  source: true
+              }}
+              alt={"userimg"}
+              />
         <p className="font-bold text-blue1">{comment.user.name}</p>
+          <h1>
+            {
+                comment.user.num > 5 ?  
+                <Image style={{ width: 40, height: 20 }} 
+                src={comment.user.num > 50 ? plat : 
+                comment.user.num > 40 ? rubi : 
+                comment.user.num > 30 ? ouro : 
+                comment.user.num > 20 ? esm : 
+                comment.user.num > 15 ? ferro : madeira} 
+                alt={"Shield"} 
+                /> : 
+                ""
+            }
+          </h1>
       </div>
 
       <p className="mt-1 text-black">{comment.content}</p>
