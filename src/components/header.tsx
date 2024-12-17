@@ -52,7 +52,7 @@ export const Header = ({ instructor, toggleTheme }: { instructor: Boolean, toggl
 
       <div className="flex flex-grow gap-20 justify-end items-center mr-24">
         {instructor ? (
-          <Link className="font-robFont text-blue2 text-xl" href={ROUTES.admin}>
+          <Link className="font-robFont text-blue2 dark:text-blue5 text-xl" href={ROUTES.admin}>
             Admin
           </Link>
         ) : (
