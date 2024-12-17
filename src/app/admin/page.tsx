@@ -317,7 +317,7 @@ export default function Admin() {
                                 {users.map((user, i) => {
                                     return (
                                         <div key={i} className="flex border-2 dark:border-blue4  flex-row gap-3 shadow-md p-4 rounded-md w-60 items-center justify-between">
-                                            <h1 className="capitalize">{user.name}</h1>
+                                            <h1 className="capitalize dark:text-white">{user.name}</h1>
                                             {user.instructor ? (
                                                 <div className="flex flex-row  text-blue1 font-bold">
                                                     <h1>Instructor</h1>
