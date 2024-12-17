@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import CardMessage from "@/components/cardMessage";
 import ImageComponent from "@/components/image";
 import axios from 'axios';
+import { useRouter } from 'next/router';
+import Image from "next/image";
+import flecha from "@/assets/sending.png"
+import { CldImage } from "next-cloudinary";
 
 const limit = 350;
 
@@ -323,7 +327,7 @@ const projectPage = () => {
                             return(
 
                                 <div key={index} className="flex gap-3 items-center mt-6">
-                                    <ImageComponent src={contributor.image} alt="" width={30} height={30} className="rounded-full object-cover aspect-square" />
+                                    <CldImage src={contributor.image} alt="" width={30} height={30} className="rounded-full object-cover aspect-square" />
                                     <h1 className="dark:text-white">{contributor.name}</h1>
                                     <button
                                         className="flex bg-blue2 text-white self-end justify-self-end rounded p-2 hover:shadow hover:bg-blue1"
@@ -388,8 +392,8 @@ const projectPage = () => {
                     onChange={(e) => setNewMessage(e.target.value)}
                 />
                 <div onClick={send}>
-                    <ImageComponent
-                        src="sending.png"
+                    <Image
+                        src={flecha}
                         width={50}
                         height={50}
                         alt="Enviar"

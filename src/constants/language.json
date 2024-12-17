@@ -1,0 +1,11 @@
+
+{
+    "role": ["Instrutor", "Aprendiz"],
+    "bio": "Sobre mim",
+    "interest": "Área de interesse",
+    "hub": ["Início", "Feedback", "Interações"],
+    "name": "Nome",
+    "git": "Usuário do GitHub",
+    "pBio": "Sua biografia",
+    "pArea": "Adicionar nova área"
+}

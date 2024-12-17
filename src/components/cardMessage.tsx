@@ -1,3 +1,4 @@
+import { CldImage } from "next-cloudinary";
 import ImageComponent from "./image";
 import data from '@/constants/dataProjects.json'
 
@@ -30,7 +31,7 @@ const CardMessage = ({ user, text, image, curUser} : IMessage) => {
         <div className={"flex shadow p-2 items-center flex text-balance flex-row max-w-[400px] rounded-md " + (curUser ? "bg-blue5 text-white self-end justify-self-end mr-8": "bg-slate-100")}>
             <div>
             <div className="flex" >
-                <ImageComponent src={image} width={40} height={40} alt="algo" className="rounded-full object-cover aspect-square" />
+                <CldImage src={image} width={40} height={40} alt="algo" className="rounded-full object-cover aspect-square" />
                     <h1 className="text-blue1 m-2" >{user}</h1>
             </div>
                 <p className="ml-2 text-pretty break-all m-2" >{text}</p>

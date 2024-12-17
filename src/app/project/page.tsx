@@ -8,8 +8,11 @@ import Link from "next/link";
 import axios from "axios";
 import Image from "next/image";
 import ImageComponent from "@/components/image";
-// import placeholder from '@/assets/placeholder.jpg'
 import { CldImage, CldUploadWidget } from "next-cloudinary";
+import mais from "@/assets/icons8-adicionar-100.png"
+import menos from "@/assets/menos.png"
+import topic3 from "@/assets/topic3.png"
+import adicionar from "@/assets/icons8-adicionar-100.png"
 import plusLight from '@/assets/plusClaro.png'
 
 const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
@@ -211,9 +214,9 @@ useEffect(() => {
 
 // Add a useEffect to handle when projects are fetched and logged
 useEffect(() => {
-  if (project.length > 0) {
-    console.log("Fetched Projects:", project);
-  }
+  // if (project.length > 0) {
+  //   console.log("Fetched Projects:", project);
+  // }
 }, [project]); // This will log the projects when the 'project' state changes
 
 
@@ -399,12 +402,12 @@ useEffect(() => {
                   {goals.map((goal, index) => {
                     return (
                       <div key={index} className="flex items-center justify-between m-2">
-                        <ImageComponent src="topic3.png" width={25} height={25} alt="topic" />
+                        <Image src={topic3} width={25} height={25} alt="topic" />
                         <h1 className="flex-wrap">{goal}</h1>
                         <div className="ml-auto" onClick={() => { deleteGoal(goal) }} >
-                          <ImageComponent
+                          <Image
                             className="cursor-pointer"
-                            src="menos.png"
+                            src={menos}
                             width={30}
                             height={30}
                             alt="topic"
@@ -473,7 +476,7 @@ useEffect(() => {
                         className={styles.person}
                         onClick={() => addPeopleToList(person)}
                       >
-                        <ImageComponent
+                        <CldImage
                           src={person.image}
                           width={40}
                           height={40}
@@ -482,8 +485,8 @@ useEffect(() => {
                         />
                         <p className="self-center">{person.name}</p>
                         <div className="ml-auto">
-                          <ImageComponent
-                            src={"icons8-adicionar-100.png"}
+                          <Image
+                            src={adicionar}
                             width={30}
                             height={30}
                             alt=""
@@ -501,7 +504,7 @@ useEffect(() => {
                   <div className={styles.people}>
                     {listContributors.map((person) => (
                       <div key={person.id} className={styles.person}>
-                        <ImageComponent
+                        <CldImage
                           src={person.image ? person.image : ''}
                           width={40}
                           height={40}
@@ -510,9 +513,9 @@ useEffect(() => {
                         />
                         <p className="self-center">{person.name}</p>
                         <div className="ml-auto" onClick={() => { deletePerson(person) }} >
-                          <ImageComponent
+                          <Image
                             className="cursor-pointer"
-                            src="menos.png"
+                            src={menos}
                             width={30}
                             height={30}
                             alt="topic"
@@ -554,7 +557,7 @@ useEffect(() => {
           {/* Add projects */}
           <div className="flex justify-end">
             <div className="w-auto" onClick={() => setOpenModalInfo(true)}>
-              <ImageComponent src={'icons8-adicionar-100.png'} width={50} height={50} alt="" className={styles.icon} />
+              <Image src={mais} width={50} height={50} alt="" className={styles.icon} />
             </div>
           </div>
         </div>
