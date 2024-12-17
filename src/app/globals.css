@@ -25,7 +25,7 @@ html.dark {
 }
 html.dark body {
     background-color: var(--black); /* Cor de fundo quando no modo escuro */
-    color: var(--alice); /* Cor do texto no modo escuro */
+    
   }
 .scrollbar-hidden::-webkit-scrollbar {
     display: none; 

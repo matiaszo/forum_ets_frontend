@@ -13,6 +13,7 @@ import mais from "@/assets/icons8-adicionar-100.png"
 import menos from "@/assets/menos.png"
 import topic3 from "@/assets/topic3.png"
 import adicionar from "@/assets/icons8-adicionar-100.png"
+import plusLight from '@/assets/plusClaro.png'
 
 const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
@@ -71,6 +72,7 @@ const Projects = () => {
   const [goals, setGoals] = useState<string[]>([]);
   const [listContributors, setListContributors] = useState<Person[]>([]);
   const [listIdContributors, setIdListContributors] = useState<number[]>([])
+  const [isDarkMode, setIsDarkMode] = useState(false); 
 
   const [usuario, setUsuario] = useState<user>({
     id: '',
@@ -130,10 +132,30 @@ const Projects = () => {
 
   let tokenToGet: string | null;
 
+  const toggleTheme = () => {
+    const newTheme = isDarkMode ? "light" : "dark";
+    localStorage.setItem("theme", newTheme);
+    setIsDarkMode(!isDarkMode);
+    if (newTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
+
 useEffect(() => {
   let user = localStorage.getItem("user");
   if (user != null) {
     setUsuario(JSON.parse(user));
+  }
+
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "dark") {
+    setIsDarkMode(true);
+    document.documentElement.classList.add("dark"); 
+  } else {
+    setIsDarkMode(false);
+    document.documentElement.classList.remove("dark");
   }
 
   // Get token and user ID from localStorage
@@ -164,6 +186,7 @@ useEffect(() => {
       console.error("Error fetching projects:", err);
     }
   };
+
 
   const fetchUsers = async () => {
     try {
@@ -294,7 +317,7 @@ useEffect(() => {
 
   return (
     <div className="flex flex-col mt-20">
-      <Header instructor={usuario.instructor ? true : false} />
+      <Header toggleTheme={toggleTheme} instructor={usuario.instructor ? true : false} />
       <div className="pr-20 pl-20 pt-10 w-[100%]">
         {/* Modal de criação do projeto */}
         {openModalInfo && (
@@ -363,8 +386,8 @@ useEffect(() => {
                     required
                   />
                   <div className="self-center " onClick={addGoal}>
-                    <Image
-                      src={mais}
+                    <ImageComponent
+                      src={isDarkMode? 'plusClaro.png' :"icons8-adicionar-100.png"}
                       width={50}
                       height={50}
                       alt="Adicionar objetivo"
@@ -529,7 +552,7 @@ useEffect(() => {
 
         <div className={styles.header}>
           <h1 className={styles.title}>Seus projetos</h1>
-          <p>Colabore com seus colegas em grupos exclusivos sobre projetos</p>
+          <p className="dark:text-white" >Colabore com seus colegas em grupos exclusivos sobre projetos</p>
 
           {/* Add projects */}
           <div className="flex justify-end">
@@ -562,7 +585,7 @@ useEffect(() => {
 export default Projects;
 
 const styles = {
-  title: "text-blue1 text-3xl font-robCondensed",
+  title: "text-blue1 dark:text-blue5 text-3xl font-robCondensed",
   input: " w-full p-2 my-4 border-b border-blue3 outline-none ease-in-out hover:border-blue1 ",
   inputObj: "capitalize w-[500px] p-2 my-4 border-b border-blue3 outline-none ease-in-out hover:border-blue1",
   content: "m-4",

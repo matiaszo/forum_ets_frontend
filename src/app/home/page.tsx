@@ -6,6 +6,7 @@ import dataTests from "@/constants/dataTests.json";
 import { ROUTES } from "@/constants/routes";
 import Link from "next/link";
 import plus from "@/assets/icons8-adicionar-100.png";
+import plusLight from '@/assets/plusClaro.png'
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -122,7 +123,7 @@ const Home = () => {
 
   return (
     <div className="flex flex-col mt-20">
-      <Header instructor={usuario.instructor === 1} toggleTheme={toggleTheme}/>
+      <Header instructor={usuario.instructor == 1} toggleTheme={toggleTheme}/>
       <div className="mr-10 ml-10 mb-10">
         {modalAdd && (
           <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
@@ -197,14 +198,14 @@ const Home = () => {
         <div className="pr-20 pl-20 pt-10 flex flex-col items-center w-[100%]">
           <div className="flex flex-col flex-wrap w-[100%]">
             <h1 className="text-blue1 text-3xl dark:text-blue5">As principais notícias do setor aqui</h1>
-            <p>Fique atento às datas e novidades por aqui.</p>
+            <p className="dark:text-white">Fique atento às datas e novidades por aqui.</p>
           </div>
           <div className="flex justify-end w-[100%]">
             <div className="flex items-end justify-end cursor-pointer w-[100%]" onClick={() => setModalAdd(true)}>
               {usuario.instructor == 1 ? (
                 <div className="flex justify-end">
                   <div className="w-auto" onClick={() => setModalAdd(true)}>
-                    <Image src={plus} width={50} height={50} alt="Adicionar Notícia" />
+                    <Image src={isDarkMode? plusLight :plus} width={50} height={50} alt="Adicionar Notícia" />
                   </div>
                 </div>
               ) : (

@@ -10,6 +10,8 @@ import crown from '@/assets/crown.png';
 import edit from '@/assets/edit.png';
 import trash from '@/assets/trash-bin.png';
 import plus from '@/assets/icons8-adicionar-100.png';
+import plusLight from '@/assets/plusClaro.png'
+import searchLight from '@/assets/pesquisarClaro.png'
 
 interface usuario {
     id: string;
@@ -33,7 +35,9 @@ export default function Admin() {
     const [searchUser, setSearchUser] = useState('');
     const [searchSkill, setSearchSkill] = useState('');
 
-    const [openModalInfo, setOpenModalInfo] = useState<boolean>(true);
+    const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
+
+    const [isDarkMode, setIsDarkMode] = useState(false); 
 
     const toggleDetails = () => {
         setIsOpen(!isOpen);
@@ -110,10 +114,29 @@ export default function Admin() {
             } catch (error) {
                 console.error("Erro ao carregar dados:", error);
             }
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme === "dark") {
+                setIsDarkMode(true);
+                document.documentElement.classList.add("dark"); 
+              } else {
+                setIsDarkMode(false);
+                document.documentElement.classList.remove("dark");
+              }
         };
 
         fetchData();
     }, [searchUser, searchSkill]);
+
+    const toggleTheme = () => {
+        const newTheme = isDarkMode ? "light" : "dark";
+        localStorage.setItem("theme", newTheme);
+        setIsDarkMode(!isDarkMode);
+        if (newTheme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      };
 
     const [formData, setFormData] = useState({
         edv: "",
@@ -167,7 +190,7 @@ export default function Admin() {
 
     return (
         <div className="flex flex-row mt-20 justify-between min-h-[90vh] font-robFont">
-            <Header instructor={true} />
+            <Header toggleTheme={toggleTheme} instructor={true} />
 
             {/* Modal de criação do projeto */}
             {openModalInfo && (
@@ -178,46 +201,46 @@ export default function Admin() {
                         <div className="">
 
                             <div className="w-[100%] flex mb-4 flex-col items-center">
-                                <label className="font-robFont w-[100%] text-start text-[18px]">Edv</label>
+                                <label className="font-robFont text-black w-[100%] text-start text-[18px]">Edv</label>
                                 <input
                                     type="text"
                                     name="edv"
-                                    className="font-robFont w-[100%] h-10 p-2 border-b-2 border-blue2"
+                                    className="font-robFont text-black w-[100%] h-10 p-2 border-b-2 border-blue2"
                                     placeholder="type edv..."
                                     value={formData.edv}
                                     onChange={handleInputChange}
                                     />
                             </div>
                             <div className="w-[100%] flex mb-4 flex-col items-center">
-                                <label className="font-robFont w-[100%] text-start text-[18px]">Name</label>
+                                <label className="font-robFont text-black w-[100%] text-start text-[18px]">Name</label>
                                 <input
                                     type="text"
                                     name="name"
-                                    className="font-robFont w-[100%] h-10 p-2 border-b-2 border-blue2"
+                                    className="font-robFont text-black w-[100%] h-10 p-2 border-b-2 border-blue2"
                                     placeholder="type name..."
                                     value={formData.name}
                                     onChange={handleInputChange}
                                     />
                             </div>
                             <div className="w-[100%] flex mb-4 flex-col items-center">
-                                <label className="font-robFont w-[100%] text-start text-[18px]">Email</label>
+                                <label className="font-robFont text-black w-[100%] text-start text-[18px]">Email</label>
                                 <input
                                     type="email"
                                     name="email"
-                                    className="font-robFont w-[100%] h-10 p-2 border-b-2 border-blue2"
+                                    className="font-robFont text-black w-[100%] h-10 p-2 text-black border-b-2 border-blue2"
                                     placeholder="type email..."
                                     value={formData.email}
                                     onChange={handleInputChange}
                                     />
                             </div>
                             <div className="w-[100%] flex mb-4 flex-col">
-                                <label className="font-robFont w-[100%] text-start text-[18px]">Instrutor</label>
+                                <label className="font-robFont text-black w-[100%] text-start text-[18px]">Instrutor</label>
                                 <label className="relative inline-flex items-center cursor-pointer mt-2">
                                     <input
                                         type="checkbox"
                                         checked={formData.instructor}
                                         onChange={() => setFormData({ ...formData, instructor: !formData.instructor })}
-                                        className="sr-only peer"
+                                        className="sr-only peer text-black"
                                         />
                                     <div
                                         className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer
@@ -254,15 +277,15 @@ export default function Admin() {
 
             <div className="w-full">
                 <div className="m-10">
-                    <h1 className="text-2xl mb-4 text-blue1 ">Bem-vindo(a), instrutor(a).</h1>
-                    <p>Por aqui faça a administração dos usuários e skills do sistema.</p>
+                    <h1 className="text-2xl mb-4 text-blue1 dark:text-blue5 ">Bem-vindo(a), instrutor(a).</h1>
+                    <p className="dark:text-white" >Por aqui faça a administração dos usuários e skills do sistema.</p>
                 </div>
                 <div className="border border-gray-300 p-4">
                     <button
                         onClick={toggleDetails}
                         className="w-[100%] flex flex-row justify-between pr-5 pl-5"
                     >
-                        <h1 className="text-[22px] text-blue1 font-bold">Usuários</h1>
+                        <h1 className="text-[22px] text-blue1 dark:text-blue5 font-bold">Usuários</h1>
                         {isOpen ? (
                             <Image src={arrouUp} alt=""/>
                         ) : (
@@ -276,27 +299,27 @@ export default function Admin() {
                                     <input
                                         type="text"
                                         placeholder="Pesquise..."
-                                        className="p-2 border border-blue2 rounded-md w-full outline-none"
+                                        className="p-2 text-black border border-blue2 rounded-md w-full outline-none"
                                         value={searchUser}
                                         onChange={(e) => setSearchUser(e.target.value)}
                                     />
                                     <button className="p-2 text-white rounded-md">
-                                        <Image src={search} alt="" className="w-8 h-8" />
+                                        <Image src={isDarkMode? searchLight: search} alt="" className="w-8 h-8" />
                                     </button>
                                 </div>
                                 <div className="flex justify-end">
                                     <div className="w-auto cursor-pointer" onClick={() => setOpenModalInfo(true)}>
-                                        <Image src={plus} alt="" className="w-12 h-12" />
+                                        <Image src={isDarkMode? plusLight:plus} alt="" className="w-12 h-12" />
                                     </div>
                                 </div>
                             </div>
                             <div className="mt-4 mb-4 flex flex-wrap gap-6">
                                 {users.map((user, i) => {
                                     return (
-                                        <div key={i} className="flex flex-row gap-3 shadow-md p-4 rounded-md w-60 items-center justify-between">
-                                            <h1 className="capitalize">{user.name}</h1>
+                                        <div key={i} className="flex border-2 dark:border-blue4  flex-row gap-3 shadow-md p-4 rounded-md w-60 items-center justify-between">
+                                            <h1 className="capitalize dark:text-white">{user.name}</h1>
                                             {user.instructor ? (
-                                                <div className="flex flex-row text-blue1 font-bold">
+                                                <div className="flex flex-row  text-blue1 font-bold">
                                                     <h1>Instructor</h1>
                                                     <Image src={crown} alt=""/>
                                                 </div>
@@ -315,7 +338,7 @@ export default function Admin() {
                     <button
                         onClick={toggleDetailsSkills}
                         className="w-[100%] flex flex-row justify-between pr-5 pl-5">
-                        <h1 className="text-[22px] text-blue1 font-bold">Skills</h1>
+                        <h1 className="text-[22px] dark:text-blue5 text-blue1 font-bold">Skills</h1>
                         {isOpenSkills ? (
                             <Image src={arrouUp} alt=""/>
                         ) : (
@@ -329,16 +352,16 @@ export default function Admin() {
                                     <input
                                         type="text"
                                         placeholder="Pesquise..."
-                                        className="p-2 border border-blue2 rounded-md w-full outline-none"
+                                        className="p-2 border text-black border-blue2 rounded-md w-full outline-none"
                                         value={searchSkill}
                                         onChange={(e) => setSearchSkill(e.target.value)}
                                     />
                                     <button className="p-2 text-white rounded-md">
-                                        <Image src={search} alt="" className="w-8 h-8" />
+                                        <Image src={isDarkMode? searchLight: search} alt="" className="w-8 h-8" />
                                     </button>
                                 </div>
                                 <button className="p-2 text-white rounded-md">
-                                    <Image src={plus} alt="" className="w-12 h-12" />
+                                    <Image src={isDarkMode? plusLight: plus} alt="" className="w-12 h-12" />
                                 </button>
                             </div>
                             <div className="mt-4 mb-4 flex flex-wrap gap-10 w-[100%] justify-center">

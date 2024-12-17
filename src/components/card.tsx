@@ -48,10 +48,10 @@ const Card = ( {title, image, mainQuestion} : CardData) => {
 
 const styles = {
     container:
-      "flex justify-center items-center rounded p-4 shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] ease-in-out duration-300 hover:bg-zinc-200 hover:shadow-[0_0_2px_1px_rgba(0,0,0,0.3)] cursor-pointer",
+      "flex justify-center dark:hover:bg-neutral-700 dark:bg-zinc-900 items-center rounded p-4 shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] ease-in-out duration-300 hover:bg-zinc-200 hover:shadow-[0_0_2px_1px_rgba(0,0,0,0.3)] cursor-pointer",
     img: "rounded h-44 object-cover",
-    title: "text-blue1 text-2xl my-2",
-    question:"w-full text-sm text-gray-700 overflow-hidden overflow-ellipsis whitespace-nowrap",
+    title: "text-blue1 dark:text-blue5 text-2xl my-2",
+    question:"w-full dark:text-blue4 text-sm text-gray-700 overflow-hidden overflow-ellipsis whitespace-nowrap",
   };
 
 
