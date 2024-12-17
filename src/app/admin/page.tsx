@@ -515,8 +515,8 @@ export default function Admin() {
                                         <CldImage
                                             src={skill.image || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
                                             alt={skill.name}
-                                            width={40}
-                                            height={40}
+                                            width={100}
+                                            height={100}
                                             radius={8}
                                             crop={{
                                                 type: 'auto',
