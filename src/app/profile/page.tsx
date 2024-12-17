@@ -13,8 +13,21 @@ import plus from "@/assets/icons8-adicionar-100.png";
 import trash from "@/assets/trash-bin.png";
 import defaultPhoto from "@/assets/blueColor.jpg"
 import { CldImage, CldUploadWidget } from "next-cloudinary";
+import portuguese from "@/constants/language.json"
+
+import plat from "@/assets/platina.png"
+import rubi from "@/assets/rubi.png"
+import ouro from "@/assets/ouro.png"
+import esm from "@/assets/esmeralda.png"
+import ferro from "@/assets/ferro.png"
+import madeira from "@/assets/madeira.png"
 
 const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
+
+// const language = {};
+
+const language = portuguese;
+
 
 
 interface skillInterface {
@@ -38,6 +51,7 @@ interface user {
     gitUsername: string;
     instructor: number;
     isUser: boolean;
+    interactionNumber: number
 }
 
 interface feedback {
@@ -75,6 +89,7 @@ export default function Home() {
         gitUsername: '',
         email: '',
         edv: '',
+        interactionNumber: 0,
         instructor: 0,
         isUser: false,
     });
@@ -111,6 +126,7 @@ export default function Home() {
                 bio: data.bio,
                 email: data.email,
                 edv: data.edv,
+                interactionNumber: data.interactionNumber,
                 gitUsername: data.gitUserName != null ? data.gitUserName : null,
                 instructor: data.instructor ? 1 : 0,
                 isUser: data.isUser,
@@ -194,7 +210,29 @@ export default function Home() {
 
         getUserData(token, id);
 
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "dark") {
+          setIsDarkMode(true);
+          document.documentElement.classList.add("dark"); 
+        } else {
+          setIsDarkMode(false);
+          document.documentElement.classList.remove("dark");
+        }
+      
+      
+
     }, [])
+
+    const toggleTheme = () => {
+        const newTheme = isDarkMode ? "light" : "dark";
+        localStorage.setItem("theme", newTheme);
+        setIsDarkMode(!isDarkMode);
+        if (newTheme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      };
 
 
     const [activeTab, setActiveTab] = useState('inicio');
@@ -212,6 +250,8 @@ export default function Home() {
     const [newSkillId, setNewSkillId] = useState("");
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [isDarkMode, setIsDarkMode] = useState(false); 
 
     // --- MODAL
 
@@ -436,7 +476,7 @@ export default function Home() {
 
     return (
         <div className="w-[100%] mt-7">
-            <Header instructor={localStorage.getItem('instructor') == '1' ? true : false} />
+            <Header toggleTheme={ toggleTheme} instructor={localStorage.getItem('instructor') == '1' ? true : false} />
             <div className="w-[100%] flex flex-row p-10 gap-10">
                 <div className="w-[30%] min-h-[80%] shadow-lg flex-col rounded-lg flex items-center p-12 justify-between">
                     <div className="flex flex-col items-center w-[100%]">
@@ -451,11 +491,38 @@ export default function Home() {
                                 source: true,
                             }}
                         />
-                        <h1 className="text-[26px] font-robCondensed text-blue1 mt-2 capitalize font-medium" >{usuario.name}</h1>
-                        <h1 className="text-[18px] font-robFont" >{usuario.instructor == 1 ? 'Instructor' : 'Aprendice'}</h1>
+                        <h1 className="text-[26px] font-robCondensed text-blue1 mt-2 capitalize font-medium flex items-center" >
+                            {usuario.name}
+                            {
+                               usuario.interactionNumber > 5 ?  
+                               <Image style={{ width: 50, height: 30 }} 
+                               src={usuario.interactionNumber > 50 ? plat : 
+                               usuario.interactionNumber > 40 ? rubi : 
+                               usuario.interactionNumber > 30 ? ouro : 
+                               usuario.interactionNumber > 20 ? esm : 
+                               usuario.interactionNumber > 15 ? ferro : madeira} 
+                               alt={"Shield"} 
+                               /> : 
+                               ""
+                            }
+                            </h1>
+                        <div className={`w-[80px] text-white p-3 flex items-center justify-center ${usuario.interactionNumber > 50 ? "bg-purple-600" : 
+                               usuario.interactionNumber > 40 ? "bg-red-600" : 
+                               usuario.interactionNumber > 30 ? "bg-amber-400" : 
+                               usuario.interactionNumber > 20 ? "bg-green-600" : 
+                               usuario.interactionNumber > 15 ? "bg-slate-600" : 
+                               usuario.interactionNumber > 5 ? "bg-amber-900" : "bg-slate-300 text-slate-950"} h-[20px] rounded`}
+                        >
+                            {usuario.interactionNumber > 50 ? "Platina" : 
+                               usuario.interactionNumber > 40 ? "Rubi" : 
+                               usuario.interactionNumber > 30 ? "Ouro" : 
+                               usuario.interactionNumber > 20 ? "Esmeralda" : 
+                               usuario.interactionNumber > 15 ? "Ferro" : usuario.interactionNumber > 5 ? "Madeira" : "Normal"} 
+                        </div>
+                        <h1 className="text-[18px] font-robCondensed" >{usuario.instructor == 1 ? language.role[0] : language.role[1]}</h1>
                         {usuario.bio ? (
                             <div className="shadow-md p-4 rounded-lg w-[100%] mt-1">
-                                <h1 className="text-[20px] font-robCondensed text-blue1 mb-2 flex flex-col">About me</h1>
+                                <h1 className="text-[20px] font-robCondensed text-blue1 mb-2 flex flex-col">{language.bio}</h1>
                                 <h1 className="font-robFont ml-3">{usuario.bio}</h1>
                             </div>
                         ) : (
@@ -465,7 +532,7 @@ export default function Home() {
 
                         {areas && areas.length > 0 ? (
                             <div className="shadow-md rounded-lg p-5 mt-5 w-[100%]">
-                                <h1 className="text-[20px] font-robCondensed text-blue1 mb-2 flex flex-col">Areas of interest</h1>
+                                <h1 className="text-[20px] font-robCondensed text-blue1 mb-2 flex flex-col">{language.interest}</h1>
                                 {areas.map(area => (
                                     <div key={area.id}>
                                         <li className="font-robFont ml-3 marker:text-blue2">{area.name}</li>
@@ -499,17 +566,17 @@ export default function Home() {
                     <div className="max-h-[90vh] overflow-y-auto flex flex-col w-[100%] items-center scrollbar scrollbar-thumb-blue5 scrollbar-track-gray-100 gap-2 p-2">
                         <h1 className="text-[32px] mt-5 font-robFont ">Editar Perfil</h1>
                         <div className="flex flex-col items-center space-y-4">
-                        <CldImage
-                            src={imageTemp ? imageTemp : usuario.image || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
-                            alt={usuario.name}
-                            width={130}
-                            height={130}
-                            radius={130}
-                            crop={{
-                                type: 'auto',
-                                source: true,
-                            }}
-                        />
+                            <CldImage
+                                src={imageTemp ? imageTemp : usuario.image || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
+                                alt={usuario.name}
+                                width={130}
+                                height={130}
+                                radius={130}
+                                crop={{
+                                    type: 'auto',
+                                    source: true,
+                                }}
+                            />
                             <CldUploadWidget
                                 uploadPreset={cloudPresetName}
                                 onSuccess={handleUploadComplete}
