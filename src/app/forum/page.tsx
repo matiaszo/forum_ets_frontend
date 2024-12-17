@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { Header } from "@/components/header";
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
-import imagem from "@/assets/Matias3.jpg";
+// import imagem from "@/assets/Matias3.jpg";
 import plus from "@/assets/icons8-adicionar-100.png";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 
@@ -130,7 +130,7 @@ const Forum = () => {
             if (newTitle && newDescription && newImage) {
                 const newForumData = {
                     title: newTitle,
-                    image: "newImage", 
+                    image: newImage, 
                     description: newDescription,
                     userId: userId,
                 };
@@ -198,17 +198,20 @@ const Forum = () => {
                                     className="hidden"
                                 />
                                 <label htmlFor="cameraInput" className="cursor-pointer">
-                                    {newImage ? (
-                                        <img
-                                            src={newImage}
-                                            alt="Nova Imagem"
-                                            className="w-96 h-64 object-cover rounded-lg"
-                                        />
-                                    ) : (
-                                        <div className="w-96 h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
-                                            Adicione uma imagem
-                                        </div>
+                                <CldUploadWidget
+                                    uploadPreset={cloudPresetName}
+                                    onSuccess={handleUploadComplete}
+                                >
+                                    {({ open }) => (
+                                        <button
+                                            type="button"
+                                            onClick={() => open()}
+                                            className="w-96 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500"
+                                        >
+                                            Upload an Image
+                                        </button>
                                     )}
+                                </CldUploadWidget>
                                 </label>
                             </div>
                             <input
@@ -295,7 +298,7 @@ const Forum = () => {
                             <Card
                                 title={item.title || "Título Indisponível"}
                                 mainQuestion={item.description || "Descrição Indisponível"}
-                                image={imagem.src}
+                                image={item.image}
                             />
                         </Link>
                     ))}
