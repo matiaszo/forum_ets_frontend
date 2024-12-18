@@ -287,8 +287,9 @@ export default function Chat() {
                     key={msg.id}
                     className={`flex items-center mb-4 ${msg.user.id === Number(localStorage.getItem("id")) ? "justify-end" : "justify-start"}`}
                   >
+                      {msg.user.id !== Number(localStorage.getItem("id")) &&
                     <CldImage
-                      src={msg.user.image?.trimStart() || "segsnhic8wvgxhmcmj5w"}
+                      src={msg.user.image?.trimStart() || "xjlzp7la2pcpac629a85"}
                       alt={msg.user.name}
                       width={40}
                       height={40}
@@ -297,7 +298,7 @@ export default function Chat() {
                         type: 'auto',
                         source: true,
                       }}
-                    />
+                    /> }
                     <div className="flex flex-col max-w-[70%]">
                       <div className="text-sm text-blue2 ml-3 font-bold">{msg.user.name}</div>
                       <div className={`p-3 rounded-lg text-white ml-3 ${msg.user.id === Number(localStorage.getItem("id")) ? "bg-blue2" : "bg-blue1"}`}>

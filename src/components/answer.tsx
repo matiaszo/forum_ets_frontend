@@ -93,7 +93,7 @@ export const Answer: React.FC<AnswerProps> = ({
 
       <div className="flex items-center mb-2">
         <CldImage
-          src={comment.user.image}
+          src={comment.user.image == null ? "xjlzp7la2pcpac629a85" : comment.user.image}
           width={40}
           height={40}
           radius={40}
