@@ -575,7 +575,7 @@ useEffect(() => {
           ) : (
             project?.map((item, index) => (
               <Link key={index} href={`/projectSelected?id=${item.id}`}>
-                <Card title={item.name} mainQuestion={item.description} image={item.image ? item.image : "segsnhic8wvgxhmcmj5w" } />
+                <Card title={item.name} mainQuestion={item.description} image={item.image != null ? item.image : "segsnhic8wvgxhmcmj5w" } />
               </Link>
             ))
           )}
