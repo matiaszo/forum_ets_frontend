@@ -348,7 +348,7 @@ useEffect(() => {
                     <button
                       type="button"
                       onClick={() => open()}
-                      className="w-96 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500"
+                      className="w-96 h-12 mt-5 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500"
                     >
                       Upload an Image
                     </button>
@@ -386,8 +386,8 @@ useEffect(() => {
                     required
                   />
                   <div className="self-center " onClick={addGoal}>
-                    <ImageComponent
-                      src={isDarkMode? 'plusClaro.png' :"icons8-adicionar-100.png"}
+                    <Image
+                      src={isDarkMode? plusLight : adicionar}
                       width={50}
                       height={50}
                       alt="Adicionar objetivo"
@@ -477,7 +477,7 @@ useEffect(() => {
                         onClick={() => addPeopleToList(person)}
                       >
                         <CldImage
-                          src={person.image}
+                          src={person.image ? person.image : "xjlzp7la2pcpac629a85"}
                           width={40}
                           height={40}
                           alt={person.name}
@@ -505,7 +505,7 @@ useEffect(() => {
                     {listContributors.map((person) => (
                       <div key={person.id} className={styles.person}>
                         <CldImage
-                          src={person.image ? person.image : ''}
+                          src={person.image ? person.image : 'xjlzp7la2pcpac629a85'}
                           width={40}
                           height={40}
                           alt={person.name}

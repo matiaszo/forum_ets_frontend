@@ -327,7 +327,7 @@ const projectPage = () => {
                             return(
 
                                 <div key={index} className="flex gap-3 items-center mt-6">
-                                    <CldImage src={contributor.image} alt="" width={30} height={30} className="rounded-full object-cover aspect-square" />
+                                    <CldImage src={contributor.image ? contributor.image : "xjlzp7la2pcpac629a85"} alt="" width={30} height={30} className="rounded-full object-cover aspect-square" />
                                     <h1 className="dark:text-white">{contributor.name}</h1>
                                     <button
                                         className="flex bg-blue2 text-white self-end justify-self-end rounded p-2 hover:shadow hover:bg-blue1"
@@ -374,7 +374,7 @@ const projectPage = () => {
                                         user={MsgOwner.name}
                                         curUser={CurrentUser}
                                         text={msg.text}
-                                        image={MsgOwner.image}
+                                        image={MsgOwner.image ? MsgOwner.image : 'xjlzp7la2pcpac629a85'}
                                     />
                                 </div>
                             );

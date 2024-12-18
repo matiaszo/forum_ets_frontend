@@ -9,6 +9,7 @@ import { Header } from "@/components/header";
 interface User {
   id: string;
   name: string;
+  num: number;
   instructor: boolean;
   image: string;
 }

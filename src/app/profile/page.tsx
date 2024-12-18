@@ -522,7 +522,7 @@ export default function Home() {
                         {usuario.bio ? (
                             <div className="shadow-md p-4 rounded-lg w-[100%] mt-1">
                                 <h1 className="text-[20px] font-robCondensed text-blue1 mb-2 flex flex-col">{language.bio}</h1>
-                                <h1 className="font-robFont ml-3">{usuario.bio}</h1>
+                                <h1 className="font-robCondensed ml-3">{usuario.bio}</h1>
                             </div>
                         ) : (
                             <>
@@ -534,7 +534,8 @@ export default function Home() {
                                 <h1 className="text-[20px] font-robCondensed text-blue1 mb-2 flex flex-col">{language.interest}</h1>
                                 {areas.map(area => (
                                     <div key={area.id}>
-                                        <li className="font-robFont ml-3 marker:text-blue2">{area.name}</li>
+                                        <h3 className="font-robCondensed marker:text-blue2 border-b-2 pb-2 pt-2">{area.name}</h3>
+                                        {/* <li className="font-robCondensed ml-3 marker:text-blue2">{area.name}</li> */}
                                     </div>
                                 ))}
                             </div>
