@@ -278,8 +278,9 @@
                       key={msg.id}
                       className={`flex items-center mb-4 ${msg.user.id === Number(localStorage.getItem("id")) ? "justify-end" : "justify-start"}`}
                     >
+                      {msg.user.id !== Number(localStorage.getItem("id")) &&
                     <CldImage
-                      src={msg.user.image?.trimStart() || "segsnhic8wvgxhmcmj5w"} // Ensure no unwanted spaces and use fallback image if empty
+                      src={msg.user.image?.trimStart() || "xjlzp7la2pcpac629a85"} // Ensure no unwanted spaces and use fallback image if empty
                       alt={msg.user.name}
                       width={40}
                       height={40}
@@ -288,7 +289,7 @@
                         type: 'auto',
                         source: true,
                       }}
-                    />
+                    /> }
 
                       
 

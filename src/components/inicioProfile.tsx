@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import editPhoto from "@/assets/edit.png";
+import { CldImage } from "next-cloudinary";
 
 interface user {
     id: string;
@@ -86,8 +87,8 @@ export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skil
                         <div className="shadow-md w-[100%] rounded-lg p-2">
                             <h1 className="text-[22px] font-robFont mb-2">GitHub Status</h1>
                             <div className="flex flex-row w-[100%] items-center justify-center sm:flex-wrap">
-                                <img src={`https://github-readme-stats.vercel.app/api?username=${usuario.gitUsername}&hide_name=false&hide_rank=false&show_icons=true&include_all_commits=false&count_private=false&disable_animations=false&theme=${gitTheme}&locale=en&hide_border=true`} className="h-[250px]" alt="stats graph" />
-                                <img src={`https://github-readme-stats.vercel.app/api/top-langs?username=${usuario.gitUsername}&locale=en&hide_name=false&layout=compact&card_width=320&langs_count=12&theme=${gitTheme}&hide_border=true`} className="h-[250px]" alt="languages graph" />
+                                <img src={`https://github-readme-stats.vercel.app/api?username=${usuario.gitUsername}&hide_name=false&hide_rank=false&show_icons=true&include_all_commits=false&count_private=false&disable_animations=false&theme=${gitTheme}&locale=en&hide_border=true`} className="h-[190px]" alt="stats graph" />
+                                <img src={`https://github-readme-stats.vercel.app/api/top-langs?username=${usuario.gitUsername}&locale=en&hide_name=false&layout=compact&card_width=320&langs_count=12&theme=${gitTheme}&hide_border=true`} className="h-[190px]" alt="languages graph" />
                             </div>
                             {usuario.isUser ? (
                                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -156,8 +157,8 @@ export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skil
                         <div className="flex flex-wrap gap-5 items-center justify-center p-2">
                             {skills.map((skill, index) => (
                                 <div key={skill.id || index} className="flex flex-col items-center">
-                                    <img
-                                        src={skill.image}
+                                    <CldImage
+                                        src={skill.image != null ? skill.image : "segsnhic8wvgxhmcmj5w"}
                                         alt={skill.name}
                                         width={100}
                                         height={100}

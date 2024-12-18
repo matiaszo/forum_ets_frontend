@@ -478,7 +478,7 @@ useEffect(() => {
                         onClick={() => addPeopleToList(person)}
                       >
                         <CldImage
-                          src={person.image ? person.image : "xjlzp7la2pcpac629a85"}
+                          src={person.image != null ? person.image : "xjlzp7la2pcpac629a85"}
                           width={40}
                           height={40}
                           alt={person.name}
@@ -572,7 +572,7 @@ useEffect(() => {
           ) : (
             project?.map((item, index) => (
               <Link key={index} href={`/projectSelected?id=${item.id}`}>
-                <Card title={item.name} mainQuestion={item.description} image={item.image ? item.image : "xjlzp7la2pcpac629a85" } />
+                <Card title={item.name} mainQuestion={item.description} image={item.image ? item.image : "segsnhic8wvgxhmcmj5w" } />
               </Link>
             ))
           )}
