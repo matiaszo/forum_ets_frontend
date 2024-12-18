@@ -16,9 +16,6 @@ import { CldImage, CldUploadWidget } from "next-cloudinary";
 
 const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
-
-
-
 interface usuario {
     id: string;
     name: string;
@@ -419,121 +416,123 @@ export default function Admin() {
                     <h1 className="text-2xl mb-4 text-blue1 dark:text-blue5 ">Bem-vindo(a), instrutor(a).</h1>
                     <p className="dark:text-white" >Por aqui faça a administração dos usuários e skills do sistema.</p>
                 </div>
-                <div className="border border-gray-300 p-4">
-                    <button
-                        onClick={toggleDetails}
-                        className="w-[100%] flex flex-row justify-between pr-5 pl-5"
-                    >
-                        <h1 className="text-[22px] text-blue1 dark:text-blue5 font-bold">Usuários</h1>
-                        {isOpen ? (
-                            <Image src={arrouUp} alt=""/>
-                        ) : (
-                            <Image src={arrouDown} alt=""/>
-                        )}
-                    </button>
-                    {isOpen && (
-                        <div className="mt-4 m-10">
-                            <div className="flex flex-row justify-between items-center">
-                                <div className="flex space-x-4 w-[60%]">
-                                    <input
-                                        type="text"
-                                        placeholder="Pesquise..."
-                                        className="p-2 text-black border border-blue2 rounded-md w-full outline-none"
-                                        value={searchUser}
-                                        onChange={(e) => setSearchUser(e.target.value)}
-                                    />
-                                    <button className="p-2 text-white rounded-md">
-                                        <Image src={isDarkMode? searchLight: search} alt="" className="w-8 h-8" />
-                                    </button>
-                                </div>
-                                <div className="flex justify-end">
-                                    <div className="w-auto cursor-pointer" onClick={() => setOpenModalInfo(true)}>
-                                        <Image src={isDarkMode? plusLight:plus} alt="" className="w-12 h-12" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="mt-4 mb-4 flex flex-wrap gap-6">
-                                {users.map((user, i) => {
-                                    return (
-                                        <div key={i} className="flex border-2 dark:border-blue4  flex-row gap-3 shadow-md p-4 rounded-md w-60 items-center justify-between">
-                                            <div className="">    
-                                                <h1 className="capitalize dark:text-white font-robCondensed">{user.name}</h1>
-                                                {user.instructor ? (
-                                                    <div className="flex flex-col justify-start items-start font-robCondensed  text-blue1 font-bold">
-                                                        <h1>Instructor</h1>
-                                                        <Image src={crown} alt=""/>
-                                                    </div>
-                                                ) : (
-                                                    <div className="flex flex-col justify-center items-center font-robCondensed  text-blue1 font-bold">
-                                                        <h1>Aprendiz</h1>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <Image className="cursor-pointer" src={trash} alt="" onClick={() => deleteUser(user.id)} />
-                                        </div> 
-                                    )
-                                })}
-                            </div>
-                        </div>
-                    )}
-                </div>
-                <div className="border border-gray-300 p-4">
-                    <button
-                        onClick={toggleDetailsSkills}
-                        className="w-[100%] flex flex-row justify-between pr-5 pl-5">
-                        <h1 className="text-[22px] dark:text-blue5 text-blue1 font-bold">Skills</h1>
-                        {isOpenSkills ? (
-                            <Image src={arrouUp} alt=""/>
-                        ) : (
-                            <Image src={arrouDown} alt=""/>
-                        )}
-                    </button>
-                    {isOpenSkills && (
-                        <div className="mt-4 m-10">
-                            <div className="flex flex-row justify-between items-center">
-                                <div className="flex space-x-4 w-[60%]">
-                                    <input
-                                        type="text"
-                                        placeholder="Pesquise..."
-                                        className="p-2 border text-black border-blue2 rounded-md w-full outline-none"
-                                        value={searchSkill}
-                                        onChange={(e) => setSearchSkill(e.target.value)}
-                                    />
-                                    <button className="p-2 text-white rounded-md">
-                                        <Image src={isDarkMode? searchLight: search} alt="" className="w-8 h-8" />
-                                    </button>
-                                </div>
-                                <button className="p-2 text-white rounded-md">
-                                    <Image src={isDarkMode? plusLight: plus} alt="" className="w-12 h-12" onClick={() => {
-                                        setOpenModalSkills(true);
-                                    }} />
-                                </button>
-                            </div>
-                            <div className="mt-4 mb-4 flex flex-wrap gap-10 w-[100%] justify-center">
-                                {skills.map((skill, index) => (
-                                    <div key={index} className="flex flex-col gap-3 shadow-md p-4 rounded-md w-44 items-center justify-center">
-                                        <CldImage
-                                            src={skill.image || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
-                                            alt={skill.name}
-                                            width={100}
-                                            height={100}
-                                            radius={8}
-                                            crop={{
-                                                type: 'auto',
-                                                source: true,
-                                            }}
+                <div className="m-12" >
+                    <div className="border border-gray-300 p-4">
+                        <button
+                            onClick={toggleDetails}
+                            className="w-[100%] flex flex-row justify-between pr-5 pl-5"
+                        >
+                            <h1 className="text-[22px] text-blue1 dark:text-blue5 font-bold">Usuários</h1>
+                            {isOpen ? (
+                                <Image src={arrouUp} alt=""/>
+                            ) : (
+                                <Image src={arrouDown} alt=""/>
+                            )}
+                        </button>
+                        {isOpen && (
+                            <div className="mt-4 m-10">
+                                <div className="flex flex-row justify-between items-center">
+                                    <div className="flex space-x-4 w-[60%]">
+                                        <input
+                                            type="text"
+                                            placeholder="Pesquise..."
+                                            className="p-2 text-black border border-blue2 rounded-md w-full outline-none"
+                                            value={searchUser}
+                                            onChange={(e) => setSearchUser(e.target.value)}
                                         />
-                                        <h1 className="w-[100%] text-blue1 font-semibold text-[20px]">{skill.name}</h1>
-                                        <div className="flex flex-row w-[100%] justify-end">
-                                            <Image src={trash} className="cursor-pointer" alt="" onClick={() => deleteSkill(skill.id)}/>
+                                        <button className="p-2 text-white rounded-md">
+                                            <Image src={isDarkMode? searchLight: search} alt="" className="w-8 h-8" />
+                                        </button>
+                                    </div>
+                                    <div className="flex justify-end">
+                                        <div className="w-auto cursor-pointer" onClick={() => setOpenModalInfo(true)}>
+                                            <Image src={isDarkMode? plusLight:plus} alt="" className="w-12 h-12" />
                                         </div>
                                     </div>
-                                ))}
+                                </div>
+                                <div className="mt-4 mb-4 flex flex-wrap gap-6">
+                                    {users.map((user, i) => {
+                                        return (
+                                            <div key={i} className="flex border-2 dark:border-blue4  flex-row gap-3 shadow-md p-4 rounded-md w-60 items-center justify-between">
+                                                <div className="">
+                                                    <h1 className="capitalize dark:text-white font-robCondensed">{user.name}</h1>
+                                                    {user.instructor ? (
+                                                        <div className="flex flex-col justify-start items-start font-robCondensed  text-blue1 font-bold">
+                                                            <h1 className="dark:text-blue5">Instructor</h1>
+                                                            <Image src={crown} alt=""/>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex flex-col justify-center items-center font-robCondensed  text-blue1 font-bold">
+                                                            <h1 className="dark:text-blue5" >Aprendiz</h1>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <Image className="cursor-pointer" src={trash} alt="" onClick={() => deleteUser(user.id)} />
+                                            </div>
+                                        )
+                                    })}
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
+                    <div className="border border-gray-300 p-4">
+                        <button
+                            onClick={toggleDetailsSkills}
+                            className="w-[100%] flex flex-row justify-between pr-5 pl-5">
+                            <h1 className="text-[22px] dark:text-blue5 text-blue1 font-bold">Skills</h1>
+                            {isOpenSkills ? (
+                                <Image src={arrouUp} alt=""/>
+                            ) : (
+                                <Image src={arrouDown} alt=""/>
+                            )}
+                        </button>
+                        {isOpenSkills && (
+                            <div className="mt-4 m-10">
+                                <div className="flex flex-row justify-between items-center">
+                                    <div className="flex space-x-4 w-[60%]">
+                                        <input
+                                            type="text"
+                                            placeholder="Pesquise..."
+                                            className="p-2 border text-black border-blue2 rounded-md w-full outline-none"
+                                            value={searchSkill}
+                                            onChange={(e) => setSearchSkill(e.target.value)}
+                                        />
+                                        <button className="p-2 text-white rounded-md">
+                                            <Image src={isDarkMode? searchLight: search} alt="" className="w-8 h-8" />
+                                        </button>
+                                    </div>
+                                    <button className="p-2 text-white rounded-md">
+                                        <Image src={isDarkMode? plusLight: plus} alt="" className="w-12 h-12" onClick={() => {
+                                            setOpenModalSkills(true);
+                                        }} />
+                                    </button>
+                                </div>
+                                <div className="mt-4 mb-4 flex flex-wrap gap-10 w-[100%] justify-center">
+                                    {skills.map((skill, index) => (
+                                        <div key={index} className="flex flex-col gap-3 shadow-md p-4 rounded-md w-44 items-center justify-center">
+                                            <CldImage
+                                                src={skill.image || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
+                                                alt={skill.name}
+                                                width={100}
+                                                height={100}
+                                                radius={8}
+                                                crop={{
+                                                    type: 'auto',
+                                                    source: true,
+                                                }}
+                                            />
+                                            <h1 className="w-[100%] text-blue1 font-semibold text-[20px]">{skill.name}</h1>
+                                            <div className="flex flex-row w-[100%] justify-end">
+                                                <Image src={trash} className="cursor-pointer" alt="" onClick={() => deleteSkill(skill.id)}/>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                                </div>
                 </div>
-            </div>
         </div>
     );
 }
