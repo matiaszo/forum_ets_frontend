@@ -1,10 +1,13 @@
   "use client"
 
   import { Header } from "@/components/header";
-  import { CldImage } from "next-cloudinary";
+  import { CldImage, CldUploadWidget } from "next-cloudinary";
   import React, { useState, useRef, useEffect } from "react";
   import plus from "@/assets/icons8-adicionar-100.png"
   import Image from "next/image"; 
+
+  
+const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
   export default function Chat() {
     interface User {
@@ -73,6 +76,16 @@
         instructor: 0,
         isUser: false,
     });
+
+    const handleUploadComplete = (result: any) => {
+      if (result?.info?.public_id) {
+          const publicId = result.info.public_id;
+          console.log('Uploaded file public_id:', publicId);
+          
+      } else {
+          console.error('Upload failed or public_id is not present in the result');
+      }
+  };
 
     const toggleTheme = () => {
       const newTheme = isDarkMode ? "light" : "dark";
@@ -232,7 +245,7 @@
     }
 
     return (
-      <div className="flex flex-row mt-20 justify-between min-h-[90vh] font-robFont">
+      <div className="flex flex-row mt-20 justify-between min-h-[90vh] font-robCondensed">
         <Header toggleTheme={toggleTheme} instructor={usuario.instructor ? true : false} />
         <div className="mr-20 ml-20 flex w-[100%] gap-3">
           <div className="flex flex-col gap-4 bg-white shadow-lg min-h-[100%] rounded-md p-3 items-center w-[30%]">
@@ -265,7 +278,7 @@
             {chat ? (
               <>
                 <div className="flex flex-col items-center justify-center w-full bg-alice p-3 rounded-t-lg">
-                  <h1 className="text-xl text-blue2 mb-4">{chat.name}</h1>
+                  <h1 className="text-xl text-blue2 mb-2">{chat.name}</h1>
                   <hr className="w-full border-t-1 border-blue1 mt-1" />
                 </div>
 
@@ -299,7 +312,17 @@
                         <div
                           className={`p-3 rounded-lg text-white ml-3 ${msg.user.id === Number(localStorage.getItem("id")) ? "bg-blue2" : "bg-blue1"}`}
                         >
-                          <p className="font-robFont">{msg.text}</p>
+                          <p className="font-robCondensed">{msg.text}</p>
+                          <p className="font-robCondensed font-light text-[12px]">
+                            {new Date(msg.date).toLocaleString('en-GB', {
+                              day: '2-digit',
+                              month: '2-digit',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              hour12: false, // 24-hour format
+                            }).replace(',', '')}
+                          </p>
                         </div>
                       </div>
 
@@ -322,13 +345,29 @@
                 </div>
 
                 <div className="flex w-[90%] mt-4 mb-5">
+                  <CldUploadWidget
+                    uploadPreset={cloudPresetName}
+                    onSuccess={handleUploadComplete}
+                >
+                    {({ open }) => (
+                        <button
+                            type="button"
+                            onClick={() => open()}
+                            className="w-12 h-12 mr-2 bg-gray-200 rounded-[100%] flex items-center justify-center text-gray-800"
+                        >
+                            📎
+                        </button>
+                    )}
+                </CldUploadWidget>
+
                   <input
                     type="text"
-                    className="flex-1 p-3 rounded-md border-2 border-blue-200 mr-2 outline-none font-robFont"
+                    className="flex-1 p-3 rounded-md border-2 border-blue-200 mr-2 outline-none font-robCondensed"
                     placeholder="Digite sua mensagem"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                   />
+
                   <button
                     className="px-4 py-2 bg-blue2 text-white rounded-md"
                     onClick={sendMessage}

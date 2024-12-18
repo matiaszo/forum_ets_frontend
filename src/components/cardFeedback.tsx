@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import view from "@/assets/view.png";
 import hide from "@/assets/hide.png";
+import { CldImage } from "next-cloudinary";
 
 export const CardFeedback = ({id, stars, text, publico, projectName, isUser, user} : {id: number, stars : number, text: string, publico: boolean, projectName: string, user : {id : number, image: string, name: string}, isUser: Boolean}) => {
   
@@ -48,8 +49,19 @@ export const CardFeedback = ({id, stars, text, publico, projectName, isUser, use
       <div className="flex flex-col shadow-md rounded-lg p-8 gap-5 mb-3">
         <div className="flex flex-row justify-between">
             <div className="flex flex-row items-center gap-4">
-                <img className="w-14 h-14 object-cover rounded-full" src={user.image} alt="photo" />
-                <h1 className="capitalize">{user.name} | {projectName}</h1>
+                {/* <img className="w-14 h-14 object-cover rounded-full" src={user.image} alt="photo" /> */}
+                <CldImage
+                src={user.image || "xjlzp7la2pcpac629a85"} // Provide a fallback image if image is null
+                alt={user.name}
+                width={60}
+                height={60}
+                radius={100}
+                crop={{
+                    type: 'auto',
+                    source: true,
+                }}
+            />
+                <h1 className="capitalize text-blue1 font-semibold">{user.name} | {projectName}</h1>
             </div>
             <div className="flex gap-1">
                 {starDisplay.map((char, index) => (
@@ -57,7 +69,7 @@ export const CardFeedback = ({id, stars, text, publico, projectName, isUser, use
                 ))}
             </div>
         </div>
-        <h1 className="font-robFont font-bold ml-8 text-[20px]">{text}</h1>
+        <h1 className="font-robCondensed font-normal text-[20px]">{text}</h1>
         <div className="w-[100%] justify-end flex">
             {isUser ? (
                 <button onClick={openModal} >
