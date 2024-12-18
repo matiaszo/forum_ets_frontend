@@ -48,7 +48,7 @@ export const Header = ({ instructor, toggleTheme }: { instructor: Boolean, toggl
   };
     
     return(
-        <div className="flex items-center w-[100%] bg-white shadow-md fixed top-0 p-1">
+        <div className="flex dark:bg-zinc-800 items-center w-[100%] bg-white shadow-md fixed top-0 p-1">
 
             <h1 className="ml-6">
                 <Image src={ets_logo} width={90} height={90} alt="ets logo"/>

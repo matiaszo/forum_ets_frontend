@@ -28,8 +28,6 @@ const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
 const language = portuguese;
 
-
-
 interface skillInterface {
     id: string;
     name: string;
@@ -479,7 +477,7 @@ export default function Home() {
         <div className="w-[100%] mt-7">
             <Header toggleTheme={ toggleTheme} instructor={localStorage.getItem('instructor') == '1' ? true : false} />
             <div className="w-[100%] flex flex-row p-10 gap-10">
-                <div className="w-[30%] min-h-[80%] shadow-lg flex-col rounded-lg flex items-center p-12 justify-between">
+                <div className="w-[30%] min-h-[80%] shadow-lg flex-col dark:text-blue5 rounded-lg flex items-center p-12 justify-between">
                     <div className="flex flex-col items-center w-[100%]">
                         <CldImage
                             src={usuario.image || "xjlzp7la2pcpac629a85"}
@@ -492,7 +490,7 @@ export default function Home() {
                                 source: true,
                             }}
                         />
-                        <h1 className="text-[26px] font-robCondensed text-blue1 mt-2 capitalize font-medium flex items-center" >
+                        <h1 className="text-[26px] dark:text-blue5 font-robCondensed text-blue1 mt-2 capitalize font-medium flex items-center" >
                             {usuario.name}
                             {
                                usuario.interactionNumber > 5 ?  
@@ -524,7 +522,7 @@ export default function Home() {
                         {usuario.bio ? (
                             <div className="shadow-md p-4 rounded-lg w-[100%] mt-1">
                                 <h1 className="text-[20px] font-robCondensed text-blue1 mb-2 flex flex-col">{language.bio}</h1>
-                                <h1 className="font-robFont ml-3">{usuario.bio}</h1>
+                                <h1 className="font-robCondensed ml-3">{usuario.bio}</h1>
                             </div>
                         ) : (
                             <>
@@ -536,7 +534,8 @@ export default function Home() {
                                 <h1 className="text-[20px] font-robCondensed text-blue1 mb-2 flex flex-col">{language.interest}</h1>
                                 {areas.map(area => (
                                     <div key={area.id}>
-                                        <li className="font-robFont ml-3 marker:text-blue2">{area.name}</li>
+                                        <h3 className="font-robCondensed marker:text-blue2 border-b-2 pb-2 pt-2">{area.name}</h3>
+                                        {/* <li className="font-robCondensed ml-3 marker:text-blue2">{area.name}</li> */}
                                     </div>
                                 ))}
                             </div>
@@ -615,7 +614,7 @@ export default function Home() {
                                 {areas.map((area) => (
                                     <div key={area.id} className="flex items-center mb-2">
                                         <h2 className="w-[80%] border-b border-blue3 outline-none p-2">{area.name}</h2>
-                                        <button onClick={() => handleRemoveArea(area.id)} className="ml-2 text-red-500"><Image src={trash} width={24} height={24} alt="" /></button>
+                                        <button onClick={() => handleRemoveArea(area.id)} className="ml-2 text-red-500 "><Image src={trash} width={24} height={24} alt="" /></button>
                                     </div>
                                 ))}
                             </div>
