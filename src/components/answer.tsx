@@ -156,9 +156,9 @@ export const Answer: React.FC<AnswerProps> = ({
 
       {/* Reply Section */}
       {replyingTo === comment.id && (
-        <div className="mt-3 border-t pt-3">
+        <div className="mt-3 border-t border-blue3 pt-3">
           <textarea
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue5"
+            className="w-full p-2 border border-blue3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue5"
             placeholder={`Responda a ${comment.user.name}`}
             value={replyContent}
             onChange={(e) => setReplyContent(e.target.value)}
