@@ -473,6 +473,7 @@ useEffect(() => {
                       console.log(`Pesquisando por: ${personValue}, Encontrado: ${matches} para ${person.name}`);
                       return matches;
                     })
+
                     .map((person) => (
                       <div
                         key={person.id}
@@ -600,9 +601,9 @@ const styles = {
   modalContainer:
     "h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]",
   modalBox:
-    "bg-white w-[600px] p-4 w-auto flex-wrap rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)]",
+    "bg-white w-[600px] p-4 w-auto flex-wrap rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[80%] overflow-y-auto",
   modalNext:
-    "bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[90%]",
+    "bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[90%] overflow-y-auto",
   btnNext: "bg-blue-500 text-white rounded-md px-3 py-3 hover:bg-blue-800",
   btnCancel: "bg-red-500 text-white rounded-md px-3 py-3 hover:bg-red-800",
   peopleSelect: "flex flex-col mt-2 overflow-y-scroll h-60 bg-gray-100 p-4 rounded ",
