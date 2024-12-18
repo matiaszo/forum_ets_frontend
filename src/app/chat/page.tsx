@@ -230,11 +230,7 @@
 
     return (
       <div className="flex flex-row mt-20 justify-between min-h-[90vh] font-robFont">
-<<<<<<< HEAD
-        <Header instructor={usuario.instructor ? true : false}  />
-=======
         <Header toggleTheme={toggleTheme} instructor={usuario.instructor ? true : false} />
->>>>>>> d750fd53b4c5da45040f51dd24e20ad184eba989
         <div className="mr-20 ml-20 flex w-[100%] gap-3">
           <div className="flex flex-col gap-4 bg-white shadow-lg min-h-[100%] rounded-md p-3 items-center w-[30%]">
             <h1 className={`flex items-center rounded-md w-full h-8 text-blue1 text-3xl ${localStorage.getItem("instructor") == "1" ? "flex justify-between" : "hidden justify-start"}`}>
