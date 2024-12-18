@@ -127,7 +127,7 @@ const Home = () => {
       <div className="mr-10 ml-10 mb-10">
         {modalAdd && (
           <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
-            <div className="bg-white p-12 rounded-lg w-[600px] ">
+            <div className="bg-white p-12 rounded-lg w-[600px] max-h-[80%] overflow-y-auto">
               <form id="modal" onSubmit={(e) => e.preventDefault()} className="">
                 <h1 className="text-blue1 dark:text-blue5 text-3xl">Adicionar Noticia</h1>
                 <div className="flex flex-col items-center space-y-4">

@@ -258,7 +258,7 @@ const projectPage = () => {
             {/* Modal de feedback */}
             {open && (
                 <div className="flex bg-[#000000A0] w-full h-full absolute items-center self-center justify-center">
-                    <form className="flex-col bg-white-100 bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[90%]" action="">
+                    <form className="flex-col max-h-[80%] overflow-y-auto bg-white-100 bg-white w-[600px] p-4 rounded shadow-[0_0_5px_2px_rgba(0,0,0,0.3)] max-h-[90%]" action="">
                         <p className="text-blue1 text-3xl mb-4 my-6">Feedback</p>
                         <textarea
                             className="bg-slate-100 w-full h-[200px] outline-none p-2"
