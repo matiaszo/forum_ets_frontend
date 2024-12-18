@@ -470,6 +470,7 @@ useEffect(() => {
                       console.log(`Pesquisando por: ${personValue}, Encontrado: ${matches} para ${person.name}`);
                       return matches;
                     })
+
                     .map((person) => (
                       <div
                         key={person.id}

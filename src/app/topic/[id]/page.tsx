@@ -48,6 +48,7 @@ const TopicPage = () => {
   const [topic, setTopic] = useState<Topic | null>(null);
   const [newReply, setNewReply] = useState("");
   const [replyingTo, setReplyingTo] = useState<Comment | null>(null);
+  const [isDarkMode, setIsDarkMode] = useState(false); 
 
   const params = useParams();
   const id = parseInt(params.id as string || "0", 10);
@@ -103,6 +104,17 @@ const TopicPage = () => {
       console.error("Erro ao postar a resposta:", error);
     }
   };
+
+  const toggleTheme = () => {
+    const newTheme = isDarkMode ? "light" : "dark";
+    localStorage.setItem("theme", newTheme);
+    setIsDarkMode(!isDarkMode);
+    if (newTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
   
 
   const handleLike = async (commentId: number) => {
@@ -150,20 +162,28 @@ const TopicPage = () => {
 
   useEffect(() => {
     if (!isNaN(id)) fetchTopic(id);
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setIsDarkMode(true);
+      document.documentElement.classList.add("dark"); 
+    } else {
+      setIsDarkMode(false);
+      document.documentElement.classList.remove("dark");
+    }
   }, [id]);
 
   if (!topic) return <p>Carregando...</p>;
 
   return (
     <div className="h-screen mt-20">
-      <Header instructor={instructor? true: false}/>
+      <Header toggleTheme={toggleTheme} instructor={instructor? true: false}/>
       <div className="flex m-10 flex-col">
         <div className="flex flex-col items-center rounded-xl p-3 m-10 text-black">
           <div className="flex flex-col mt-4min-w-[95%]">
             <h1 className="text-blue1 text-3xl mb-3 capitalize font-robCondensed">{topic.title}</h1>
             <h3 className="ml-1 text-start capitalize">{topic.mainComment.content}</h3>
-            <div className="flex justify-end text-blue1 capitalize">{topic.mainComment.user.name}</div>
           </div>
+            <div className="flex justify-end text-blue1 capitalize w-[95%]">{topic.mainComment.user.name}</div>
           <hr className="w-full border-t-1 border-black" />
         </div>
 
