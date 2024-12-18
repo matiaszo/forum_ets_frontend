@@ -6,6 +6,8 @@ import Topic from "@/components/topic";
 import { Header } from "@/components/header";
 import plus from "@/assets/icons8-adicionar-100.png";
 import { use } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Make sure to import the styles
 
 interface GetTopic {
   id: number;
@@ -42,6 +44,7 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const [modalAdd, setModalAdd] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState<string>("");
   const [newMainQuestion, setNewMainQuestion] = useState<string>("");
+  const [isDarkMode, setIsDarkMode] = useState(false); 
   const { id } = use(params);
 
   const handleGetSingleSession = async (sessionId: string) => {
@@ -63,7 +66,7 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
       }
 
       const data: any = await response.json();
-      console.log("Data:" + JSON.stringify(data))
+      console.log("Data:" + JSON.stringify(data));
       setSessionData(data);
     } catch (error) {
       console.error("Erro ao buscar dados da sessão:", error);
@@ -72,43 +75,40 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
   useEffect(() => {
     let user = localStorage.getItem("user");
-    if(user != null)
-    {
-        setUsuario(JSON.parse(user))
+    if (user != null) {
+      setUsuario(JSON.parse(user));
     }
-  
+
     if (id) {
       handleGetSingleSession(id);
-      console.log("deu fetch")
+      console.log("deu fetch");
     }
-
   }, [id]);
-
 
   const handlePostTopic = async () => {
     const token = localStorage.getItem("token");
-  
+
     if (!token) {
-      alert("Token não encontrado. Faça login novamente.");
+      toast.error("Token não encontrado. Faça login novamente.");
       return;
     }
-  
+
     if (!newTitle || !newMainQuestion) {
-      alert("Por favor, preencha todos os campos.");
+      toast.error("Por favor, preencha todos os campos.");
       return;
     }
-  
+
     try {
       const payload = JSON.parse(atob(token.split(".")[1]));
       const userId = payload.userId;
       console.log("Usuário logado ID:", userId);
-  
+
       const newTopicData = {
         title: newTitle,
         mainComment: newMainQuestion,
-        idSection: id, 
+        idSection: id,
       };
-  
+
       const response = await fetch("http://localhost:8080/topic", {
         method: "POST",
         headers: {
@@ -117,34 +117,45 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
         },
         body: JSON.stringify(newTopicData),
       });
-  
+
       if (!response.ok) {
         throw new Error("Erro ao criar o tópico. Tente novamente.");
       }
-  
+
       const createdTopic = await response.json();
       console.log("Tópico criado com sucesso:", createdTopic);
-  
+
       await handleGetSingleSession(id);
-  
+
       setModalAdd(false);
       setNewTitle("");
       setNewMainQuestion("");
+      toast.success("Tópico criado com sucesso!");
     } catch (error) {
       console.error("Erro ao criar o tópico:", error);
-      alert("Erro ao criar o tópico. Tente novamente.");
+      toast.error("Erro ao criar o tópico. Tente novamente.");
     }
   };
-  
-  
-  
+
+  const toggleTheme = () => {
+    const newTheme = isDarkMode ? "light" : "dark";
+    localStorage.setItem("theme", newTheme);
+    setIsDarkMode(!isDarkMode);
+    if (newTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
+
   if (!sessionData) {
     return <p>Carregando...</p>;
   }
 
   return (
     <div className="flex flex-col border-black rounded-md mt-20 font-robCondensed">
-      <Header instructor={localStorage.getItem('instructor') == '1' ? true : false} />
+            <Header toggleTheme={toggleTheme} instructor={localStorage.getItem("instructor") == "1" ? true : false} />
+
       {modalAdd && (
         <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
           <div className="bg-white p-12 rounded-lg w-[600px]">
@@ -189,7 +200,7 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
         </div>
         <div className="flex items-end justify-end w-[100%]">
           <div className="w-auto cursor-pointer" onClick={() => setModalAdd(true)}>
-            <Image style={{margin: 10}} src={plus} width={50} height={50} alt="Adicionar Sessão" />
+            <Image style={{ margin: 10 }} src={plus} width={50} height={50} alt="Adicionar Sessão" />
           </div>
         </div>
         {sessionData.topics && sessionData.topics.length > 0 ? (
@@ -200,7 +211,8 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
           <p className="text-gray-500 text-center mt-5">Nenhum tópico disponível.</p>
         )}
       </div>
-
+      {/* Add ToastContainer here to render the toasts */}
+      <ToastContainer />
     </div>
   );
 };

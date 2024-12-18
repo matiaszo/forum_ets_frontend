@@ -14,6 +14,12 @@ import plusLight from '@/assets/plusClaro.png'
 import searchLight from '@/assets/pesquisarClaro.png'
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Make sure to import the styles
+
+
+
 const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
 
@@ -162,7 +168,7 @@ export default function Admin() {
         e.preventDefault();
 
         if (!formData.email.includes("@")) {
-            alert("Por favor, insira um email válido.");
+            toast.error("Por favor, insira um email válido."); 
             return;
         }
 
@@ -194,7 +200,7 @@ export default function Admin() {
     
             setUsers((prevUsers) => [...prevUsers, u]); 
             setOpenModalInfo(false);
-            alert("Usuario criado com sucesso!")
+            toast.success("Usuário criado com sucesso!"); 
             
         } catch (error) {
             console.error("Erro ao criar usuário:", error);
@@ -221,10 +227,12 @@ export default function Admin() {
     
             const newSkill = await response.json();
             setSkills((prevSkills) => [...prevSkills, newSkill]);
-            alert("Skill criada com sucesso!");
+            toast.success("Skill criada com sucesso!"); 
+            
         } catch (error) {
             console.error("Erro ao criar skill:", error);
-            alert("Erro ao criar skill. Verifique os dados e tente novamente.");
+            toast.error("Erro ao criar skill. Verifique os dados e tente novamente."); 
+
         }
     };
     
@@ -534,6 +542,7 @@ export default function Admin() {
                     )}
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 }
