@@ -42,6 +42,7 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const [modalAdd, setModalAdd] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState<string>("");
   const [newMainQuestion, setNewMainQuestion] = useState<string>("");
+  const [isDarkMode, setIsDarkMode] = useState(false); 
   const { id } = use(params);
 
   const handleGetSingleSession = async (sessionId: string) => {
@@ -82,7 +83,27 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
       console.log("deu fetch")
     }
 
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setIsDarkMode(true);
+      document.documentElement.classList.add("dark"); 
+    } else {
+      setIsDarkMode(false);
+      document.documentElement.classList.remove("dark");
+    }
+
   }, [id]);
+
+  const toggleTheme = () => {
+    const newTheme = isDarkMode ? "light" : "dark";
+    localStorage.setItem("theme", newTheme);
+    setIsDarkMode(!isDarkMode);
+    if (newTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
 
 
   const handlePostTopic = async () => {
@@ -144,7 +165,7 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <div className="flex flex-col border-black rounded-md mt-20 font-robCondensed">
-      <Header instructor={localStorage.getItem('instructor') == '1' ? true : false} />
+      <Header toggleTheme={toggleTheme} instructor={localStorage.getItem('instructor') == '1' ? true : false} />
       {modalAdd && (
         <div className="h-screen w-screen object-contain flex justify-center fixed items-center top-0 left-0 bg-[#000000A0]">
           <div className="bg-white p-12 rounded-lg w-[600px] max-h-[80%] overflow-y-auto">
