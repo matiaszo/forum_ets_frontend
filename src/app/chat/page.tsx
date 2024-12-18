@@ -52,7 +52,7 @@
     const [newMessage, setNewMessage] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const [title, setTitle] = useState<string | undefined>();
+    const [title, setTitle] = useState<string | undefined>('');
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const [isDarkMode, setIsDarkMode] = useState(false); 
 
