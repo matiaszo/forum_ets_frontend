@@ -17,6 +17,9 @@ import plusLight from '@/assets/plusClaro.png'
 
 const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Make sure to import the styles
+
 // tipo de dado para os participantes
 type Person = {
   id: number;
@@ -206,7 +209,7 @@ useEffect(() => {
     fetchUsers();
     fetchProjects();
   } else {
-    alert("Você precisa estar logado para acessar os projetos.");
+    toast.error("Você precisa estar logado para acessar os projetos.");
     return;
   }
 
@@ -224,7 +227,7 @@ useEffect(() => {
     const file = event.target.files?.[0];
     if (file) {
       if (!file.type.startsWith("image/")) {
-        alert("Por favor, selecione uma imagem.");
+        toast.error("Por favor, selecione uma imagem.");
         return;
       }
       const reader = new FileReader();
@@ -266,7 +269,7 @@ useEffect(() => {
       if (response.ok) {
         const projectData = await response.json(); // receber o projeto criado
 
-        alert('Projeto criado com sucesso!');
+        toast.success('Projeto criado com sucesso!');
         console.log("Projeto criado:", projectData);
 
         // atualiza a lista de projetos localmente 
@@ -277,11 +280,11 @@ useEffect(() => {
 
       } else {
         console.log("Erro ao criar o projeto:", response);
-        alert("Erro ao criar o projeto. Tente novamente.");
+        toast.error("Erro ao criar o projeto. Tente novamente.");
       }
     } catch (error) {
       console.error("Erro no envio de dados:", error);
-      alert("Erro ao enviar os dados. Tente novamente.");
+      toast.error("Erro ao enviar os dados. Tente novamente.");
     }
   };
 
@@ -579,6 +582,7 @@ useEffect(() => {
         </div>
 
       </div>
+      <ToastContainer/>
     </div>
   );
 };

@@ -48,7 +48,6 @@ const TopicPage = () => {
   const [topic, setTopic] = useState<Topic | null>(null);
   const [newReply, setNewReply] = useState("");
   const [replyingTo, setReplyingTo] = useState<Comment | null>(null);
-  const [isDarkMode, setIsDarkMode] = useState(false); 
 
   const params = useParams();
   const id = parseInt(params.id as string || "0", 10);
@@ -104,17 +103,6 @@ const TopicPage = () => {
       console.error("Erro ao postar a resposta:", error);
     }
   };
-
-  const toggleTheme = () => {
-    const newTheme = isDarkMode ? "light" : "dark";
-    localStorage.setItem("theme", newTheme);
-    setIsDarkMode(!isDarkMode);
-    if (newTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  };
   
 
   const handleLike = async (commentId: number) => {
@@ -162,21 +150,13 @@ const TopicPage = () => {
 
   useEffect(() => {
     if (!isNaN(id)) fetchTopic(id);
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      setIsDarkMode(true);
-      document.documentElement.classList.add("dark"); 
-    } else {
-      setIsDarkMode(false);
-      document.documentElement.classList.remove("dark");
-    }
   }, [id]);
 
   if (!topic) return <p>Carregando...</p>;
 
   return (
     <div className="h-screen mt-20">
-      <Header toggleTheme={toggleTheme} instructor={instructor? true: false}/>
+      <Header instructor={instructor? true: false}/>
       <div className="flex m-10 flex-col">
         <div className="flex flex-col items-center rounded-xl p-3 m-10 text-black">
           <div className="flex flex-col mt-4min-w-[95%]">

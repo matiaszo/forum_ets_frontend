@@ -12,6 +12,9 @@ import { useEffect, useState } from "react";
 
 import { CldImage, CldUploadWidget } from 'next-cloudinary';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Make sure to import the styles
+
 interface noticia {
   image: string;
   title: string;
@@ -107,7 +110,7 @@ const Home = () => {
       setNewTitle("");
       setNewContent("");
     } else {
-      alert("Por favor, preencha todos os campos.");
+      toast.error("Por favor, preencha todos os campos.");
     }
   };
 
@@ -220,6 +223,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 };
