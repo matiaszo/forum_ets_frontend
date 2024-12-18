@@ -22,6 +22,9 @@ import esm from "@/assets/esmeralda.png"
 import ferro from "@/assets/ferro.png"
 import madeira from "@/assets/madeira.png"
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Make sure to import the styles
+
 const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
 // const language = {};
@@ -382,14 +385,14 @@ export default function Home() {
 
                     } else {
                         console.error("Erro ao adicionar skill:", response.statusText);
-                        alert("Erro ao adicionar a skill!");
+                        toast.error("Erro ao adicionar a skill!");
                     }
                 } catch (error) {
                     console.error("Erro ao fazer a requisição:", error);
-                    alert("Erro ao conectar com o servidor!");
+                    toast.error("Erro ao conectar com o servidor!");
                 }
             } else {
-                alert("Skill já adicionada!");
+                toast.success("Skill já adicionada!");
             }
         }
     };
@@ -415,11 +418,11 @@ export default function Home() {
                 setSkills(skills.filter((skill) => skill.id !== id));
             } else {
                 console.error("Erro ao remover skill:", response.statusText);
-                alert("Erro ao remover a skill!");
+                toast.error("Erro ao remover a skill!");
             }
         } catch (error) {
             console.error("Erro ao fazer a requisição:", error);
-            alert("Erro ao conectar com o servidor!");
+            toast.error("Erro ao conectar com o servidor!");
         }
     };
 
@@ -646,6 +649,7 @@ export default function Home() {
                     </div>
                 </Modal>
             </div>
+            <ToastContainer/>
         </div>
     );
 }

@@ -6,6 +6,8 @@ import Topic from "@/components/topic";
 import { Header } from "@/components/header";
 import plus from "@/assets/icons8-adicionar-100.png";
 import { use } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Make sure to import the styles
 
 interface GetTopic {
   id: number;
@@ -64,7 +66,7 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
       }
 
       const data: any = await response.json();
-      console.log("Data:" + JSON.stringify(data))
+      console.log("Data:" + JSON.stringify(data));
       setSessionData(data);
     } catch (error) {
       console.error("Erro ao buscar dados da sessão:", error);
@@ -73,14 +75,13 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
   useEffect(() => {
     let user = localStorage.getItem("user");
-    if(user != null)
-    {
-        setUsuario(JSON.parse(user))
+    if (user != null) {
+      setUsuario(JSON.parse(user));
     }
-  
+
     if (id) {
       handleGetSingleSession(id);
-      console.log("deu fetch")
+      console.log("deu fetch");
     }
 
     const savedTheme = localStorage.getItem("theme");
@@ -94,6 +95,59 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
   }, [id]);
 
+
+  const handlePostTopic = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.error("Token não encontrado. Faça login novamente.");
+      return;
+    }
+
+    if (!newTitle || !newMainQuestion) {
+      toast.error("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const userId = payload.userId;
+      console.log("Usuário logado ID:", userId);
+
+      const newTopicData = {
+        title: newTitle,
+        mainComment: newMainQuestion,
+        idSection: id,
+      };
+
+      const response = await fetch("http://localhost:8080/topic", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(newTopicData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao criar o tópico. Tente novamente.");
+      }
+
+      const createdTopic = await response.json();
+      console.log("Tópico criado com sucesso:", createdTopic);
+
+      await handleGetSingleSession(id);
+
+      setModalAdd(false);
+      setNewTitle("");
+      setNewMainQuestion("");
+      toast.success("Tópico criado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao criar o tópico:", error);
+      toast.error("Erro ao criar o tópico. Tente novamente.");
+    }
+  };
+
   const toggleTheme = () => {
     const newTheme = isDarkMode ? "light" : "dark";
     localStorage.setItem("theme", newTheme);
@@ -105,60 +159,6 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
     }
   };
 
-
-  const handlePostTopic = async () => {
-    const token = localStorage.getItem("token");
-  
-    if (!token) {
-      alert("Token não encontrado. Faça login novamente.");
-      return;
-    }
-  
-    if (!newTitle || !newMainQuestion) {
-      alert("Por favor, preencha todos os campos.");
-      return;
-    }
-  
-    try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      const userId = payload.userId;
-      console.log("Usuário logado ID:", userId);
-  
-      const newTopicData = {
-        title: newTitle,
-        mainComment: newMainQuestion,
-        idSection: id, 
-      };
-  
-      const response = await fetch("http://localhost:8080/topic", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(newTopicData),
-      });
-  
-      if (!response.ok) {
-        throw new Error("Erro ao criar o tópico. Tente novamente.");
-      }
-  
-      const createdTopic = await response.json();
-      console.log("Tópico criado com sucesso:", createdTopic);
-  
-      await handleGetSingleSession(id);
-  
-      setModalAdd(false);
-      setNewTitle("");
-      setNewMainQuestion("");
-    } catch (error) {
-      console.error("Erro ao criar o tópico:", error);
-      alert("Erro ao criar o tópico. Tente novamente.");
-    }
-  };
-  
-  
-  
   if (!sessionData) {
     return <p>Carregando...</p>;
   }
@@ -210,7 +210,7 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
         </div>
         <div className="flex items-end justify-end w-[100%]">
           <div className="w-auto cursor-pointer" onClick={() => setModalAdd(true)}>
-            <Image style={{margin: 10}} src={plus} width={50} height={50} alt="Adicionar Sessão" />
+            <Image style={{ margin: 10 }} src={plus} width={50} height={50} alt="Adicionar Sessão" />
           </div>
         </div>
         {sessionData.topics && sessionData.topics.length > 0 ? (
@@ -221,7 +221,8 @@ const SessionPage = ({ params }: { params: Promise<{ id: string }> }) => {
           <p className="text-gray-500 text-center mt-5">Nenhum tópico disponível.</p>
         )}
       </div>
-
+      {/* Add ToastContainer here to render the toasts */}
+      <ToastContainer />
     </div>
   );
 };

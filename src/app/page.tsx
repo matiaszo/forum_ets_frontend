@@ -6,6 +6,9 @@ import check from "@/assets/checked.png";
 import Image from "next/image";
 import { ROUTES } from "@/constants/routes";
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Make sure to import the styles
+
 interface ReturnBack {
   token: string;
   instructor: number;
@@ -43,29 +46,26 @@ export default function Home() {
       const data: ReturnBack = await response.json();
       console.log("Token recebido:", data.token);
 
-      localStorage.setItem("instructor", data.instructor.toString()); 
-      // Redirecionar ou salvar o token
+      localStorage.setItem("instructor", data.instructor.toString());
       localStorage.setItem("token", data.token); // Exemplo de salvamento
       localStorage.setItem("id", data.id.toString()); // Exemplo de salvamento
-      
       localStorage.setItem("profile", data.id.toString());
 
       fetch(`http://localhost:8080/profile/${data.id}`,
         {
-          headers: {"Authorization": `Bearer ${data.token}`}
+          headers: { "Authorization": `Bearer ${data.token}` }
         }
-      ).then(response => (response.json())).then((user) =>
-      {
-        localStorage.setItem("user", JSON.stringify(user))
-      })
-
+      ).then(response => (response.json())).then((user) => {
+        localStorage.setItem("user", JSON.stringify(user));
+      });
 
       localStorage.setItem("instructor", data.instructor.toString()); // Exemplo de salvamento
-      alert("Login bem-sucedido!");
+      toast.success("Login bem-sucedido!"); 
       window.location.href = ROUTES.home;
     } catch (error) {
       console.error("Erro ao fazer login:", error);
-      alert("Erro ao fazer login.");
+  
+      toast.error("Erro ao fazer login."); 
     }
   };
 
@@ -101,7 +101,7 @@ export default function Home() {
       <div className={style.secondDiv}>
         <h1 className="font-robCondensed text-blue1 font-semibold text-[35px]">Login</h1>
         <div className="w-[100%] flex flex-col items-center">
-          <label htmlFor="edv" className=" font-robFont w-[80%] text-start font-bold text-blue1">
+          <label htmlFor="edv" className="font-robFont w-[80%] text-start font-bold text-blue1">
             EDV
           </label>
           <input
@@ -136,6 +136,8 @@ export default function Home() {
           Registrar-se
         </a>
       </div>
+      {/* Add ToastContainer here to render the toasts */}
+      <ToastContainer />
     </div>
   );
 }
