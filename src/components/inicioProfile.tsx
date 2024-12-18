@@ -38,6 +38,15 @@ export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skil
           setGitTheme(themes[selectedColor]);
         }
 
+        const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setIsDarkMode(true);
+      document.documentElement.classList.add("dark"); 
+    } else {
+      setIsDarkMode(false);
+      document.documentElement.classList.remove("dark");
+    }
+
     }, [selectedColor]);
 
     useEffect(() => {
@@ -50,7 +59,7 @@ export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skil
     }, []);
     
     const colors = ["red", "blue", "green", "black", "purple"];
-    const themes: { [key: string]: string } =  theme == 'dark' ? {
+    const themes: { [key: string]: string } = localStorage.getItem('theme') == 'light' ? {
         red: "shadow_red",
         blue: "transparent",
         green: "shadow_green",
@@ -66,6 +75,7 @@ export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skil
     
     
     const [gitTheme, setGitTheme] = useState(themes.blue);
+    const [isDarkMode, setIsDarkMode] = useState(false); 
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -78,6 +88,17 @@ export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skil
         setGitHubName(name)
     };
 
+    const toggleTheme = () => {
+        const newTheme = isDarkMode ? "light" : "dark";
+        localStorage.setItem("theme", newTheme);
+        setIsDarkMode(!isDarkMode);
+        if (newTheme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      };
+
 
     return (
         <div>
@@ -85,7 +106,7 @@ export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skil
                 (
                     <div className="w-[100%] mb-1">
                         <div className="shadow-md w-[100%] rounded-lg p-2">
-                            <h1 className="text-[22px] font-robFont mb-2">GitHub Status</h1>
+                            <h1 className="text-[22px] font-robFont mb-2 dark:text-blue5">GitHub Status</h1>
                             <div className="flex flex-row w-[100%] items-center justify-center sm:flex-wrap">
                                 <img src={`https://github-readme-stats.vercel.app/api?username=${usuario.gitUsername}&hide_name=false&hide_rank=false&show_icons=true&include_all_commits=false&count_private=false&disable_animations=false&theme=${gitTheme}&locale=en&hide_border=true`} className="h-[190px]" alt="stats graph" />
                                 <img src={`https://github-readme-stats.vercel.app/api/top-langs?username=${usuario.gitUsername}&locale=en&hide_name=false&layout=compact&card_width=320&langs_count=12&theme=${gitTheme}&hide_border=true`} className="h-[190px]" alt="languages graph" />
@@ -136,14 +157,14 @@ export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skil
                     </div>
                 ) : (
                     <div className="w-[100%] mb-2">
-                        <div className="shadow-md w-[100%] h-1/2 rounded-lg p-2">
+                        <div className="shadow-md w-[100%] h-1/2 rounded-lg p-2 dark:text-white">
                                 {usuario.isUser ? (
-                                    <button>
+                                    <button className="dark:text-white" >
                                         Adicione seu GitHub Status em "Editar Perfil"
                                     </button>
                                 ) : (
                                     <>
-                                        <h1 className='text-gray-400'>O usuário nao possui GitHub Status</h1>
+                                        <h1 className='text-gray-400 dark:text-white'>O usuário nao possui GitHub Status</h1>
                                     </>
                                 )}
                         </div>
@@ -175,7 +196,7 @@ export const InicioProfile = ({ usuario, skills }: { usuario: user, skills: skil
                 <div className="w-[100%] mb-2">
                     <div className="shadow-md w-[100%] h-1/2 rounded-lg p-2">
                     {usuario.isUser ? (
-                        <button>
+                        <button className="dark:text-white">
                             Adicione Skills em "Editar Perfil"
                         </button>
                     ) : (

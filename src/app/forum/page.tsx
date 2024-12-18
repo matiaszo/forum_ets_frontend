@@ -16,6 +16,9 @@ import searchLight from '@/assets/pesquisarClaro.png'
 import plusLight from '@/assets/plusClaro.png'
 const cloudPresetName = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME;
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Make sure to import the styles
+
 interface user {
     id: string;
     name: string;
@@ -107,7 +110,7 @@ const Forum = () => {
         const token = localStorage.getItem("token");
 
         if (!token) {
-           alert("Token de autenticação não encontrado. Faça o login novamente.");
+           toast.error("Token de autenticação não encontrado. Faça o login novamente.");
            window.location.href ='http://localhost:3000'
            return
         }
@@ -135,7 +138,7 @@ const Forum = () => {
             }
         } catch (error) {
             console.error("Erro ao buscar sessões:", error);
-            // alert("Erro ao buscar sessões. Tente novamente.");
+            toast.error("Erro ao buscar sessões. Tente novamente.");
         }
         
     };
@@ -144,7 +147,7 @@ const Forum = () => {
         const token = localStorage.getItem("token");
     
         if (!token) {
-            alert("Token não encontrado. Faça login novamente.");
+            toast.error("Token não encontrado. Faça login novamente.");
             return;
         }
     
@@ -186,14 +189,14 @@ const Forum = () => {
                     handleGetSession();
                 } catch (error) {
                     console.error("Erro no servidor:", error);
-                    alert("Erro ao criar a sessão. Tente novamente.");
+                    toast.error("Erro ao criar a sessão. Tente novamente.");
                 }
             } else {
-                alert("Por favor, preencha todos os campos.");
+                toast.error("Por favor, preencha todos os campos.");
             }
         } catch (error) {
             console.error("Erro ao decodificar o token:", error);
-            alert("Erro no token. Faça login novamente.");
+            toast.error("Erro no token. Faça login novamente.");
         }
     };
 
@@ -340,6 +343,7 @@ const Forum = () => {
                     ))}
                 </div>
             </div>
+            <ToastContainer/>
         </div>
     );
 };

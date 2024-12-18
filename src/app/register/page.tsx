@@ -6,6 +6,9 @@ import check from "@/assets/checked.png";
 import Image from "next/image";
 import { ROUTES } from "@/constants/routes";
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Make sure to import the styles
+
 export default function Register() {
   const [formData, setFormData] = useState({
     edv: "",
@@ -33,14 +36,14 @@ export default function Register() {
       const status = await response.json();
 
       if (status === 10) {
-        alert("Registro feito com sucesso!");
+        toast.success("Registro feito com sucesso!");
         window.location.href = ROUTES.login;
       } else {
-        alert("Erro ao registrar. Tente novamente.");
+        toast.error("Erro ao registrar. Tente novamente.");
       }
     } catch (error) {
       console.error("Erro na requisição:", error);
-      alert("Erro ao registrar.");
+      toast.error("Erro ao registrar.");
     }
   };
 
@@ -135,6 +138,7 @@ export default function Register() {
           Login
         </a>
       </div>
+      <ToastContainer/>
     </div>
   );
 }
