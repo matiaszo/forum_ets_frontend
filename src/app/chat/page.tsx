@@ -213,11 +213,14 @@
             text: newMessage,
           }),
         });
+
+        setNewMessage("")
       } catch (err) {
         console.error("Error sending message", err);
       }
 
       fetchMessagesForSelectedGroup();
+    
     };
 
     if (loading) {
