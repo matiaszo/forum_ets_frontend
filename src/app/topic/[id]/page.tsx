@@ -163,7 +163,7 @@ const TopicPage = () => {
             <h1 className="text-blue1 text-3xl mb-3 capitalize font-robCondensed">{topic.title}</h1>
             <h3 className="ml-1 text-start capitalize">{topic.mainComment.content}</h3>
           </div>
-            <div className="flex justify-end text-blue1 capitalize">{topic.mainComment.user.name}</div>
+            <div className="flex justify-end text-blue1 capitalize w-[95%]">{topic.mainComment.user.name}</div>
           <hr className="w-full border-t-1 border-black" />
         </div>
 
