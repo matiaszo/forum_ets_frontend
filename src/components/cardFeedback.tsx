@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import view from "@/assets/view.png";
 import hide from "@/assets/hide.png";
+import { CldImage } from "next-cloudinary";
 
 export const CardFeedback = ({id, stars, text, publico, projectName, isUser, user} : {id: number, stars : number, text: string, publico: boolean, projectName: string, user : {id : number, image: string, name: string}, isUser: Boolean}) => {
   
@@ -48,7 +49,7 @@ export const CardFeedback = ({id, stars, text, publico, projectName, isUser, use
       <div className="flex flex-col shadow-md rounded-lg p-8 gap-5 mb-3">
         <div className="flex flex-row justify-between">
             <div className="flex flex-row items-center gap-4">
-                <img className="w-14 h-14 object-cover rounded-full" src={user.image} alt="photo" />
+                <CldImage className="w-14 h-14 object-cover rounded-full" src={user.image == null ? "xjlzp7la2pcpac629a85" : user.image} alt="photo" width={56} height={56}/>
                 <h1 className="capitalize">{user.name} | {projectName}</h1>
             </div>
             <div className="flex gap-1">
